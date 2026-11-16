@@ -10,22 +10,27 @@ const voicesToGenerate = [
   {
     fileName: 'voice_1_tanaffus.mp3',
     voice: 'madina',
-    text: "Hurmatli talabalar va o'qituvchilar! Dars mashg'uloti yakunlandi. Tanaffus vaqti boshlandi. Iltimos, sanitariya va tartib qoidalariga rioya qiling."
+    text: "Hurmatli talabalar va o'qituvchilar! Dars yakunlandi, besh daqiqalik qisqa tanaffus. Iltimos, xonalarni shamollatib, sanitariya qoidalariga rioya qiling."
   },
   {
-    fileName: 'voice_2_tushlik.mp3',
+    fileName: 'voice_2_katta_tanaffus.mp3',
     voice: 'madina',
-    text: "Hurmatli talabalar, ustozlar va shifokor-pedagoglar! Katta tushlik tanaffusi boshlandi. Barchaga yoqimli ishtaha va mustahkam salomatlik tilaymiz!"
+    text: "Hurmatli talabalar va ustozlar! Ikkinchi para yakunlandi. O'n besh daqiqalik katta tanaffus boshlandi. Maroqli dam oling!"
   },
   {
-    fileName: 'voice_3_tushlik_tugadi.mp3',
+    fileName: 'voice_3_tanaffus_tugadi.mp3',
     voice: 'sardor',
-    text: "Diqqat, katta tushlik tanaffusi yakunlandi. Navbatdagi para mashg'ulotlari boshlandi. Talabalar dars xonalari va laboratoriyalarga marhamat qiling."
+    text: "Diqqat, katta tanaffus yakunlandi. Dars mashg'ulotlari boshlandi. Talabalar o'z xonalariga marhamat qiling."
   },
   {
-    fileName: 'voice_4_kun_yakuni.mp3',
+    fileName: 'voice_4_smena_almashinuvi.mp3',
     voice: 'madina',
-    text: "Hurmatli talabalar va texnikum jamoasi! Bugungi mashg'ulotlar yakunlandi. Barchaga maroqli dam olish tilaymiz. Ertaga ko'rishguncha xayr, salomat bo'ling!"
+    text: "Hurmatli talabalar va ustozlar! Birinchi smena darslari yakunlandi. Smenalar almashinuvi va tushlik vaqti boshlandi. Ikkinchi smena talabalariga muvaffaqiyat tilaymiz!"
+  },
+  {
+    fileName: 'voice_5_kun_yakuni.mp3',
+    voice: 'sardor',
+    text: "Hurmatli talabalar va texnikum jamoasi! Bugungi barcha mashg'ulotlar yakunlandi. Auditoriya va laboratoriyalarni tartibga keltirishingizni so'raymiz. Xayr, salomat bo'ling!"
   },
   {
     fileName: 'voice_emergency.mp3',
@@ -35,7 +40,7 @@ const voicesToGenerate = [
   {
     fileName: 'voice_sanitariya.mp3',
     voice: 'madina',
-    text: "Diqqat! Texnikumda sanitariya va dezinfeksiya soati boshlandi. O'quv xonalari va simulyatsion markazlarda tozalik ishlarini olib borishingiz so'raladi."
+    text: "Diqqat! Texnikumda sanitariya va dezinfeksiya soati boshlandi. O'quv xonalari va laboratoriyalarda tozalik ishlarini olib borishingiz so'raladi."
   }
 ];
 
@@ -44,7 +49,7 @@ async function generateAll() {
     const filePath = path.join(audioDir, item.fileName);
     console.log(`Generating ${item.fileName}...`);
     try {
-      const res = await fetch('https://ibratschoolsmartbell.vercel.app/api/tts', {
+      const res = await fetch('http://localhost:3000/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: item.text, voice: item.voice })
@@ -61,7 +66,7 @@ async function generateAll() {
       console.error(` Error ${item.fileName}:`, err.message);
     }
   }
-  console.log('All voices done!');
+  console.log('All Guliston Texnikum voices generated!');
 }
 
 generateAll();

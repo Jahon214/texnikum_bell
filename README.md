@@ -1,130 +1,96 @@
-# 🏥 Tibbiyot Texnikumi Aqlli Qo'ng'irog'i (Med Texnikum Smart Bell)
+# 🏥 Guliston Tibbiyot Texnikumi — Aqlli Qo'ng'iroq Tizimi
 
-> **Abu Ali ibn Sino nomidagi Jamoat salomatligi texnikumi** uchun maxsus ishlab chiqilgan avtomatlashtirilgan aqlli qo'ng'iroq, dars jadvali va AI ovozli radiouzel axborot tizimi.
+> **Guliston tibbiyot texnikumi 2026-2027 o'quv yili uchun rasmiy tasdiqlangan qo'ng'iroqlar jadvali** asosida ishlab chiqilgan avtomatlashtirilgan aqlli qo'ng'iroq, dars jadvali va AI ovozli radiouzel tizimi.
 
-Ushbu loyiha [Ibrat School Smart Bell](https://ibratschoolsmartbell.vercel.app/) andazasida, tibbiyot kollejlari va texnikumlarining **paralar (juftliklar) tizimi**, **klinik amaliyot**, **sanitariya-gigiyena qoidalari** va **tibbiy favqulodda holatlar** o'ziga xosliklarini to'liq inobatga olgan holda yaratildi.
-
----
-
-## 🌟 Asosiy Imkoniyatlar
-
-### 1. 🩺 Tibbiyot Texnikumi Mashg'ulot Jadvali (Paralar tizimi)
-- Standart tibbiyot texnikumi dars jadvali **80-90 daqiqalik paralar** (juftliklar) va oralig'idagi tanaffuslar asosida tuzilgan:
-  - **08:29** — 🇺🇿 O'zbekiston Respublikasi Davlat Madhiyasi
-  - **08:30 – 09:50** — **1-para:** Anatomiya va odam fiziologiyasi (80 daqiqa)
-  - *Tanaffus:* 09:50 – 10:05 (15 daqiqa)
-  - **10:05 – 11:25** — **2-para:** Hamshiralik ishi asoslari & Aseptika-antiseptika (80 daqiqa)
-  - *Katta tushlik:* 11:25 – 12:10 (45 daqiqa — Talaba va xodimlar tushligi)
-  - **12:10 – 13:30** — **3-para:** Farmakologiya va retseptura (80 daqiqa)
-  - *Tanaffus:* 13:30 – 13:45 (15 daqiqa)
-  - **13:45 – 15:05** — **4-para:** Klinik terapiya & Shoshilinch tibbiy yordam (80 daqiqa)
-  - *Kichik tanaffus:* 15:05 – 15:15 (10 daqiqa)
-  - **15:15 – 16:30** — **Simulyatsion amaliyot & Mustaqil ta'lim** (75 daqiqa)
-- **Smena va rejim namunalari:**
-  - 🩺 **1-smena:** Kunduzgi ta'lim (08:30 – 16:30)
-  - 🌙 **2-smena:** Kechki ta'lim (13:30 – 19:30)
-  - ⚡ **Shanba:** Qisqartirilgan amaliyot va laboratoriya kuni
-
-### 2. 🎙️ 6 ta Maxsus Tibbiyot Ovozli E'lonlari (MP3 & Zaxira sintez)
-1. **Har bir tanaffus boshlanganda:**
-   > *"Hurmatli talabalar va o'qituvchilar! Dars mashg'uloti yakunlandi. Tanaffus vaqti boshlandi. Iltimos, sanitariya va tartib qoidalariga rioya qiling."*
-2. **Katta tushlik boshlanganda (11:25 da):**
-   > *"Hurmatli talabalar, ustozlar va shifokor-pedagoglar! Katta tushlik tanaffusi boshlandi. Barchaga yoqimli ishtaha va mustahkam salomatlik tilaymiz!"*
-3. **Tushlik tugaganda va dars boshlanishida (12:10 da):**
-   > *"Diqqat, katta tushlik tanaffusi yakunlandi. Navbatdagi para mashg'ulotlari boshlandi. Talabalar dars xonalari va laboratoriyalarga marhamat qiling."*
-4. **Kun yakuni va amaliyot soatlari tugaganda (16:30 da):**
-   > *"Hurmatli talabalar va texnikum jamoasi! Bugungi mashg'ulotlar yakunlandi. Barchaga maroqli dam olish tilaymiz. Ertaga ko'rishguncha xayr, salomat bo'ling!"*
-5. **Davlat Madhiyasi (08:29 da):**
-   > Har kuni darslar boshlanishidan 1 daqiqa oldin Davlat Madhiyasi avtomatik ijro etiladi.
-6. **Sanitariya & Dezinfeksiya soati:**
-   > *"Diqqat! Texnikumda sanitariya va dezinfeksiya soati boshlandi. O'quv xonalari va simulyatsion markazlarda tozalik ishlarini olib borishingiz so'raladi."*
-
-### 3. 🚨 Favqulodda Tibbiy Signal (Qizil Kod & Evakuatsiya)
-- Maxsus audio generator va sirenaga ega **Qizil Kod** favqulodda holatlar signali.
-- Avtomatik audio xabarnoma: *"Diqqat! Favqulodda holat signali! Barcha talabalar va xodimlar xotirjamlikni saqlagan holda binodan evakuatsiya yo'laklari orqali chiqishingiz so'raladi!"*
-
-### 4. 📢 AI Ovozli Radiouzel & Tabrik Tizimi (TTS)
-- Istalgan matnni bir zumda jonli o'zbekcha AI ovozga aylantirish (Edge-TTS va VoiceLab integratsiyasi).
-- **Tayyor tibbiyot shablonlari:**
-  - 🩺 *Klinik amaliyot eslatmasi* (Viloyat shifoxonasida amaliyot, oq xalat, fonendoskop talabi)
-  - 💉 *Beg'araz donorlik aksiyasi* (Qon topshirish haqida e'lon)
-  - 🎂 *Ustoz / Shifokor tavallud ayyomi* (Tantanalik tabrik)
-  - 🧹 *Sanitariya va tozalik nazorati* (Guruh yetakchilari va navbatchilarga eslatma)
-  - 📋 *Kafedra mudirlari va bo'lim boshliqlari majlisi*
-- **Imkoniyatlar:** Eshitib ko'rish, hozir radioga e'lon qilish, keyingi tanaffusga rejalashtirish, MP3 yuklab olish.
-
-### 5. 📺 TV Kiosk / Fohe Katta Ekran Rejimi
-- Texnikum kirish fohesi, koridorlar va dars zallari uchun maxsus moslashtirilgan Kiosk rejimi:
-  - Gigant raqamli soat (HH:MM:SS)
-  - Aylana shaklidagi jonli progress ringi
-  - Hozirgi para va navbatdagi qo'ng'iroqqacha qolgan vaqt
-  - Yuguruvchi satr (Marquee): sanitariya talablari, e'lonlar va navbatchi shifokor xonasi
-  - `Esc` yoki tugma orqali chiqish
-
-### 6. ⏩ Tezkor Kunlik Simulyatsiya Rejimi
-- Butun kunlik (08:28 dan 17:00 gacha bo'lgan) paralar, tanaffuslar, madhiya va ovozli xabarlarni **×30, ×60, ×120 yoki ×600** tezlikda bir necha daqiqada sinab ko'rish imkoniyati.
-
-### 7. ✏️ Moslashuvchan Jadval & Mahalliy Saqlash
-- Har bir parani tahrirlash, o'chirish yoki yangi mashg'ulot qo'shish.
-- Barcha o'zgarishlar brauzer xotirasida (**LocalStorage**) saqlanib qoladi.
-- JSON formatida zaxira nusxa olish va tiklash (Eksport / Import).
+Tasdiqlovchi: **Guliston tibbiyot texnikumi direktori S.F. Artikova**  
+O'quv ishlari bo'yicha direktor o'rinbosari: **R.R. Mirzaliyev**
 
 ---
 
-## 🚀 O'rnatish va Ishga Tushirish
+## 📅 Rasmiy Tasdiqlangan Dars Jadvali
 
-### Talablar:
-- [Node.js](https://nodejs.org/) (v18 yoki undan yuqori)
+### ☀️ I SMENA (08:30 – 12:20)
+| t/r | Kirish | Chiqish | Tanaffus | Davomiyligi | Izoh & Voice Ovoz |
+|---|---|---|---|---|---|
+| **—** | 08:29 | 08:30 | — | 1 daq | 🇺🇿 **Davlat Madhiyasi** |
+| **1** | **08:30** | **09:40** | 5 daqiqa | 70 daqiqa | 🔔 Kirish qo'ng'irog'i $\rightarrow$ 09:40 da 1-Voice (5 daqiqa tanaffus) |
+| **2** | **09:45** | **10:55** | 15 daqiqa | 70 daqiqa | 🔔 Kirish $\rightarrow$ 10:55 da 2-Voice (Katta tanaffus) |
+| **3** | **11:10** | **12:20** | — | 70 daqiqa | 11:10 da 3-Voice $\rightarrow$ 12:20 da 4-Voice (I Smena yakuni & Tushlik) |
 
-### 1. Bog'liqliklarni o'rnatish:
-```bash
-npm install
-```
+> ☕ **Smenalar oralig'i / Tushlik va smena almashinuvi:** **12:20 – 12:50** (30 daqiqa)
 
-### 2. Loyihani ishga tushirish:
+---
+
+### 🌙 II SMENA (12:50 – 16:30)
+| t/r | Kirish | Chiqish | Tanaffus | Davomiyligi | Izoh & Voice Ovoz |
+|---|---|---|---|---|---|
+| **1** | **12:50** | **14:00** | 5 daqiqa | 70 daqiqa | 🔔 II Smena boshlanishi $\rightarrow$ 14:00 da 1-Voice |
+| **2** | **14:05** | **15:15** | 5 daqiqa | 70 daqiqa | 🔔 Kirish $\rightarrow$ 15:15 da 1-Voice |
+| **3** | **15:20** | **16:30** | — | 70 daqiqa | 🔔 Kirish $\rightarrow$ 16:30 da 5-Voice (II Smena & Kun yakuni) |
+
+---
+
+## 🎙️ Voice Audio E'lonlar Matnlari (Qachon va nima deydi)
+
+Har bir tanaffus va dars yakunida **Qo'ng'iroq ➔ Freesound chime ➔ AI Ovoz** ketma-ketlikda yangraydi:
+
+### 1. 🔔 1-Voice: 5 daqiqalik qisqa tanaffus
+- **Qachon yangraydi:** Soat **09:40**, **14:00**, **15:15** da (dars tugaganda)
+- **Fayl nomi:** `public/audio/voice_1_tanaffus.mp3`
+- **Matni:**
+  > *"Hurmatli talabalar va o'qituvchilar! Dars yakunlandi, besh daqiqalik qisqa tanaffus. Iltimos, xonalarni shamollatib, sanitariya qoidalariga rioya qiling."*
+
+### 2. ☕ 2-Voice: Katta tanaffus (15 daqiqa dam olish)
+- **Qachon yangraydi:** Soat **10:55 da** (2-para tugaganda)
+- **Fayl nomi:** `public/audio/voice_2_katta_tanaffus.mp3`
+- **Matni:**
+  > *"Hurmatli talabalar va ustozlar! Ikkinchi para yakunlandi. O'n besh daqiqalik katta tanaffus boshlandi. Maroqli dam oling!"*
+
+### 3. ⏰ 3-Voice: Katta tanaffus tugashi (3-para boshlanishi)
+- **Qachon yangraydi:** Soat **11:10 da**
+- **Fayl nomi:** `public/audio/voice_3_tanaffus_tugadi.mp3`
+- **Matni:**
+  > *"Diqqat, katta tanaffus yakunlandi. Dars mashg'ulotlari boshlandi. Talabalar o'z xonalariga marhamat qiling."*
+
+### 4. 🔄 4-Voice: I Smena yakuni va Smena almashinuvi (30 daqiqa)
+- **Qachon yangraydi:** Soat **12:20 da** (1-smena yakuni)
+- **Fayl nomi:** `public/audio/voice_4_smena_almashinuvi.mp3`
+- **Matni:**
+  > *"Hurmatli talabalar va ustozlar! Birinchi smena darslari yakunlandi. Smenalar almashinuvi va tushlik vaqti boshlandi. Ikkinchi smena talabalariga muvaffaqiyat tilaymiz!"*
+
+### 5. 🏁 5-Voice: II Smena va Butun kun yakuni
+- **Qachon yangraydi:** Soat **16:30 da**
+- **Fayl nomi:** `public/audio/voice_5_kun_yakuni.mp3`
+- **Matni:**
+  > *"Hurmatli talabalar va texnikum jamoasi! Bugungi barcha mashg'ulotlar yakunlandi. Auditoriya va laboratoriyalarni tartibga keltirishingizni so'raymiz. Xayr, salomat bo'ling!"*
+
+### 6. 🇺🇿 6-Voice: O'zbekiston Davlat Madhiyasi
+- **Qachon yangraydi:** Har kuni soat **08:29 da** (1-para oldidan)
+- **Fayl nomi:** `public/audio/madhiya.mp3`
+
+### 7. 🚨 Favqulodda signal (Qizil Kod & Evakuatsiya)
+- **Qachon yangraydi:** Favqulodda tugma bosilganda
+- **Fayl nomi:** `public/audio/voice_emergency.mp3`
+- **Matni:**
+  > *"Diqqat! Favqulodda holat signali! Barcha talabalar va xodimlar xotirjamlikni saqlagan holda binodan evakuatsiya yo'laklari orqali chiqishingiz so'raladi!"*
+
+---
+
+## 🛠️ Ovoz fayllarini o'zgartirish (O'zingiz ovoz yozib qo'ymoqchi bo'lsangiz):
+
+Agar ovozlarni o'zingiz diktor yoki mikrofon orqali yozib olmoqchi bo'lsangiz, yozilgan audio fayllarni MP3 formatda quyidagi nomlar bilan `public/audio/` papkasiga saqlasangiz kifoya:
+1. `public/audio/voice_1_tanaffus.mp3` (5 daqiqalik tanaffus uchun)
+2. `public/audio/voice_2_katta_tanaffus.mp3` (15 daqiqalik katta tanaffus uchun)
+3. `public/audio/voice_3_tanaffus_tugadi.mp3` (Katta tanaffus tugab darsga kirish uchun)
+4. `public/audio/voice_4_smena_almashinuvi.mp3` (12:20 dagi smena almashinuvi uchun)
+5. `public/audio/voice_5_kun_yakuni.mp3` (16:30 dagi kun yakuni uchun)
+
+Shuningdek, tizimning ichidagi **📢 E'lon & Tabrik** modali orqali ham istalgan matningizni AI orqali bir zumda yangi audio faylga aylantirib yuklab olishingiz mumkin!
+
+---
+
+## 🚀 Ishga tushirish:
 ```bash
 npm start
 ```
-Brauzerda oching: **`http://localhost:3000`**
-
----
-
-## ☁️ Vercel orqali Bepul Joylashtirish (Deploy)
-
-Loyiha to'liq **Vercel** serverless arxitekturasiga moslashtirilgan (`vercel.json`, `api/tts.js`, `api/voices.js`):
-
-1. Loyihani GitHub-ga yuklang.
-2. [Vercel](https://vercel.com/) boshqaruv paneliga kiring va loyihani import qiling.
-3. **Deploy** tugmasini bosing — loyihangiz bir zumda jonli internetda ishlaydi!
-
----
-
-## 📁 Loyiha Strukturasi
-
-```
-texnikum_bell/
-├── api/
-│   ├── tts.js            # O'zbekcha AI ovoz sintezi (Vercel serverless / Express)
-│   └── voices.js         # Mavjud AI ovozlar ro'yxati API
-├── public/
-│   ├── index.html        # Zamonaviy tibbiyot dizaynidagi SPA interfeys
-│   └── audio/
-│       ├── bell.mp3                    # Klassik kirish qo'ng'irog'i
-│       ├── freesound.mp3               # Chime / Diqqat signali
-│       ├── madhiya.mp3                 # O'zbekiston Davlat Madhiyasi
-│       ├── voice_1_tanaffus.mp3        # Tanaffus boshlanishi ovozi
-│       ├── voice_2_tushlik.mp3         # Katta tushlik ovozi
-│       ├── voice_3_tushlik_tugadi.mp3  # Tushlik tugashi va darsga kirish ovozi
-│       ├── voice_4_kun_yakuni.mp3      # Kun yakuni va amaliyot tugashi ovozi
-│       ├── voice_emergency.mp3         # Favqulodda evakuatsiya ovozi
-│       └── voice_sanitariya.mp3        # Sanitariya soati ovozi
-├── package.json
-├── server.js             # Express veb-serveri
-├── vercel.json           # Vercel konfiguratsiyasi
-└── README.md
-```
-
----
-
-## ⚕️ Mualliflik va Litsenziya
-Litsenziya: MIT. Ushbu loyiha tibbiyot texnikumlari va kollejlarida ta'lim sifatini va intizomini oshirish maqsadida erkin foydalanish uchun taqdim etiladi.
+Brauzerda ochish: **http://localhost:3000**
