@@ -1,0 +1,23 @@
+{
+  "name": "med-texnikum-smart-bell",
+  "version": "1.0.0",
+  "description": "Abu Ali ibn Sino nomidagi Jamoat salomatligi texnikumi aqlli qo'ng'iroq va radio e'lonlar tizimi",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "smart-bell",
+    "medical-technical-school",
+    "texnikum",
+    "school-bell",
+    "tts"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
