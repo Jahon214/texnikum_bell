@@ -951,12 +951,14 @@ body.tv-mode .tv-marquee {
           <span style="font-size:11px; color:var(--ok); font-weight:700;">✅ 1-Voice (Chime) ➔ Voice</span>
         </div>
 
-        <!-- Tabs for 4 Days -->
+        <!-- Tabs for 6 Days -->
         <div class="sound-tabs">
           <button class="sound-tab-btn active" id="tabMonBtn" onclick="switchVoiceTab('mon')">📅 Dushanba</button>
           <button class="sound-tab-btn" id="tabTueBtn" onclick="switchVoiceTab('tue')">📅 Seshanba</button>
           <button class="sound-tab-btn" id="tabWedBtn" onclick="switchVoiceTab('wed')">📅 Chorshanba</button>
           <button class="sound-tab-btn" id="tabThuBtn" onclick="switchVoiceTab('thu')">📅 Payshanba</button>
+          <button class="sound-tab-btn" id="tabFriBtn" onclick="switchVoiceTab('fri')">📅 Juma</button>
+          <button class="sound-tab-btn" id="tabSatBtn" onclick="switchVoiceTab('sat')">📅 Shanba</button>
           <button class="sound-tab-btn" id="tabAllBtn" onclick="switchVoiceTab('all')">🔔 Barchasi</button>
         </div>
 
@@ -1010,6 +1012,8 @@ body.tv-mode .tv-marquee {
             <option value="tue">📅 Doim Seshanba ovozlari</option>
             <option value="wed">📅 Doim Chorshanba ovozlari</option>
             <option value="thu">📅 Doim Payshanba ovozlari</option>
+            <option value="fri">📅 Doim Juma ovozlari</option>
+            <option value="sat">📅 Doim Shanba ovozlari</option>
           </select>
         </div>
 
@@ -1039,6 +1043,8 @@ body.tv-mode .tv-marquee {
               <option value="2">📅 Seshanba (8, 9, 10, 11, 12, 13-Voice)</option>
               <option value="3">📅 Chorshanba (1, 2, 3, 4, 5, 6-Voice)</option>
               <option value="4">📅 Payshanba (7, 8, 9, 10, 11, 12-Voice)</option>
+              <option value="5">📅 Juma (1, 2, 3, 4, 5, 6-Voice)</option>
+              <option value="6">📅 Shanba (7, 8, 9, 10, 11, 12-Voice)</option>
             </select>
           </div>
           <div>
@@ -1117,6 +1123,22 @@ body.tv-mode .tv-marquee {
         <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu2Out">Pay 2-chiq (10-V)</button>
         <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu3In">Pay 3-kir (11-V)</button>
         <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu3Out">Pay 3-chiq (12-V)</button>
+
+        <!-- Juma -->
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri1In">Ju 1-kir (1-V)</button>
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri1Out">Ju 1-chiq (2-V)</button>
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri2In">Ju 2-kir (3-V)</button>
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri2Out">Ju 2-chiq (4-V)</button>
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri3In">Ju 3-kir (5-V)</button>
+        <button class="btn ghost sm" style="border-color:#14b8a6; color:#2dd4bf;" id="manualFri3Out">Ju 3-chiq (6-V)</button>
+
+        <!-- Shanba -->
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat1In">Sh 1-kir (7-V)</button>
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat1Out">Sh 1-chiq (8-V)</button>
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat2In">Sh 2-kir (9-V)</button>
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat2Out">Sh 2-chiq (10-V)</button>
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat3In">Sh 3-kir (11-V)</button>
+        <button class="btn ghost sm" style="border-color:#f59e0b; color:#fbbf24;" id="manualSat3Out">Sh 3-chiq (12-V)</button>
 
         <button class="btn ghost sm" id="manualAnthemBtn">🇺🇿 Madhiya</button>
         <button class="btn danger sm" id="manualSiren">🚨 Qizil Kod</button>
@@ -1325,6 +1347,22 @@ const AUDIO_PATHS = {
   thu_p2_out: getAudioUrl("voice_thu_p2_out.mp3"),
   thu_p3_in: getAudioUrl("voice_thu_p3_in.mp3"),
   thu_p3_out: getAudioUrl("voice_thu_p3_out.mp3"),
+
+  // JUMA (1, 2, 3, 4, 5, 6-Voice)
+  fri_p1_in: getAudioUrl("voice_fri_p1_in.mp3"),
+  fri_p1_out: getAudioUrl("voice_fri_p1_out.mp3"),
+  fri_p2_in: getAudioUrl("voice_fri_p2_in.mp3"),
+  fri_p2_out: getAudioUrl("voice_fri_p2_out.mp3"),
+  fri_p3_in: getAudioUrl("voice_fri_p3_in.mp3"),
+  fri_p3_out: getAudioUrl("voice_fri_p3_out.mp3"),
+
+  // SHANBA (7, 8, 9, 10, 11, 12-Voice)
+  sat_p1_in: getAudioUrl("voice_sat_p1_in.mp3"),
+  sat_p1_out: getAudioUrl("voice_sat_p1_out.mp3"),
+  sat_p2_in: getAudioUrl("voice_sat_p2_in.mp3"),
+  sat_p2_out: getAudioUrl("voice_sat_p2_out.mp3"),
+  sat_p3_in: getAudioUrl("voice_sat_p3_in.wav"),
+  sat_p3_out: getAudioUrl("voice_sat_p3_out.wav"),
 
   // Umumiy
   anthem: getAudioUrl("madhiya.mp3"),
@@ -1543,6 +1581,106 @@ const VOICES_INFO = [
     time: "12:20 da",
     desc: "\"Hurmatli talabalar, bugungi darslar yakunlandi. Bir oddiy xulosani eslab qoling: xavfsiz muhit tasodifan paydo bo'lmaydi. U har bir insonning to'g'ri harakatidan shakllanadi...\"",
     url: AUDIO_PATHS.thu_p3_out
+  },
+
+  // JUMA
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "1-Voice: Juma 1-para kirish (08:30)",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Juma tongi barchangizga xayrli bo'lsin. Bilim olish bilan birga o'z salomatligimizni asrashni ham unutmang. Yetarli dam, me'yorli ovqatlanish va harakat faol o'qishga yordam beradi. Barchangizga xotirjam, samarali kun tilaymiz. Birinchi para boshlanadi.\"",
+    url: AUDIO_PATHS.fri_p1_in
+  },
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "2-Voice: Juma 1-para tugashi (09:40)",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Aziz talabalar, uzoq vaqt bir joyda o'tirgandan so'ng qisqa harakat va holatni o'zgartirish o'zingizni tetik his qilishga yordam berishi mumkin. Tanaffusda yengil yurib keling, suv iching va ko'zlaringizni ekrandan dam oldiring. O'zingizga e'tibor bering.\"",
+    url: AUDIO_PATHS.fri_p1_out
+  },
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "3-Voice: Juma 2-para kirish (09:45)",
+    time: "09:45 da",
+    desc: "\"Diqqat, ikkinchi para boshlanmoqda. Stressli vaziyatda shoshmasdan fikrlash va kerak bo'lsa yordam so'rash muhim ko'nikmadir. Tibbiyotda ham jamoa yordami va o'zaro maslahat katta ahamiyatga ega. Bugun darsda savollarni birgalikda muhokama qiling. Auditoriyalarga marhamat.\"",
+    url: AUDIO_PATHS.fri_p2_in
+  },
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "4-Voice: Juma 2-para tugashi - Katta tanaffus (10:55)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para yakunlandi. Katta tanaffus vaqti. Ovqatni shoshmasdan yeyish, suyuqlik ichish va suhbatlashib dam olish kunning qolgan qismiga kuch beradi. Guruhingizdagi yolg'iz qolgan do'stingizga ham e'tibor qarating. Ba'zan oddiy samimiy suhbatning o'zi katta dalda bo'ladi.\"",
+    url: AUDIO_PATHS.fri_p2_out
+  },
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "5-Voice: Juma 3-para kirish (11:10)",
+    time: "11:10 da",
+    desc: "\"Aziz talabalar, uchinchi para boshlanadi. Mas'uliyat faqat boshqalarga yordam berish emas, o'z chegarangizni va charchoqni ham tan olishdir. Dam olish va o'qish o'rtasida muvozanat saqlash uzoq muddatli o'sishga xizmat qiladi. Bugungi so'nggi mashg'ulotda faol bo'ling.\"",
+    url: AUDIO_PATHS.fri_p3_in
+  },
+  {
+    day: "fri",
+    tag: "Juma",
+    title: "6-Voice: Juma 3-para tugashi - Kun yakuni (12:20)",
+    time: "12:20 da",
+    desc: "\"Hurmatli talabalar va ustozlar, bugungi darslar yakunlandi. Hafta davomida qilgan mehnatingiz uchun o'zingizga ham rahmat ayting. Bajarilgan ishlarni qadrlang, qiyin qolgan mavzularni esa keyingi haftaga reja qiling. Sog'lom hordiq va yaqinlaringiz bilan mazmunli vaqt tilaymiz. Xayrli kun!\"",
+    url: AUDIO_PATHS.fri_p3_out
+  },
+
+  // SHANBA
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "7-Voice: Shanba 1-para kirish (08:30)",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Bugun haftalik mehnatimizga nazar tashlaymiz. O'sish faqat katta natijada emas, kechagidan bir oz yaxshiroq bo'lishda ham ko'rinadi. Hafta davomida o'rgangan bilimlaringizni bir-biriga bog'lab ko'ring. Barchangizga muvaffaqiyatli shanba tilaymiz. Birinchi para boshlanadi.\"",
+    url: AUDIO_PATHS.sat_p1_in
+  },
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "8-Voice: Shanba 1-para tugashi (09:40)",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Aziz talabalar, o'tgan darslardan siz uchun eng qiyin bo'lgan bitta mavzuni eslang. Uni qayta ko'rib chiqish uchun kichik reja tuzing. Bilimdagi bo'shliqni tan olish kamchilik emas, uni to'ldirishga kirishish haqiqiy rivojlanishdir. Tanaffusdan unumli foydalaning.\"",
+    url: AUDIO_PATHS.sat_p1_out
+  },
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "9-Voice: Shanba 2-para kirish (09:45)",
+    time: "09:45 da",
+    desc: "\"Diqqat, ikkinchi para boshlanmoqda. Kuchli mutaxassis tajribasini tahlil qila oladi. Nima to'g'ri bo'ldi? Nima qiyin kechdi? Va keyingi safar nimani o'zgartirish kerak? Bugungi mashg'ulotda shu uch savoldan foydalaning. Marhamat, auditoriyalarga.\"",
+    url: AUDIO_PATHS.sat_p2_in
+  },
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "10-Voice: Shanba 2-para tugashi - Katta tanaffus (10:55)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Haftaning so'nggi o'quv kunida bir-biringizga minnatdorlik bildirishni ham unutmang. Sizga yordam bergan ustozga yoki guruhdoshga samimiy rahmat ayting. Ijobiy muhit ham yaxshi ta'limning muhim qismidir. Yaxshi dam oling.\"",
+    url: AUDIO_PATHS.sat_p2_out
+  },
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "11-Voice: Shanba 3-para kirish (11:10)",
+    time: "11:10 da",
+    desc: "\"Aziz talabalar, uchinchi para boshlanadi. Bugungi darsga aniq niyat bilan kiring: hafta davomida o'rganilgan bir mavzuni puxta mustahkamlash. Shoshilmang, asosiy tushunchani anglang va misol bilan tekshiring. Yaxshi natija muntazam mashq bilan keladi. Omad!\"",
+    url: AUDIO_PATHS.sat_p3_in
+  },
+  {
+    day: "sat",
+    tag: "Shanba",
+    title: "12-Voice: Shanba 3-para tugashi - Hafta yakuni (12:20)",
+    time: "12:20 da",
+    desc: "\"Hurmatli ustozlar va aziz talabalar, o'quv haftamiz yakunlandi. Bu hafta olgan bilimlaringizni uchta asosiy xulosa bilan jamlang. Keyingi hafta uchun bitta maqsad belgilang. Dam olish kunida yaqinlaringizga vaqt ajrating, kuch yig'ing. Mehnatingiz uchun rahmat, xayrli dam olish kunlari!\"",
+    url: AUDIO_PATHS.sat_p3_out
   }
 ];
 
@@ -1554,7 +1692,7 @@ let AppConfig = {
   anthemTime: "08:29",
   workingDays: [1, 2, 3, 4, 5, 6], // Du-Sh
   activeShift: "I va II Smena (To'liq kun)",
-  voiceDayMode: "auto" // 'auto', 'mon', 'tue', 'wed', 'thu'
+  voiceDayMode: "auto" // 'auto', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'
 };
 
 let schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
@@ -1759,26 +1897,23 @@ function getCurrentDayTime() {
   return { dayOfWeek, currentSec, dateString };
 }
 
-/* Ovozlar kunini aniqlash: 1=Du, 2=Se, 3=Chor, 4=Pay */
+/* Ovozlar kunini aniqlash: 1=Du, 2=Se, 3=Chor, 4=Pay, 5=Ju, 6=Sh */
 function getActiveVoiceDay(currentDayOfWeek) {
   if (AppConfig.voiceDayMode === 'mon') return 1;
   if (AppConfig.voiceDayMode === 'tue') return 2;
   if (AppConfig.voiceDayMode === 'wed') return 3;
   if (AppConfig.voiceDayMode === 'thu') return 4;
+  if (AppConfig.voiceDayMode === 'fri') return 5;
+  if (AppConfig.voiceDayMode === 'sat') return 6;
   
   // 'auto':
   // 1 = Dushanba (1-7 voices)
   // 2 = Seshanba (8-13 voices)
   // 3 = Chorshanba (Chor 1-6 voices)
   // 4 = Payshanba (Pay 7-12 voices)
-  // 5 (Juma) = Dushanba/Chorshanba
-  // 6 (Shanba) = Seshanba/Payshanba
-  if (currentDayOfWeek === 1) return 1;
-  if (currentDayOfWeek === 2) return 2;
-  if (currentDayOfWeek === 3) return 3;
-  if (currentDayOfWeek === 4) return 4;
-  if (currentDayOfWeek === 5) return 3; // Juma
-  if (currentDayOfWeek === 6) return 4; // Shanba
+  // 5 = Juma (Ju 1-6 voices)
+  // 6 = Shanba (Sh 7-12 voices)
+  if (currentDayOfWeek >= 1 && currentDayOfWeek <= 6) return currentDayOfWeek;
   return 1;
 }
 
@@ -1807,6 +1942,8 @@ function compileDailyEvents(targetDayOfWeek = null) {
   // SESHANBA: 1-kir(8-V), 1-chiq(9-V), 2-kir(10-V), 2-chiq(11-V), 3-kir(12-V), 3-chiq(13-V)
   // CHORSHANBA: 1-kir(1-V), 1-chiq(2-V), 2-kir(3-V), 2-chiq(4-V), 3-kir(5-V), 3-chiq(6-V)
   // PAYSHANBA: 1-kir(7-V), 1-chiq(8-V), 2-kir(9-V), 2-chiq(10-V), 3-kir(11-V), 3-chiq(12-V)
+  // JUMA: 1-kir(1-V), 1-chiq(2-V), 2-kir(3-V), 2-chiq(4-V), 3-kir(5-V), 3-chiq(6-V)
+  // SHANBA: 1-kir(7-V), 1-chiq(8-V), 2-kir(9-V), 2-chiq(10-V), 3-kir(11-V), 3-chiq(12-V)
 
   const dayVoiceMap = {
     1: { // Dushanba
@@ -1844,6 +1981,24 @@ function compileDailyEvents(targetDayOfWeek = null) {
       p2_out: { url: AUDIO_PATHS.thu_p2_out, label: "10-Voice" },
       p3_in: { url: AUDIO_PATHS.thu_p3_in, label: "11-Voice" },
       p3_out: { url: AUDIO_PATHS.thu_p3_out, label: "12-Voice" }
+    },
+    5: { // Juma
+      name: "Juma",
+      p1_in: { url: AUDIO_PATHS.fri_p1_in, label: "1-Voice" },
+      p1_out: { url: AUDIO_PATHS.fri_p1_out, label: "2-Voice" },
+      p2_in: { url: AUDIO_PATHS.fri_p2_in, label: "3-Voice" },
+      p2_out: { url: AUDIO_PATHS.fri_p2_out, label: "4-Voice" },
+      p3_in: { url: AUDIO_PATHS.fri_p3_in, label: "5-Voice" },
+      p3_out: { url: AUDIO_PATHS.fri_p3_out, label: "6-Voice" }
+    },
+    6: { // Shanba
+      name: "Shanba",
+      p1_in: { url: AUDIO_PATHS.sat_p1_in, label: "7-Voice" },
+      p1_out: { url: AUDIO_PATHS.sat_p1_out, label: "8-Voice" },
+      p2_in: { url: AUDIO_PATHS.sat_p2_in, label: "9-Voice" },
+      p2_out: { url: AUDIO_PATHS.sat_p2_out, label: "10-Voice" },
+      p3_in: { url: AUDIO_PATHS.sat_p3_in, label: "11-Voice" },
+      p3_out: { url: AUDIO_PATHS.sat_p3_out, label: "12-Voice" }
     }
   };
 
@@ -2148,6 +2303,8 @@ function switchVoiceTab(tab) {
   document.getElementById("tabTueBtn")?.classList.toggle("active", tab === 'tue');
   document.getElementById("tabWedBtn")?.classList.toggle("active", tab === 'wed');
   document.getElementById("tabThuBtn")?.classList.toggle("active", tab === 'thu');
+  document.getElementById("tabFriBtn")?.classList.toggle("active", tab === 'fri');
+  document.getElementById("tabSatBtn")?.classList.toggle("active", tab === 'sat');
   document.getElementById("tabAllBtn")?.classList.toggle("active", tab === 'all');
   renderVoiceCards();
 }
@@ -2167,6 +2324,8 @@ function renderVoiceCards() {
     else if (v.day === 'tue') borderCol = '#10b981';
     else if (v.day === 'wed') borderCol = '#06b6d4';
     else if (v.day === 'thu') borderCol = '#8b5cf6';
+    else if (v.day === 'fri') borderCol = '#14b8a6';
+    else if (v.day === 'sat') borderCol = '#f59e0b';
 
     const seq = v.isChime ? [AUDIO_PATHS.voice1] : [AUDIO_PATHS.voice1, v.url];
     const seqStr = JSON.stringify(seq).replace(/"/g, '&quot;');
@@ -2341,6 +2500,8 @@ function bindFormControls() {
     if (day === 2) sampleVoice = AUDIO_PATHS.tue_p1_in;
     else if (day === 3) sampleVoice = AUDIO_PATHS.wed_p1_in;
     else if (day === 4) sampleVoice = AUDIO_PATHS.thu_p1_in;
+    else if (day === 5) sampleVoice = AUDIO_PATHS.fri_p1_in;
+    else if (day === 6) sampleVoice = AUDIO_PATHS.sat_p1_in;
     playAudioSequence([AUDIO_PATHS.voice1, sampleVoice]);
   });
   document.getElementById("stopAudioBtn")?.addEventListener("click", stopAllAudio);
@@ -2382,6 +2543,22 @@ function bindFormControls() {
   document.getElementById("manualThu2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p2_out]); addBellLog("🔔 Pay 2-chiq: 1-V ➔ Pay 10-V"); });
   document.getElementById("manualThu3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_in]); addBellLog("🔔 Pay 3-kir: 1-V ➔ Pay 11-V"); });
   document.getElementById("manualThu3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_out]); addBellLog("🔔 Pay 3-chiq: 1-V ➔ Pay 12-V"); });
+
+  // Juma
+  document.getElementById("manualFri1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p1_in]); addBellLog("🔔 Ju 1-kir: 1-V ➔ Ju 1-V"); });
+  document.getElementById("manualFri1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p1_out]); addBellLog("🔔 Ju 1-chiq: 1-V ➔ Ju 2-V"); });
+  document.getElementById("manualFri2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p2_in]); addBellLog("🔔 Ju 2-kir: 1-V ➔ Ju 3-V"); });
+  document.getElementById("manualFri2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p2_out]); addBellLog("🔔 Ju 2-chiq: 1-V ➔ Ju 4-V"); });
+  document.getElementById("manualFri3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p3_in]); addBellLog("🔔 Ju 3-kir: 1-V ➔ Ju 5-V"); });
+  document.getElementById("manualFri3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p3_out]); addBellLog("🔔 Ju 3-chiq: 1-V ➔ Ju 6-V"); });
+
+  // Shanba
+  document.getElementById("manualSat1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p1_in]); addBellLog("🔔 Sh 1-kir: 1-V ➔ Sh 7-V"); });
+  document.getElementById("manualSat1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p1_out]); addBellLog("🔔 Sh 1-chiq: 1-V ➔ Sh 8-V"); });
+  document.getElementById("manualSat2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p2_in]); addBellLog("🔔 Sh 2-kir: 1-V ➔ Sh 9-V"); });
+  document.getElementById("manualSat2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p2_out]); addBellLog("🔔 Sh 2-chiq: 1-V ➔ Sh 10-V"); });
+  document.getElementById("manualSat3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p3_in]); addBellLog("🔔 Sh 3-kir: 1-V ➔ Sh 11-V"); });
+  document.getElementById("manualSat3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p3_out]); addBellLog("🔔 Sh 3-chiq: 1-V ➔ Sh 12-V"); });
 
   document.getElementById("manualAnthemBtn")?.addEventListener("click", () => {
     playAudioSequence([AUDIO_PATHS.anthem], 120000);
