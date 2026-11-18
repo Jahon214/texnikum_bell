@@ -22,9 +22,13 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n======================================================`);
-  console.log(`🏥 TIBBIYOT TEXNIKUMI AQLLI QO'NG'IROG'I ISHGA TUSHDI!`);
-  console.log(`🔗 Brauzerda oching: http://localhost:${PORT}`);
-  console.log(`======================================================\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n======================================================`);
+    console.log(`🏥 TIBBIYOT TEXNIKUMI AQLLI QO'NG'IROG'I ISHGA TUSHDI!`);
+    console.log(`🔗 Brauzerda oching: http://localhost:${PORT}`);
+    console.log(`======================================================\n`);
+  });
+}
+
+module.exports = app;
