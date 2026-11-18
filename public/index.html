@@ -8,12 +8,12 @@
 <style>
 /* ========================================================
    GULISTON TIBBIYOT TEXNIKUMI AQLLI QO'NG'IROG'I
-   2026-2027 O'QUV YILI TASDIQLANGAN JADVALI ASOSIDA
+   DUSHANBA VA SESHANBA MAXSUS OVOZLI TIZIMI (1-13 VOICES)
    ======================================================== */
 :root {
-  --ac: #0ea5e9;         /* Tibbiy moviy */
-  --ac2: #10b981;        /* Tibbiy zumrad */
-  --ac3: #6366f1;        /* Indigo */
+  --ac: #0ea5e9;
+  --ac2: #10b981;
+  --ac3: #6366f1;
   --ok: #10b981;
   --wr: #f59e0b;
   --er: #ef4444;
@@ -236,7 +236,7 @@ header {
 /* Asosiy Grid */
 .grid-main {
   display: grid;
-  grid-template-columns: 1.45fr 1fr;
+  grid-template-columns: 1.4fr 1.05fr;
   gap: 20px;
 }
 @media (max-width: 992px) {
@@ -462,11 +462,38 @@ header {
 }
 
 /* Ovoz kartalari ro'yxati */
+.sound-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.sound-tab-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--mut);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.sound-tab-btn.active {
+  background: var(--chip-bg);
+  color: var(--ac);
+  border-color: var(--card-border);
+}
+
 .sound-badge-box {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 .sound-badge-card {
   background: var(--input-bg);
@@ -773,7 +800,7 @@ body.tv-mode .tv-marquee {
       <div class="logo-text-group">
         <span class="logo-badge">⚕️ 2026-2027 O'quv yili</span>
         <div class="logo-title">Guliston Tibbiyot Texnikumi</div>
-        <small class="logo-desc">Rasmiy tasdiqlangan qo'ng'iroqlar jadvali va avtomatlashtirilgan ovoz tizimi</small>
+        <small class="logo-desc">Aqlli qo'ng'iroq va maxsus ovozli xabarlar tizimi (1-13 Voices)</small>
       </div>
     </div>
     <div class="header-actions">
@@ -788,7 +815,7 @@ body.tv-mode .tv-marquee {
 
   <!-- Audio unlock banner -->
   <div class="audio-warn" id="audioWarnBanner">
-    <span>🔇 <b>Muhim eslatma:</b> Brauzer qo'ng'iroq va audio e'lonlarni to'sqinliksiz ijro etishi uchun sahifaga bir marta ovozni faollashtiring.</span>
+    <span>🔇 <b>Muhim eslatma:</b> Brauzer 1-voice (chime) va qolgan audio e'lonlarni to'sqinliksiz ijro etishi uchun sahifada ovozni faollashtiring.</span>
     <button class="btn success sm" onclick="unlockAudioEngine()">🔊 Ovozni faollashtirish</button>
   </div>
 
@@ -822,7 +849,7 @@ body.tv-mode .tv-marquee {
             </svg>
             <div class="ring-inner">
               <div class="live-clock" id="clockDisplay">00:00:00</div>
-              <div class="live-date" id="dateDisplay">Dushanba, 16-noyabr</div>
+              <div class="live-date" id="dateDisplay">Dushanba, 18-noyabr</div>
             </div>
           </div>
 
@@ -841,7 +868,7 @@ body.tv-mode .tv-marquee {
             <b id="chipAnthemTime" style="color: var(--ok);">08:29</b>
           </div>
           <div class="chip">
-            <small>I Smena boshlanishi</small>
+            <small>1-para (Kirish)</small>
             <b id="chipStartTime">08:30</b>
           </div>
           <div class="chip">
@@ -849,15 +876,15 @@ body.tv-mode .tv-marquee {
             <b id="chipBigBreak" style="color: var(--wr);">10:55</b>
           </div>
           <div class="chip">
-            <small>II Smena boshlanishi</small>
-            <b id="chipSecondShiftTime" style="color: var(--tea);">12:50</b>
+            <small>I Smena yakuni</small>
+            <b id="chipShift1EndTime" style="color: var(--tea);">12:20</b>
           </div>
           <div class="chip">
-            <small>Mashg'ulotlar tugashi</small>
+            <small>II Smena yakuni</small>
             <b id="chipEndTime">16:30</b>
           </div>
           <div class="chip">
-            <small>Keyingi qo'ng'iroq</small>
+            <small>Keyingi signal</small>
             <b id="chipNextBell" style="color: var(--ac);">--:--</b>
           </div>
         </div>
@@ -866,7 +893,7 @@ body.tv-mode .tv-marquee {
         <div class="timeline-bar-wrapper">
           <div class="timeline-labels">
             <span>08:29 Madhiya</span>
-            <span>08:30 (I Smena)</span>
+            <span>08:30 (1-para)</span>
             <span>10:55 Katta tanaffus (15 daq)</span>
             <span>12:20 Smena almashinuvi</span>
             <span>12:50 (II Smena)</span>
@@ -879,14 +906,14 @@ body.tv-mode .tv-marquee {
 
         <!-- TV Rejimida Yuguruvchi Satr (Marquee) -->
         <div class="tv-marquee" id="tvMarquee">
-          <span>🏥 Guliston tibbiyot texnikumi • 2026-2027 o'quv yili uchun tasdiqlangan qo'ng'iroqlar jadvali • Oq xalat va sanitariya-gigiyena qoidalariga qat'iy rioya qiling! • Navbatchi ma'muriyat xonasi: 1-qavat</span>
+          <span>🏥 Guliston tibbiyot texnikumi • 2026-2027 o'quv yili rasmiy qo'ng'iroqlar jadvali • Oq xalat va sanitariya qoidalariga qat'iy rioya qiling! • Navbatchi ma'muriyat: 1-qavat</span>
         </div>
       </div>
 
       <!-- Schedule Table Card -->
       <div class="card" style="margin-top: 20px;">
         <div class="card-title">
-          <span class="badge-dot">Rasmiy dars va paralar jadvali</span>
+          <span class="badge-dot">Bugungi dars va paralar jadvali</span>
           <div style="display:flex; gap:8px;">
             <button class="btn ghost sm" id="editScheduleBtn">✏️ Tahrirlash</button>
             <button class="btn ghost sm" id="resetDefaultBtn">🔄 Standart</button>
@@ -898,7 +925,7 @@ body.tv-mode .tv-marquee {
             <thead>
               <tr>
                 <th style="width: 45px;">#</th>
-                <th>Smena & Juftlik (Para)</th>
+                <th>Smena & Juftlik</th>
                 <th>Kirish</th>
                 <th>Chiqish</th>
                 <th class="col-hide-sm">Davomiyligi</th>
@@ -914,96 +941,25 @@ body.tv-mode .tv-marquee {
       </div>
     </div>
 
-    <!-- Right Column: Settings, Custom Voices, Days & Simulation -->
+    <!-- Right Column: Settings, 13 Voices List, Days & Simulation -->
     <div>
-      <!-- Audio System Card (Qo'ng'iroqlar va Ovozlar) -->
+      <!-- Audio System Card (13 Custom Voices) -->
       <div class="card">
         <div class="card-title">
-          <span class="badge-dot">Texnikum ovozli e'lonlar tizimi</span>
+          <span class="badge-dot">Maxsus Ovozlar Tizimi (1-13 Voices)</span>
+          <span style="font-size:11px; color:var(--ok); font-weight:700;">✅ Qo'ng'iroqsiz: 1-Voice ➔ Voice</span>
         </div>
 
-        <!-- Guliston Texnikum Audio Announcements List -->
-        <div class="sound-badge-box">
-          <!-- 1-Voice: Har bir 5 daqiqalik tanaffus -->
-          <div class="sound-badge-card" style="border-left-color: #0ea5e9;">
-            <div class="sound-badge-title">
-              <span>🔔 1. Qisqa tanaffus (5 daqiqa)</span>
-              <button class="btn ghost sm" id="testVoice1Btn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              <i>"Hurmatli talabalar va o'qituvchilar! Dars yakunlandi, besh daqiqalik qisqa tanaffus. Iltimos, xonalarni shamollatib, sanitariya qoidalariga rioya qiling."</i>
-            </div>
-            <div style="font-size:11px; color:var(--mut);">
-              <span class="rule-tag">Ketma-ketlik</span> Qo'ng'iroq ➔ Chime ➔ 1-Ovoz (09:40, 14:00, 15:15 da)
-            </div>
-          </div>
+        <!-- Tabs for Dushanba / Seshanba voices -->
+        <div class="sound-tabs">
+          <button class="sound-tab-btn active" id="tabMonBtn" onclick="switchVoiceTab('mon')">📅 Dushanba (1-7)</button>
+          <button class="sound-tab-btn" id="tabTueBtn" onclick="switchVoiceTab('tue')">📅 Seshanba (8-13)</button>
+          <button class="sound-tab-btn" id="tabCommonBtn" onclick="switchVoiceTab('common')">🔔 Barcha ovozlar</button>
+        </div>
 
-          <!-- 2-Voice: Katta tanaffus boshlanishi (10:55 da - 15 daqiqa) -->
-          <div class="sound-badge-card" style="border-left-color: #f59e0b;">
-            <div class="sound-badge-title">
-              <span>☕ 2. Katta tanaffus boshlanganda (10:55 da)</span>
-              <button class="btn ghost sm" id="testVoice2Btn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              <i>"Hurmatli talabalar va ustozlar! Ikkinchi para yakunlandi. O'n besh daqiqalik katta tanaffus boshlandi. Maroqli dam oling!"</i>
-            </div>
-            <div style="font-size:11px; color:var(--mut);">
-              <span class="rule-tag">Ketma-ketlik</span> Qo'ng'iroq ➔ Chime ➔ 2-Ovoz (15 daqiqalik dam olish)
-            </div>
-          </div>
-
-          <!-- 3-Voice: Katta tanaffus tugashi (11:10 da) -->
-          <div class="sound-badge-card" style="border-left-color: #0284c7;">
-            <div class="sound-badge-title">
-              <span>⏰ 3. Katta tanaffus tugaganda (11:10 da)</span>
-              <button class="btn ghost sm" id="testVoice3Btn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              <i>"Diqqat, katta tanaffus yakunlandi. Dars mashg'ulotlari boshlandi. Talabalar o'z xonalariga marhamat qiling."</i>
-            </div>
-            <div style="font-size:11px; color:var(--mut);">
-              <span class="rule-tag">Ketma-ketlik</span> Qo'ng'iroq ➔ Chime ➔ 3-Ovoz (Kirish)
-            </div>
-          </div>
-
-          <!-- 4-Voice: I Smena yakuni & Smena almashinuvi (12:20 da) -->
-          <div class="sound-badge-card" style="border-left-color: #10b981;">
-            <div class="sound-badge-title">
-              <span>🔄 4. I Smena yakuni va Tushlik (12:20 da)</span>
-              <button class="btn ghost sm" id="testVoice4Btn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              <i>"Hurmatli talabalar va ustozlar! Birinchi smena darslari yakunlandi. Smenalar almashinuvi va tushlik vaqti boshlandi. Ikkinchi smena talabalariga muvaffaqiyat tilaymiz!"</i>
-            </div>
-            <div style="font-size:11px; color:var(--mut);">
-              <span class="rule-tag">Ketma-ketlik</span> Qo'ng'iroq ➔ Chime ➔ 4-Ovoz (30 daqiqa tushlik/almashinuv)
-            </div>
-          </div>
-
-          <!-- 5-Voice: II Smena va Kun yakuni (16:30 da) -->
-          <div class="sound-badge-card" style="border-left-color: #8b5cf6;">
-            <div class="sound-badge-title">
-              <span>🏁 5. II Smena va Kun yakuni (16:30 da)</span>
-              <button class="btn ghost sm" id="testVoice5Btn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              <i>"Hurmatli talabalar va texnikum jamoasi! Bugungi barcha mashg'ulotlar yakunlandi. Auditoriya va laboratoriyalarni tartibga keltirishingizni so'raymiz. Xayr, salomat bo'ling!"</i>
-            </div>
-            <div style="font-size:11px; color:var(--mut);">
-              <span class="rule-tag">Ketma-ketlik</span> Qo'ng'iroq ➔ Chime ➔ 5-Ovoz (Kun yakuni)
-            </div>
-          </div>
-
-          <!-- Madhiya 08:29 -->
-          <div class="sound-badge-card" style="border-left-color: #059669;">
-            <div class="sound-badge-title">
-              <span>🇺🇿 6. Davlat Madhiyasi (08:29 da)</span>
-              <button class="btn ghost sm" id="testAnthemBtn">▶ Sinash</button>
-            </div>
-            <div class="sound-badge-desc">
-              Har kuni soat <b>08:29 da</b> 1-para oldidan to'liq ijro etiladi.
-            </div>
-          </div>
+        <!-- Sound Cards Container -->
+        <div class="sound-badge-box" id="soundCardsContainer">
+          <!-- Populated dynamically via JS -->
         </div>
 
         <div class="form-grid">
@@ -1028,8 +984,8 @@ body.tv-mode .tv-marquee {
         </div>
 
         <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
-          <button class="btn success" id="testBellOnlyBtn">🔔 Faqat Qo'ng'iroq</button>
-          <button class="btn warning" id="testBreakFullBtn">▶ Qisqa tanaffus zanjiri</button>
+          <button class="btn success" id="testVoice1OnlyBtn">🔔 1-Voice (Freesound chime)</button>
+          <button class="btn warning" id="testSampleChainBtn">▶ Sinov: 1-Voice ➔ 2-Voice</button>
           <button class="btn ghost" id="stopAudioBtn">⏹ To'xtatish</button>
         </div>
       </div>
@@ -1037,16 +993,25 @@ body.tv-mode .tv-marquee {
       <!-- Working Days & Fast Presets -->
       <div class="card" style="margin-top: 20px;">
         <div class="card-title">
-          <span class="badge-dot">Haftalik ish kunlari & Smenalar</span>
+          <span class="badge-dot">Haftalik kunlar & Ovozlar rejimi</span>
         </div>
         <div class="days-bar" id="weekDaysBar">
           <!-- Du, Se, Ch, Pa, Ju, Sh, Ya -->
         </div>
 
-        <div style="margin-top: 18px;">
-          <label class="field-label">Tasdiqlangan smena namunalari</label>
+        <div style="margin-top: 16px;">
+          <label class="field-label">Ovozlar kunlik tartibi:</label>
+          <select id="voiceDayModeSelect" style="font-weight: 700;">
+            <option value="auto" selected>⚡ Avtomatik: Dushanba kuni Dushanba ovozlari, Seshanba kuni Seshanba ovozlari</option>
+            <option value="mon">📅 Doim Dushanba ovozlari (2, 3, 4, 5, 6, 7-Voice)</option>
+            <option value="tue">📅 Doim Seshanba ovozlari (8, 9, 10, 11, 12, 13-Voice)</option>
+          </select>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <label class="field-label">Smena namunalari</label>
           <div class="preset-pills">
-            <button class="btn ghost sm" id="presetFullDay">📋 I va II Smena (To'liq kun: 08:30 - 16:30)</button>
+            <button class="btn ghost sm" id="presetFullDay">📋 I va II Smena (08:30 - 16:30)</button>
             <button class="btn ghost sm" id="presetShift1">🩺 Faqat I Smena (08:30 - 12:20)</button>
             <button class="btn ghost sm" id="presetShift2">🌙 Faqat II Smena (12:50 - 16:30)</button>
           </div>
@@ -1059,14 +1024,21 @@ body.tv-mode .tv-marquee {
           <span class="badge-dot">Tezkor Sinov (Simulyatsiya)</span>
         </div>
         <p style="font-size: 13px; color: var(--mut); margin-bottom: 12px;">
-          08:28 dan boshlab butun kunlik I va II smena paralarini, tanaffuslarni va e'lonlarni tezlashtirilgan rejimda tekshiring.
+          Tanlangan kun (Dushanba yoki Seshanba) bo'yicha 1-voice va tegishli voice zanjirini tezlashtirilgan tarzda eshitib ko'ring.
         </p>
         <div class="form-grid">
+          <div>
+            <label class="field-label">Simulyatsiya kuni</label>
+            <select id="simDaySelect">
+              <option value="1" selected>📅 Dushanba (2, 3, 4, 5, 6, 7-Voice)</option>
+              <option value="2">📅 Seshanba (8, 9, 10, 11, 12, 13-Voice)</option>
+            </select>
+          </div>
           <div>
             <label class="field-label">Boshlash vaqti</label>
             <input type="time" id="simStartTime" value="08:28">
           </div>
-          <div>
+          <div style="grid-column: 1 / -1;">
             <label class="field-label">Tezlik ko'paytmasi</label>
             <select id="simSpeedSelect">
               <option value="30">×30 (1 son = 30 son)</option>
@@ -1089,7 +1061,7 @@ body.tv-mode .tv-marquee {
     <!-- Today's Upcoming Bell Schedule -->
     <div class="card">
       <div class="card-title">
-        <span class="badge-dot">Bugungi barcha signallar va e'lonlar</span>
+        <span class="badge-dot">Bugungi barcha signallar va ovozlar</span>
       </div>
       <div class="scroll-list" id="todayBellList">
         <!-- Dynamically rendered -->
@@ -1102,14 +1074,25 @@ body.tv-mode .tv-marquee {
         <span class="badge-dot">Qo'lda boshqarish & Favqulodda signal</span>
       </div>
       <p style="font-size: 13px; color: var(--mut); margin-bottom: 12px;">
-        Zarur bo'lganda istalgan vaqtda signal berish yoki to'xtatish.
+        Zarur bo'lganda istalgan ovoz zanjirini qo'lda ishga tushirish.
       </p>
       <div class="quick-controls">
-        <button class="btn success" id="manualInBell">🔔 Faqat Qo'ng'iroq</button>
-        <button class="btn warning" id="manualBreakBell">🔔 Qisqa tanaffus</button>
-        <button class="btn ghost" id="manualAnthemBtn">🇺🇿 Davlat Madhiyasi</button>
-        <button class="btn danger" id="manualSiren">🚨 Qizil Kod (Sirena)</button>
-        <button class="btn ghost" id="manualStop">⏹ To'xtatish</button>
+        <button class="btn success sm" id="manualFreesoundBtn">🔔 1-Voice (Freesound)</button>
+        <button class="btn ghost sm" id="manualMon1In">Du 1-kirish (2-V)</button>
+        <button class="btn ghost sm" id="manualMon1Out">Du 1-chiqish (3-V)</button>
+        <button class="btn ghost sm" id="manualMon2In">Du 2-kirish (4-V)</button>
+        <button class="btn ghost sm" id="manualMon2Out">Du 2-chiqish (5-V)</button>
+        <button class="btn ghost sm" id="manualMon3In">Du 3-kirish (6-V)</button>
+        <button class="btn ghost sm" id="manualMon3Out">Du 3-chiqish (7-V)</button>
+        <button class="btn warning sm" id="manualTue1In">Se 1-kirish (8-V)</button>
+        <button class="btn warning sm" id="manualTue1Out">Se 1-chiqish (9-V)</button>
+        <button class="btn warning sm" id="manualTue2In">Se 2-kirish (10-V)</button>
+        <button class="btn warning sm" id="manualTue2Out">Se 2-chiqish (11-V)</button>
+        <button class="btn warning sm" id="manualTue3In">Se 3-kirish (12-V)</button>
+        <button class="btn warning sm" id="manualTue3Out">Se 3-chiqish (13-V)</button>
+        <button class="btn ghost sm" id="manualAnthemBtn">🇺🇿 Davlat Madhiyasi</button>
+        <button class="btn danger sm" id="manualSiren">🚨 Qizil Kod (Sirena)</button>
+        <button class="btn ghost sm" id="manualStop">⏹ To'xtatish</button>
       </div>
     </div>
 
@@ -1201,7 +1184,7 @@ body.tv-mode .tv-marquee {
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 10px; background: var(--chip-bg); border-radius: 10px;">
       <input type="checkbox" id="announcementIntroChime" checked style="width: 18px; height: 18px; accent-color: var(--ac);">
       <label for="announcementIntroChime" style="font-size: 13px; font-weight: 600; cursor: pointer;">
-        🔔 E'londan oldin diqqat signali (Freesound chime) chalinsin
+        🔔 E'londan oldin 1-voice (Freesound chime) chalinsin
       </label>
     </div>
 
@@ -1270,7 +1253,6 @@ const SCHEDULE_II_SMENA = [
   { id: 6, shift: "II Smena", name: "3-para", start: "15:20", end: "16:30", type: "lesson", breakMin: 0, breakName: "II Smena va Kun yakuni" }
 ];
 
-/* Standart: I va II Smena birlashtirilgan to'liq kunlik jadval (08:30 - 16:30) */
 const DEFAULT_SCHEDULE = [
   ...SCHEDULE_I_SMENA,
   ...SCHEDULE_II_SMENA
@@ -1280,18 +1262,162 @@ function getAudioUrl(fileName) {
   return '/audio/' + fileName;
 }
 
+// 1-13 TA MAXSUS OVOZLAR
 const AUDIO_PATHS = {
-  bell: getAudioUrl("bell.mp3"),
-  freesound: getAudioUrl("freesound.mp3"),
+  voice1: getAudioUrl("voice_1_freesound.mp3"), // 1-Voice (Freesound diqqat signali)
+  // Dushanba
+  voice2: getAudioUrl("voice_2_mon_p1_in.mp3"),  // Dushanba 1-para kirish (08:30)
+  voice3: getAudioUrl("voice_3_mon_p1_out.mp3"), // Dushanba 1-para chiqish (09:40)
+  voice4: getAudioUrl("voice_4_mon_p2_in.mp3"),  // Dushanba 2-para kirish (09:45)
+  voice5: getAudioUrl("voice_5_mon_p2_out.mp3"), // Dushanba 2-para chiqish - Katta tanaffus (10:55)
+  voice6: getAudioUrl("voice_6_mon_p3_in.mp3"),  // Dushanba 3-para kirish (11:10)
+  voice7: getAudioUrl("voice_7_mon_p3_out.mp3"), // Dushanba 3-para chiqish - Darslar yakuni (12:20)
+  // Seshanba
+  voice8: getAudioUrl("voice_8_tue_p1_in.mp3"),   // Seshanba 1-para kirish (08:30)
+  voice9: getAudioUrl("voice_9_tue_p1_out.mp3"),  // Seshanba 1-para chiqish (09:40)
+  voice10: getAudioUrl("voice_10_tue_p2_in.mp3"), // Seshanba 2-para kirish (09:45)
+  voice11: getAudioUrl("voice_11_tue_p2_out.mp3"),// Seshanba 2-para chiqish - Katta tanaffus (10:55)
+  voice12: getAudioUrl("voice_12_tue_p3_in.mp3"), // Seshanba 3-para kirish (11:10)
+  voice13: getAudioUrl("voice_13_tue_p3_out.mp3"),// Seshanba 3-para chiqish - Darslar yakuni (12:20)
+  // Umumiy
   anthem: getAudioUrl("madhiya.mp3"),
-  voice1: getAudioUrl("voice_1_tanaffus.mp3"),
-  voice2: getAudioUrl("voice_2_katta_tanaffus.mp3"),
-  voice3: getAudioUrl("voice_3_tanaffus_tugadi.mp3"),
-  voice4: getAudioUrl("voice_4_smena_almashinuvi.mp3"),
-  voice5: getAudioUrl("voice_5_kun_yakuni.mp3"),
   emergencyVoice: getAudioUrl("voice_emergency.mp3"),
   sanitaryVoice: getAudioUrl("voice_sanitariya.mp3")
 };
+
+// 13 ta Ovoz haqida to'liq ma'lumotlar
+const VOICES_INFO = [
+  {
+    num: 1,
+    id: "voice1",
+    tag: "Chime",
+    title: "1-Voice (Freesound diqqat signali)",
+    time: "Doim barcha e'lonlardan oldin",
+    desc: "Barcha xabarlardan oldin birinchi bo'lib ijro etiladigan tiniq diqqat signali.",
+    url: AUDIO_PATHS.voice1,
+    day: "common"
+  },
+  {
+    num: 2,
+    id: "voice2",
+    tag: "Dushanba",
+    title: "2-Voice: Dushanba 1-para kirish",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Yangi haftani yangi maqsad bilan boshlaymiz va omad tilab qolamiz. Tibbiyotda eng katta ishonch inson salomatligi sizga omonat qilinishidir...\"",
+    url: AUDIO_PATHS.voice2,
+    day: "mon"
+  },
+  {
+    num: 3,
+    id: "voice3",
+    tag: "Dushanba",
+    title: "3-Voice: Dushanba 1-para tugashi",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Aziz talabalar, kasbga hurmat katta gaplardan emas, kichik ishlardan boshlanadi. Ya'ni darsga vaqtida kirish, ustozni diqqat bilan tinglash...\"",
+    url: AUDIO_PATHS.voice3,
+    day: "mon"
+  },
+  {
+    num: 4,
+    id: "voice4",
+    tag: "Dushanba",
+    title: "4-Voice: Dushanba 2-para kirish",
+    time: "09:45 da",
+    desc: "\"Diqqat, aziz talabalar, ikkinchi para boshlanmoqda. Kelajakda bemor sizning javobingizga emas, to'g'ri qaroringizga muhtoj bo'ladi. Shuning uchun tushunmagan mavzuni yashirmang...\"",
+    url: AUDIO_PATHS.voice4,
+    day: "mon"
+  },
+  {
+    num: 5,
+    id: "voice5",
+    tag: "Dushanba",
+    title: "5-Voice: Dushanba 2-para tugashi (Katta tanaffus)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para yakunlandi. Endi katta tanaffus. Bir fikrni yodda tuting. Ishonch bir kunda paydo bo'lmaydi. U kundalik halol mehnat orqali orttiriladi...\"",
+    url: AUDIO_PATHS.voice5,
+    day: "mon"
+  },
+  {
+    num: 6,
+    id: "voice6",
+    tag: "Dushanba",
+    title: "6-Voice: Dushanba 3-para kirish",
+    time: "11:10 da",
+    desc: "\"Hurmatli talabalar, uchinchi para boshlanadi. So'nggi darsda ham e'tiborni yo'qotmang. Inson salomatligi bilan ishlaydigan mutaxassis uchun mayda tafsilot ham muhim bo'lishi mumkin...\"",
+    url: AUDIO_PATHS.voice6,
+    day: "mon"
+  },
+  {
+    num: 7,
+    id: "voice7",
+    tag: "Dushanba",
+    title: "7-Voice: Dushanba 3-para tugashi (Kun yakuni)",
+    time: "12:20 da",
+    desc: "\"Aziz talabalar, bugungi mashg'ulotlar yakunlandi. O'zingizdan bir savol so'rang: Bugun qaysi bilimimni amalda tushuntira olaman? Agar javobingiz aniq bo'lsa, kuningiz mazmunli o'tgan...\"",
+    url: AUDIO_PATHS.voice7,
+    day: "mon"
+  },
+  {
+    num: 8,
+    id: "voice8",
+    tag: "Seshanba",
+    title: "8-Voice: Seshanba 1-para kirish",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va ustozlar! Bugungi kunimiz ilmga qiziqish va faol savollar kuni bo'lsin. Tibbiyotda yodlashning o'zi kamlik qiladi. Nima uchun shunday bo'lishini tushunish muhim...\"",
+    url: AUDIO_PATHS.voice8,
+    day: "tue"
+  },
+  {
+    num: 9,
+    id: "voice9",
+    tag: "Seshanba",
+    title: "9-Voice: Seshanba 1-para tugashi",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Bugungi foydali odat: o'rgangan mavzuingizni oddiy so'zlar bilan bir daqiqada tushuntirib ko'ring. Tushuntira olmasangiz, qaysi qismi noaniqligini aniqlang...\"",
+    url: AUDIO_PATHS.voice9,
+    day: "tue"
+  },
+  {
+    num: 10,
+    id: "voice10",
+    tag: "Seshanba",
+    title: "10-Voice: Seshanba 2-para kirish",
+    time: "09:45 da",
+    desc: "\"Aziz talabalar, ikkinchi para boshlanmoqda. Amaliy mashg'ulotda faqat natijaga emas, bajarish ketma-ketligiga ham qarang. To'g'ri usul va xavfsiz yondashuvni birgalikda o'rganing...\"",
+    url: AUDIO_PATHS.voice10,
+    day: "tue"
+  },
+  {
+    num: 11,
+    id: "voice11",
+    tag: "Seshanba",
+    title: "11-Voice: Seshanba 2-para tugashi (Katta tanaffus)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Bilingki, xatoni mashg'ulotda ko'rish va tuzatish kelajakdagi xavfsiz ishga tayyorgarlik. Xatoni yashirmang, sababini tushuning...\"",
+    url: AUDIO_PATHS.voice11,
+    day: "tue"
+  },
+  {
+    num: 12,
+    id: "voice12",
+    tag: "Seshanba",
+    title: "12-Voice: Seshanba 3-para kirish",
+    time: "11:10 da",
+    desc: "\"Diqqat, uchinchi para boshlanmoqda. O'zingizga bitta vazifa qo'ying: bugungi darsdan kamida bir yangi atamani mazmuni va amaliy qo'llanishi bilan yodda qoldiring...\"",
+    url: AUDIO_PATHS.voice12,
+    day: "tue"
+  },
+  {
+    num: 13,
+    id: "voice13",
+    tag: "Seshanba",
+    title: "13-Voice: Seshanba 3-para tugashi (Kun yakuni)",
+    time: "12:20 da",
+    desc: "\"Aziz talabalar, bugungi darslar yakunlandi. Endi besh daqiqa ajratib, daftarlaringizdagi uch muhim fikrni qayta ko'ring. Qisqa takrorlash ertangi mashg'ulotga tayyorgarlik bo'ladi...\"",
+    url: AUDIO_PATHS.voice13,
+    day: "tue"
+  }
+];
 
 let AppConfig = {
   volume: 90,
@@ -1300,7 +1426,8 @@ let AppConfig = {
   anthemEnabled: true,
   anthemTime: "08:29",
   workingDays: [1, 2, 3, 4, 5, 6], // Du-Sh
-  activeShift: "I va II Smena (To'liq kun)"
+  activeShift: "I va II Smena (To'liq kun)",
+  voiceDayMode: "auto" // 'auto', 'mon', 'tue'
 };
 
 let schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
@@ -1311,11 +1438,13 @@ let chainIndex = 0;
 let bellLog = [];
 let triggeredEventsToday = new Set();
 let cachedGeneratedAudioUrl = null;
+let activeVoiceTab = "mon";
 
 // Simulyatsiya holati
 let isSimulation = false;
 let simFakeSeconds = 0;
 let simSpeed = 120;
+let simFakeDay = 1; // 1 = Dushanba, 2 = Seshanba
 let lastSimRealTs = null;
 
 function getMasterPlayer() {
@@ -1359,41 +1488,8 @@ function stopAllAudio() {
   if (icon) icon.classList.remove("bell-ring-active");
 }
 
-/* WebAudio orqali zaxira qo'ng'iroq chalinishi */
-function playSynthesizedBell() {
-  try {
-    if (!audioCtx) {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AC();
-    }
-    if (audioCtx.state === "suspended") audioCtx.resume();
-
-    const notes = [659.25, 523.25, 587.33, 392.0];
-    const now = audioCtx.currentTime;
-    notes.forEach((freq, i) => {
-      const startTime = now + (i * 0.45);
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, startTime);
-
-      const vol = Math.max(0.1, Math.min(1, AppConfig.volume / 100));
-      gain.gain.setValueAtTime(0.85 * vol, startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 1.2);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + 1.25);
-    });
-    animateBellIcon(4000);
-  } catch (e) {
-    console.error("Synthesized bell error:", e);
-  }
-}
-
-/* Ketma-ket audio ijro zanjiri */
-function playAudioSequence(audioUrls, totalAnimDuration = 18000) {
+/* KETMA-KET AUDIO IJRO: 1-VOICE ➔ MAQSADLI VOICE (HECH QANDAY QO'NG'IROQSIZ) */
+function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
   if (AppConfig.muted) return;
   unlockAudioEngine();
   stopAllAudio();
@@ -1425,10 +1521,7 @@ function playAudioSequence(audioUrls, totalAnimDuration = 18000) {
 
     player.onended = callNext;
     player.onerror = () => {
-      console.warn("Audio fayl yuklanmadi, zaxira chalinmoqda:", url);
-      if (url.includes("bell.mp3") || url.includes("voice_1")) {
-        playSynthesizedBell();
-      }
+      console.warn("Audio fayl yuklanmadi:", url);
       callNext();
     };
 
@@ -1436,9 +1529,8 @@ function playAudioSequence(audioUrls, totalAnimDuration = 18000) {
     const playPromise = player.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn("Audio bloklandi:", err);
-        playSynthesizedBell();
-        showToast("⚠️ Brauzer ovozni chekladi. Sahifaga bir marta bosing!", "warning");
+        console.warn("Audio ijro brauzer tomonidan bloklandi:", err);
+        showToast("⚠️ Brauzer ovozni chekladi. Ovozni to'liq eshitish uchun sahifaga bosing!", "warning");
         callNext();
       });
     }
@@ -1447,7 +1539,7 @@ function playAudioSequence(audioUrls, totalAnimDuration = 18000) {
       if (!nextCalled && activeAudio === player) {
         callNext();
       }
-    }, 25000);
+    }, 35000);
   }
 
   playNext();
@@ -1459,7 +1551,7 @@ function animateBellIcon(durationMs = 2500) {
   icon.classList.add("bell-ring-active");
   setTimeout(() => {
     icon.classList.remove("bell-ring-active");
-  }, Math.min(22000, durationMs));
+  }, Math.min(25000, durationMs));
 }
 
 // Favqulodda sirena
@@ -1488,7 +1580,7 @@ function playEmergencySiren() {
   animateBellIcon(5000);
 
   setTimeout(() => {
-    playAudioSequence([AUDIO_PATHS.emergencyVoice], 12000);
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.emergencyVoice], 15000);
   }, 3500);
 
   addBellLog("🚨 Favqulodda tibbiy signal (Qizil Kod) ishga tushirildi");
@@ -1521,10 +1613,11 @@ function getCurrentDayTime() {
     lastSimRealTs = now;
     simFakeSeconds += delta * simSpeed;
     if (simFakeSeconds >= 86400) simFakeSeconds %= 86400;
+    const dayName = simFakeDay === 2 ? "Seshanba" : "Dushanba";
     return {
-      dayOfWeek: 1, // Dushanba
+      dayOfWeek: simFakeDay,
       currentSec: simFakeSeconds,
-      dateString: "Sinov / Simulyatsiya rejimi"
+      dateString: `${dayName} (Simulyatsiya rejimi)`
     };
   }
 
@@ -1539,11 +1632,23 @@ function getCurrentDayTime() {
   return { dayOfWeek, currentSec, dateString };
 }
 
-/* KUNLIK SIGNAL REJASI (EVENT SCHEDULE PLANNER - GULISTON TIBBIYOT TEXNIKUMI) */
-function compileDailyEvents() {
+/* Ovozlar kunini aniqlash: Dushanba (1) yoki Seshanba (2) */
+function getActiveVoiceDay(currentDayOfWeek) {
+  if (AppConfig.voiceDayMode === 'mon') return 1;
+  if (AppConfig.voiceDayMode === 'tue') return 2;
+  // 'auto': Seshanba (2), Payshanba (4), Shanba (6) bo'lsa Seshanba ovozlari (8-13)
+  // Dushanba (1), Chorshanba (3), Juma (5) bo'lsa Dushanba ovozlari (2-7)
+  return (currentDayOfWeek === 2 || currentDayOfWeek === 4 || currentDayOfWeek === 6) ? 2 : 1;
+}
+
+/* KUNLIK SIGNAL REJASI (EVENT SCHEDULE PLANNER) */
+function compileDailyEvents(targetDayOfWeek = null) {
+  const { dayOfWeek } = getCurrentDayTime();
+  const day = targetDayOfWeek !== null ? targetDayOfWeek : dayOfWeek;
+  const isTuesday = (getActiveVoiceDay(day) === 2);
   const events = [];
 
-  // 1. Davlat Madhiyasi
+  // 1. Davlat Madhiyasi (08:29)
   if (AppConfig.anthemEnabled && AppConfig.anthemTime) {
     events.push({
       id: "anthem",
@@ -1556,89 +1661,76 @@ function compileDailyEvents() {
     });
   }
 
-  // 2. Paralar va Tanaffuslar ketma-ketligi
+  // 2. Paralar bo'yicha maxsus 1-13 ovozlar zanjiri
+  // Dushanba:
+  // 1-kirish (08:30): 1-voice + 2-voice
+  // 1-chiqish (09:40): 1-voice + 3-voice
+  // 2-kirish (09:45): 1-voice + 4-voice
+  // 2-chiqish (10:55): 1-voice + 5-voice (Katta tanaffus)
+  // 3-kirish (11:10): 1-voice + 6-voice
+  // 3-chiqish (12:20): 1-voice + 7-voice (Kun yakuni)
+
+  // Seshanba:
+  // 1-kirish (08:30): 1-voice + 8-voice
+  // 1-chiqish (09:40): 1-voice + 9-voice
+  // 2-kirish (09:45): 1-voice + 10-voice
+  // 2-chiqish (10:55): 1-voice + 11-voice (Katta tanaffus)
+  // 3-kirish (11:10): 1-voice + 12-voice
+  // 3-chiqish (12:20): 1-voice + 13-voice (Kun yakuni)
+
   schedule.forEach((slot, index) => {
     const startSec = timeToSec(slot.start);
     const endSec = timeToSec(slot.end);
     const shiftLabel = slot.shift ? `[${slot.shift}] ` : "";
 
-    // Dars/Para boshlanishi
-    if (slot.start === "11:10") {
-      // Katta tanaffus tugashi (3-Ovoz)
-      events.push({
-        id: `start_${slot.id}`,
-        timeSec: startSec,
-        timeStr: slot.start,
-        title: `${shiftLabel}${slot.name} boshlandi`,
-        sub: "Katta tanaffus yakunlandi, mashg'ulot boshlandi",
-        type: "lesson_start",
-        sequence: [AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice3],
-        slotId: slot.id
-      });
-    } else {
-      // Standart kirish qo'ng'irog'i
-      events.push({
-        id: `start_${slot.id}`,
-        timeSec: startSec,
-        timeStr: slot.start,
-        title: `${shiftLabel}${slot.name} boshlandi`,
-        sub: "Mashg'ulot boshlandi",
-        type: "lesson_start",
-        sequence: [AUDIO_PATHS.bell],
-        slotId: slot.id
-      });
+    // Kirish va Chiqish ovozlarini aniqlaymiz
+    let inVoice = isTuesday ? AUDIO_PATHS.voice8 : AUDIO_PATHS.voice2;
+    let inVoiceNum = isTuesday ? 8 : 2;
+    let outVoice = isTuesday ? AUDIO_PATHS.voice9 : AUDIO_PATHS.voice3;
+    let outVoiceNum = isTuesday ? 9 : 3;
+
+    if (slot.start === "09:45" || slot.id === 2 || slot.id === 5) {
+      inVoice = isTuesday ? AUDIO_PATHS.voice10 : AUDIO_PATHS.voice4;
+      inVoiceNum = isTuesday ? 10 : 4;
+    } else if (slot.start === "11:10" || slot.id === 3 || slot.id === 6) {
+      inVoice = isTuesday ? AUDIO_PATHS.voice12 : AUDIO_PATHS.voice6;
+      inVoiceNum = isTuesday ? 12 : 6;
     }
 
-    // Dars/Para tugashi
-    if (slot.end === "10:55") {
-      // Katta tanaffus (15 daqiqa) — 2-Ovoz
-      events.push({
-        id: `end_${slot.id}`,
-        timeSec: endSec,
-        timeStr: slot.end,
-        title: `${shiftLabel}${slot.name} yakunlandi`,
-        sub: "Katta tanaffus (15 daqiqa dam olish)",
-        type: "break_start",
-        sequence: [AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice2],
-        slotId: slot.id
-      });
-    } else if (slot.end === "12:20") {
-      // I Smena yakuni va Smena almashinuvi (30 daqiqa) — 4-Ovoz
-      events.push({
-        id: `end_${slot.id}`,
-        timeSec: endSec,
-        timeStr: slot.end,
-        title: `I Smena yakunlandi (12:20)`,
-        sub: "Smenalar almashinuvi va tushlik (30 daqiqa)",
-        type: "lunch_start",
-        sequence: [AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice4],
-        slotId: slot.id
-      });
-    } else if (slot.end === "16:30" || index === schedule.length - 1) {
-      // II Smena va Kun yakuni — 5-Ovoz
-      events.push({
-        id: `end_${slot.id}`,
-        timeSec: endSec,
-        timeStr: slot.end,
-        title: `Mashg'ulotlar yakunlandi (16:30)`,
-        sub: "Kun yakuni: Auditoriya va laboratoriyalarni tartibga keltirish",
-        type: "day_end",
-        sequence: [AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice5],
-        slotId: slot.id
-      });
-    } else {
-      // 5 daqiqalik qisqa tanaffus — 1-Ovoz
-      events.push({
-        id: `end_${slot.id}`,
-        timeSec: endSec,
-        timeStr: slot.end,
-        title: `${shiftLabel}${slot.name} yakunlandi`,
-        sub: "5 daqiqalik qisqa tanaffus",
-        type: "break_start",
-        sequence: [AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice1],
-        slotId: slot.id
-      });
+    if (slot.end === "10:55" || slot.id === 2 || slot.id === 5) {
+      outVoice = isTuesday ? AUDIO_PATHS.voice11 : AUDIO_PATHS.voice5;
+      outVoiceNum = isTuesday ? 11 : 5;
+    } else if (slot.end === "12:20" || slot.end === "16:30" || index === schedule.length - 1) {
+      outVoice = isTuesday ? AUDIO_PATHS.voice13 : AUDIO_PATHS.voice7;
+      outVoiceNum = isTuesday ? 13 : 7;
     }
+
+    // Dars boshlanishi (KIRISH)
+    events.push({
+      id: `start_${slot.id}`,
+      timeSec: startSec,
+      timeStr: slot.start,
+      title: `${shiftLabel}${slot.name} boshlandi`,
+      sub: `1-Voice ➔ ${inVoiceNum}-Voice (${isTuesday ? 'Seshanba' : 'Dushanba'})`,
+      type: "lesson_start",
+      sequence: [AUDIO_PATHS.voice1, inVoice],
+      slotId: slot.id
+    });
+
+    // Dars tugashi (CHIQISH)
+    const isBigBreak = (slot.end === "10:55");
+    const isDayEnd = (slot.end === "12:20" || slot.end === "16:30" || index === schedule.length - 1);
+
+    events.push({
+      id: `end_${slot.id}`,
+      timeSec: endSec,
+      timeStr: slot.end,
+      title: isDayEnd ? `${shiftLabel}${slot.name} tugadi (Kun yakuni)` : (isBigBreak ? `${shiftLabel}${slot.name} tugadi (Katta tanaffus)` : `${shiftLabel}${slot.name} tugadi`),
+      sub: `1-Voice ➔ ${outVoiceNum}-Voice (${isTuesday ? 'Seshanba' : 'Dushanba'})`,
+      type: isDayEnd ? "day_end" : (isBigBreak ? "lunch_start" : "break_start"),
+      sequence: [AUDIO_PATHS.voice1, outVoice],
+      slotId: slot.id
+    });
   });
 
   return events.sort((a, b) => a.timeSec - b.timeSec);
@@ -1654,7 +1746,7 @@ function mainTick() {
   if (dateEl) dateEl.textContent = dateString;
 
   const isWorkingDay = AppConfig.workingDays.includes(dayOfWeek);
-  const events = compileDailyEvents();
+  const events = compileDailyEvents(dayOfWeek);
 
   if (isWorkingDay && !AppConfig.muted) {
     events.forEach(evt => {
@@ -1669,7 +1761,7 @@ function mainTick() {
           showToast("📢 Rejalashtirilgan maxsus e'lon tanaffusda ijro etilmoqda!", "info");
         }
 
-        playAudioSequence(seq, 22000);
+        playAudioSequence(seq, 25000);
         addBellLog(`⏰ ${evt.timeStr} — ${evt.title} (${evt.sub})`);
         renderTodayBellList();
       }
@@ -1722,7 +1814,7 @@ function updateLiveHeroState(sec, isWorkingDay) {
     statusPill.className = "pill off";
     statusPill.textContent = "Mashg'ulotlar yakuni";
     statusHeadline.textContent = "Bugungi barcha paralar yakunlandi";
-    statusSub.textContent = "Xonalar va laboratoriyalar tartibga keltirildi. Ertangi mashg'ulotlarda ko'rishguncha!";
+    statusSub.textContent = "Auditoriya va laboratoriyalar tartibga keltirildi. Xayrli dam oling!";
     progressCircle.style.strokeDashoffset = "0";
     chipNextBell.textContent = "Tugadi";
     highlightActiveTableRow(null);
@@ -1767,9 +1859,9 @@ function updateLiveHeroState(sec, isWorkingDay) {
     const bRemain = breakDetails.end - sec;
     const bPercent = Math.min(1, Math.max(0, bElapsed / bDuration));
 
-    const isLunchOrShift = breakDetails.name.toLowerCase().includes("almashinuvi") || bDuration >= 1200;
-    statusPill.className = isLunchOrShift ? "pill lunch" : "pill break";
-    statusPill.textContent = isLunchOrShift ? "🔄 Smena almashinuvi / Tushlik" : "☕ Tanaffus";
+    const isBig = breakDetails.name.toLowerCase().includes("katta") || bDuration >= 900;
+    statusPill.className = isBig ? "pill lunch" : "pill break";
+    statusPill.textContent = isBig ? "☕ Katta tanaffus" : "🔔 Qisqa tanaffus";
     statusHeadline.textContent = breakDetails.name;
     statusSub.textContent = `${breakDetails.nextName} boshlanishiga qoldi: ${formatRemaining(bRemain)}`;
 
@@ -1854,7 +1946,6 @@ function highlightActiveTableRow(activeSlotId) {
   });
 }
 
-/* Timeline barini chizish */
 function renderTimeline() {
   const bar = document.getElementById("timelineBar");
   if (!bar || schedule.length === 0) return;
@@ -1877,13 +1968,56 @@ function renderTimeline() {
       const bDuration = nextStart - sEnd;
       if (bDuration > 0) {
         const bWidthPct = (bDuration / totalSec) * 100;
-        const isLunchOrShift = (slot.breakName || '').toLowerCase().includes("almashinuvi") || bDuration >= 1200;
-        const bClass = isLunchOrShift ? 'lunch' : 'break';
+        const isBig = (slot.breakName || '').toLowerCase().includes("katta") || bDuration >= 900;
+        const bClass = isBig ? 'lunch' : 'break';
         html += `<div class="timeline-segment ${bClass}" style="width: ${bWidthPct}%;" title="${slot.breakName || 'Tanaffus'}: ${slot.end} - ${schedule[i+1].start}"></div>`;
       }
     }
   });
   bar.innerHTML = html;
+}
+
+/* Ovozlar ro'yxatini tab bo'yicha chizish */
+function switchVoiceTab(tab) {
+  activeVoiceTab = tab;
+  document.getElementById("tabMonBtn")?.classList.toggle("active", tab === 'mon');
+  document.getElementById("tabTueBtn")?.classList.toggle("active", tab === 'tue');
+  document.getElementById("tabCommonBtn")?.classList.toggle("active", tab === 'common');
+  renderVoiceCards();
+}
+
+function renderVoiceCards() {
+  const container = document.getElementById("soundCardsContainer");
+  if (!container) return;
+
+  let filtered = VOICES_INFO;
+  if (activeVoiceTab === 'mon') {
+    filtered = VOICES_INFO.filter(v => v.day === 'mon' || v.day === 'common');
+  } else if (activeVoiceTab === 'tue') {
+    filtered = VOICES_INFO.filter(v => v.day === 'tue' || v.day === 'common');
+  }
+
+  container.innerHTML = filtered.map(v => {
+    const borderCol = v.day === 'mon' ? '#0ea5e9' : (v.day === 'tue' ? '#10b981' : '#f59e0b');
+    // Test zanjiri: agar 1-voice bo'lsa faqat 1-voice o'zi, aks holda [1-voice, shu voice]
+    const seq = (v.num === 1) ? [AUDIO_PATHS.voice1] : [AUDIO_PATHS.voice1, v.url];
+    const seqStr = JSON.stringify(seq).replace(/"/g, '&quot;');
+
+    return `
+      <div class="sound-badge-card" style="border-left-color: ${borderCol};">
+        <div class="sound-badge-title">
+          <span>${v.title}</span>
+          <button class="btn ghost sm" onclick="playAudioSequence(${seqStr})" style="padding:4px 9px;">▶ Sinash</button>
+        </div>
+        <div class="sound-badge-desc">
+          <i>${v.desc}</i>
+        </div>
+        <div style="font-size:11px; color:var(--mut);">
+          <span class="rule-tag">${v.tag}</span> Vaqti: <b>${v.time}</b> • Ketma-ketlik: ${v.num === 1 ? 'Faqat 1-Voice' : '1-Voice ➔ ' + v.num + '-Voice'}
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 /* Bugungi signallar ro'yxati */
@@ -1903,7 +2037,7 @@ function renderTodayBellList() {
       <div class="bell-item-row ${statusClass}" onclick="playAudioSequence(${JSON.stringify(evt.sequence).replace(/"/g, '&quot;')})" style="cursor:pointer;" title="Sinab ko'rish uchun bosing">
         <div>
           <b>${evt.timeStr}</b> — <span>${evt.title}</span>
-          <div style="font-size:11px; color:var(--mut);">${evt.sub}</div>
+          <div style="font-size:11px; color:var(--ac);">${evt.sub}</div>
         </div>
         <div>
           <span class="btn ghost sm" style="padding:3px 8px; font-size:11px;">▶ Ijro</span>
@@ -1991,6 +2125,16 @@ function bindFormControls() {
     };
   }
 
+  const voiceDayModeSelect = document.getElementById("voiceDayModeSelect");
+  if (voiceDayModeSelect) {
+    voiceDayModeSelect.onchange = () => {
+      AppConfig.voiceDayMode = voiceDayModeSelect.value;
+      renderTodayBellList();
+      saveState();
+      showToast(`Ovozlar tartibi yangilandi: ${voiceDayModeSelect.options[voiceDayModeSelect.selectedIndex].text}`, "info");
+    };
+  }
+
   const audioUnlockBtn = document.getElementById("audioUnlockBtn");
   if (audioUnlockBtn) audioUnlockBtn.onclick = unlockAudioEngine;
 
@@ -2018,42 +2162,70 @@ function bindFormControls() {
     }
   });
 
-  // Sound Preview Buttons
-  document.getElementById("testVoice1Btn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice1]);
+  // Sound Test Buttons
+  document.getElementById("testVoice1OnlyBtn")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1]);
   });
-  document.getElementById("testVoice2Btn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice2]);
-  });
-  document.getElementById("testVoice3Btn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice3]);
-  });
-  document.getElementById("testVoice4Btn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice4]);
-  });
-  document.getElementById("testVoice5Btn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice5]);
-  });
-  document.getElementById("testAnthemBtn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.anthem], 120000);
-  });
-  document.getElementById("testBellOnlyBtn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell]);
-  });
-  document.getElementById("testBreakFullBtn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice1]);
+  document.getElementById("testSampleChainBtn")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice2]);
   });
   document.getElementById("stopAudioBtn")?.addEventListener("click", stopAllAudio);
 
-  // Manual Bell Buttons
-  document.getElementById("manualInBell")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell]);
-    addBellLog("🔔 Qo'lda kirish qo'ng'irog'i chalindi");
+  // Manual Bell Buttons (1-13 Voices)
+  document.getElementById("manualFreesoundBtn")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1]);
+    addBellLog("🔔 Qo'lda 1-Voice (Freesound) chalindi");
   });
-  document.getElementById("manualBreakBell")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.bell, AUDIO_PATHS.freesound, AUDIO_PATHS.voice1]);
-    addBellLog("🔔 Qo'lda qisqa tanaffus zanjiri chalindi");
+  document.getElementById("manualMon1In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice2]);
+    addBellLog("🔔 Dushanba 1-kirish: 1-V ➔ 2-V");
   });
+  document.getElementById("manualMon1Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice3]);
+    addBellLog("🔔 Dushanba 1-chiqish: 1-V ➔ 3-V");
+  });
+  document.getElementById("manualMon2In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice4]);
+    addBellLog("🔔 Dushanba 2-kirish: 1-V ➔ 4-V");
+  });
+  document.getElementById("manualMon2Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice5]);
+    addBellLog("🔔 Dushanba 2-chiqish (Katta tanaffus): 1-V ➔ 5-V");
+  });
+  document.getElementById("manualMon3In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice6]);
+    addBellLog("🔔 Dushanba 3-kirish: 1-V ➔ 6-V");
+  });
+  document.getElementById("manualMon3Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice7]);
+    addBellLog("🔔 Dushanba 3-chiqish (Kun yakuni): 1-V ➔ 7-V");
+  });
+
+  document.getElementById("manualTue1In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice8]);
+    addBellLog("🔔 Seshanba 1-kirish: 1-V ➔ 8-V");
+  });
+  document.getElementById("manualTue1Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice9]);
+    addBellLog("🔔 Seshanba 1-chiqish: 1-V ➔ 9-V");
+  });
+  document.getElementById("manualTue2In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice10]);
+    addBellLog("🔔 Seshanba 2-kirish: 1-V ➔ 10-V");
+  });
+  document.getElementById("manualTue2Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice11]);
+    addBellLog("🔔 Seshanba 2-chiqish (Katta tanaffus): 1-V ➔ 11-V");
+  });
+  document.getElementById("manualTue3In")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice12]);
+    addBellLog("🔔 Seshanba 3-kirish: 1-V ➔ 12-V");
+  });
+  document.getElementById("manualTue3Out")?.addEventListener("click", () => {
+    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice13]);
+    addBellLog("🔔 Seshanba 3-chiqish (Kun yakuni): 1-V ➔ 13-V");
+  });
+
   document.getElementById("manualAnthemBtn")?.addEventListener("click", () => {
     playAudioSequence([AUDIO_PATHS.anthem], 120000);
     addBellLog("🇺🇿 Davlat Madhiyasi qo'lda yoqildi");
@@ -2121,18 +2293,22 @@ function bindFormControls() {
   document.getElementById("startSimBtn")?.addEventListener("click", () => {
     const timeVal = document.getElementById("simStartTime").value || "08:28";
     simSpeed = Number(document.getElementById("simSpeedSelect").value || 120);
+    simFakeDay = Number(document.getElementById("simDaySelect").value || 1);
     simFakeSeconds = timeToSec(timeVal);
     lastSimRealTs = performance.now();
     isSimulation = true;
     triggeredEventsToday.clear();
-    document.getElementById("systemModeTag").textContent = `Simulyatsiya (×${simSpeed})`;
+    const dayName = simFakeDay === 2 ? "Seshanba" : "Dushanba";
+    document.getElementById("systemModeTag").textContent = `Simulyatsiya: ${dayName} (×${simSpeed})`;
     document.getElementById("systemModeTag").style.color = "var(--wr)";
-    showToast(`⏩ Simulyatsiya boshlandi (${timeVal} dan boshlab)`, "warning");
+    renderTodayBellList();
+    showToast(`⏩ ${dayName} simulyatsiyasi boshlandi (${timeVal} dan)`, "warning");
   });
   document.getElementById("stopSimBtn")?.addEventListener("click", () => {
     isSimulation = false;
     document.getElementById("systemModeTag").textContent = "Real vaqt";
     document.getElementById("systemModeTag").style.color = "var(--ac)";
+    renderTodayBellList();
     showToast("⏹ Real vaqtga qaytildi", "info");
   });
 
@@ -2315,16 +2491,16 @@ function saveScheduleFromModal() {
 
 function saveState() {
   try {
-    localStorage.setItem("med_bell_config_v2", JSON.stringify(AppConfig));
-    localStorage.setItem("med_bell_schedule_v2", JSON.stringify(schedule));
+    localStorage.setItem("med_bell_config_v3", JSON.stringify(AppConfig));
+    localStorage.setItem("med_bell_schedule_v3", JSON.stringify(schedule));
   } catch (e) {}
 }
 
 function loadState() {
   try {
-    const savedConfig = localStorage.getItem("med_bell_config_v2");
+    const savedConfig = localStorage.getItem("med_bell_config_v3");
     if (savedConfig) AppConfig = { ...AppConfig, ...JSON.parse(savedConfig) };
-    const savedSchedule = localStorage.getItem("med_bell_schedule_v2");
+    const savedSchedule = localStorage.getItem("med_bell_schedule_v3");
     if (savedSchedule) schedule = JSON.parse(savedSchedule);
   } catch (e) {}
   applyConfigToUI();
@@ -2343,6 +2519,9 @@ function applyConfigToUI() {
   if (anthemInput) anthemInput.value = AppConfig.anthemTime;
   if (chipAnthem) chipAnthem.textContent = AppConfig.anthemTime;
   if (anthemToggle) anthemToggle.value = AppConfig.anthemEnabled ? "1" : "0";
+
+  const voiceDayModeSelect = document.getElementById("voiceDayModeSelect");
+  if (voiceDayModeSelect) voiceDayModeSelect.value = AppConfig.voiceDayMode || "auto";
 
   const muteBtn = document.getElementById("muteToggleBtn");
   if (muteBtn) {
@@ -2453,7 +2632,7 @@ if (broadcastAnnouncementBtn) {
     if (audioUrl) {
       const sequence = [];
       if (announcementIntroChime.checked) {
-        sequence.push(AUDIO_PATHS.freesound);
+        sequence.push(AUDIO_PATHS.voice1);
       }
       sequence.push(audioUrl);
 
@@ -2540,6 +2719,7 @@ function initApp() {
   bindFormControls();
   renderWeekDays();
   renderScheduleTable();
+  renderVoiceCards();
   renderTodayBellList();
 
   mainTick();

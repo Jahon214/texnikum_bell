@@ -1,96 +1,62 @@
-# 🏥 Guliston Tibbiyot Texnikumi — Aqlli Qo'ng'iroq Tizimi
+# 🏥 Guliston Tibbiyot Texnikumi — Aqlli Ovoz Tizimi (1–13 Voices)
 
-> **Guliston tibbiyot texnikumi 2026-2027 o'quv yili uchun rasmiy tasdiqlangan qo'ng'iroqlar jadvali** asosida ishlab chiqilgan avtomatlashtirilgan aqlli qo'ng'iroq, dars jadvali va AI ovozli radiouzel tizimi.
-
-Tasdiqlovchi: **Guliston tibbiyot texnikumi direktori S.F. Artikova**  
-O'quv ishlari bo'yicha direktor o'rinbosari: **R.R. Mirzaliyev**
+> **Guliston tibbiyot texnikumi 2026-2027 o'quv yili** uchun tasdiqlangan dars jadvali va maxsus 13 ta ovoz zanjiri asosida to'liq qayta sozlangan tizim.
 
 ---
 
-## 📅 Rasmiy Tasdiqlangan Dars Jadvali
-
-### ☀️ I SMENA (08:30 – 12:20)
-| t/r | Kirish | Chiqish | Tanaffus | Davomiyligi | Izoh & Voice Ovoz |
-|---|---|---|---|---|---|
-| **—** | 08:29 | 08:30 | — | 1 daq | 🇺🇿 **Davlat Madhiyasi** |
-| **1** | **08:30** | **09:40** | 5 daqiqa | 70 daqiqa | 🔔 Kirish qo'ng'irog'i $\rightarrow$ 09:40 da 1-Voice (5 daqiqa tanaffus) |
-| **2** | **09:45** | **10:55** | 15 daqiqa | 70 daqiqa | 🔔 Kirish $\rightarrow$ 10:55 da 2-Voice (Katta tanaffus) |
-| **3** | **11:10** | **12:20** | — | 70 daqiqa | 11:10 da 3-Voice $\rightarrow$ 12:20 da 4-Voice (I Smena yakuni & Tushlik) |
-
-> ☕ **Smenalar oralig'i / Tushlik va smena almashinuvi:** **12:20 – 12:50** (30 daqiqa)
+## ⚡ Asosiy Qoida & Ovozlar Zanjiri
+1. **Hech qanday eski qo'ng'iroq (bell) ovozi chalinmaydi.**
+2. Har bir mashg'ulot boshlanishi va tugashida **avval 1-Voice (Freesound diqqat signali)** ijro etiladi.
+3. So'ngra tegishli kunga va paraga mos bo'lgan maxsus audio ovoz yangraydi:
+   - **Ketma-ketlik:** `1-Voice` ➔ `Tegishli Voice`
 
 ---
 
-### 🌙 II SMENA (12:50 – 16:30)
-| t/r | Kirish | Chiqish | Tanaffus | Davomiyligi | Izoh & Voice Ovoz |
-|---|---|---|---|---|---|
-| **1** | **12:50** | **14:00** | 5 daqiqa | 70 daqiqa | 🔔 II Smena boshlanishi $\rightarrow$ 14:00 da 1-Voice |
-| **2** | **14:05** | **15:15** | 5 daqiqa | 70 daqiqa | 🔔 Kirish $\rightarrow$ 15:15 da 1-Voice |
-| **3** | **15:20** | **16:30** | — | 70 daqiqa | 🔔 Kirish $\rightarrow$ 16:30 da 5-Voice (II Smena & Kun yakuni) |
+## 📅 Dushanba Kuni Ovozlar Jadvali
+
+| Vaqti | Holat | Ketma-ketlik | Voice Nomi & Mazmuni |
+|:---:|:---:|:---:|:---|
+| **08:30** | 1-para boshlanishi | `1-Voice ➔ 2-Voice` | **2-Voice:** *"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Yangi haftani yangi maqsad bilan boshlaymiz va omad tilab qolamiz. Tibbiyotda eng katta ishonch inson salomatligi sizga omonat qilinishidir..."* |
+| **09:40** | 1-para tugashi | `1-Voice ➔ 3-Voice` | **3-Voice:** *"Birinchi para yakunlandi. Aziz talabalar, kasbga hurmat katta gaplardan emas, kichik ishlardan boshlanadi. Ya'ni darsga vaqtida kirish, ustozni diqqat bilan tinglash..."* |
+| **09:45** | 2-para boshlanishi | `1-Voice ➔ 4-Voice` | **4-Voice:** *"Diqqat, aziz talabalar, ikkinchi para boshlanmoqda. Kelajakda bemor sizning javobingizga emas, to'g'ri qaroringizga muhtoj bo'ladi..."* |
+| **10:55** | 2-para tugashi (Katta tanaffus) | `1-Voice ➔ 5-Voice` | **5-Voice:** *"Ikkinchi para yakunlandi. Endi katta tanaffus. Bir fikrni yodda tuting. Ishonch bir kunda paydo bo'lmaydi. U kundalik halol mehnat orqali orttiriladi..."* |
+| **11:10** | 3-para boshlanishi | `1-Voice ➔ 6-Voice` | **6-Voice:** *"Hurmatli talabalar, uchinchi para boshlanadi. So'nggi darsda ham e'tiborni yo'qotmang. Inson salomatligi bilan ishlaydigan mutaxassis uchun mayda tafsilot ham muhim bo'lishi mumkin..."* |
+| **12:20** | 3-para tugashi (Kun yakuni) | `1-Voice ➔ 7-Voice` | **7-Voice:** *"Aziz talabalar, bugungi mashg'ulotlar yakunlandi. O'zingizdan bir savol so'rang: Bugun qaysi bilimimni amalda tushuntira olaman?..."* |
 
 ---
 
-## 🎙️ Voice Audio E'lonlar Matnlari (Qachon va nima deydi)
+## 📅 Seshanba Kuni Ovozlar Jadvali
 
-Har bir tanaffus va dars yakunida **Qo'ng'iroq ➔ Freesound chime ➔ AI Ovoz** ketma-ketlikda yangraydi:
-
-### 1. 🔔 1-Voice: 5 daqiqalik qisqa tanaffus
-- **Qachon yangraydi:** Soat **09:40**, **14:00**, **15:15** da (dars tugaganda)
-- **Fayl nomi:** `public/audio/voice_1_tanaffus.mp3`
-- **Matni:**
-  > *"Hurmatli talabalar va o'qituvchilar! Dars yakunlandi, besh daqiqalik qisqa tanaffus. Iltimos, xonalarni shamollatib, sanitariya qoidalariga rioya qiling."*
-
-### 2. ☕ 2-Voice: Katta tanaffus (15 daqiqa dam olish)
-- **Qachon yangraydi:** Soat **10:55 da** (2-para tugaganda)
-- **Fayl nomi:** `public/audio/voice_2_katta_tanaffus.mp3`
-- **Matni:**
-  > *"Hurmatli talabalar va ustozlar! Ikkinchi para yakunlandi. O'n besh daqiqalik katta tanaffus boshlandi. Maroqli dam oling!"*
-
-### 3. ⏰ 3-Voice: Katta tanaffus tugashi (3-para boshlanishi)
-- **Qachon yangraydi:** Soat **11:10 da**
-- **Fayl nomi:** `public/audio/voice_3_tanaffus_tugadi.mp3`
-- **Matni:**
-  > *"Diqqat, katta tanaffus yakunlandi. Dars mashg'ulotlari boshlandi. Talabalar o'z xonalariga marhamat qiling."*
-
-### 4. 🔄 4-Voice: I Smena yakuni va Smena almashinuvi (30 daqiqa)
-- **Qachon yangraydi:** Soat **12:20 da** (1-smena yakuni)
-- **Fayl nomi:** `public/audio/voice_4_smena_almashinuvi.mp3`
-- **Matni:**
-  > *"Hurmatli talabalar va ustozlar! Birinchi smena darslari yakunlandi. Smenalar almashinuvi va tushlik vaqti boshlandi. Ikkinchi smena talabalariga muvaffaqiyat tilaymiz!"*
-
-### 5. 🏁 5-Voice: II Smena va Butun kun yakuni
-- **Qachon yangraydi:** Soat **16:30 da**
-- **Fayl nomi:** `public/audio/voice_5_kun_yakuni.mp3`
-- **Matni:**
-  > *"Hurmatli talabalar va texnikum jamoasi! Bugungi barcha mashg'ulotlar yakunlandi. Auditoriya va laboratoriyalarni tartibga keltirishingizni so'raymiz. Xayr, salomat bo'ling!"*
-
-### 6. 🇺🇿 6-Voice: O'zbekiston Davlat Madhiyasi
-- **Qachon yangraydi:** Har kuni soat **08:29 da** (1-para oldidan)
-- **Fayl nomi:** `public/audio/madhiya.mp3`
-
-### 7. 🚨 Favqulodda signal (Qizil Kod & Evakuatsiya)
-- **Qachon yangraydi:** Favqulodda tugma bosilganda
-- **Fayl nomi:** `public/audio/voice_emergency.mp3`
-- **Matni:**
-  > *"Diqqat! Favqulodda holat signali! Barcha talabalar va xodimlar xotirjamlikni saqlagan holda binodan evakuatsiya yo'laklari orqali chiqishingiz so'raladi!"*
+| Vaqti | Holat | Ketma-ketlik | Voice Nomi & Mazmuni |
+|:---:|:---:|:---:|:---|
+| **08:30** | 1-para boshlanishi | `1-Voice ➔ 8-Voice` | **8-Voice:** *"Assalomu alaykum, aziz talabalar va ustozlar! Bugungi kunimiz ilmga qiziqish va faol savollar kuni bo'lsin. Tibbiyotda yodlashning o'zi kamlik qiladi. Nima uchun shunday bo'lishini tushunish muhim..."* |
+| **09:40** | 1-para tugashi | `1-Voice ➔ 9-Voice` | **9-Voice:** *"Birinchi para yakunlandi. Bugungi foydali odat: o'rgangan mavzuingizni oddiy so'zlar bilan bir daqiqada tushuntirib ko'ring..."* |
+| **09:45** | 2-para boshlanishi | `1-Voice ➔ 10-Voice` | **10-Voice:** *"Aziz talabalar, ikkinchi para boshlanmoqda. Amaliy mashg'ulotda faqat natijaga emas, bajarish ketma-ketligiga ham qarang..."* |
+| **10:55** | 2-para tugashi (Katta tanaffus) | `1-Voice ➔ 11-Voice` | **11-Voice:** *"Ikkinchi para tugadi. Katta tanaffus boshlandi. Bilingki, xatoni mashg'ulotda ko'rish va tuzatish kelajakdagi xavfsiz ishga tayyorgarlik..."* |
+| **11:10** | 3-para boshlanishi | `1-Voice ➔ 12-Voice` | **12-Voice:** *"Diqqat, uchinchi para boshlanmoqda. O'zingizga bitta vazifa qo'ying: bugungi darsdan kamida bir yangi atamani mazmuni va amaliy qo'llanishi bilan yodda qoldiring..."* |
+| **12:20** | 3-para tugashi (Kun yakuni) | `1-Voice ➔ 13-Voice` | **13-Voice:** *"Aziz talabalar, bugungi darslar yakunlandi. Endi besh daqiqa ajratib, daftarlaringizdagi uch muhim fikrni qayta ko'ring..."* |
 
 ---
 
-## 🛠️ Ovoz fayllarini o'zgartirish (O'zingiz ovoz yozib qo'ymoqchi bo'lsangiz):
-
-Agar ovozlarni o'zingiz diktor yoki mikrofon orqali yozib olmoqchi bo'lsangiz, yozilgan audio fayllarni MP3 formatda quyidagi nomlar bilan `public/audio/` papkasiga saqlasangiz kifoya:
-1. `public/audio/voice_1_tanaffus.mp3` (5 daqiqalik tanaffus uchun)
-2. `public/audio/voice_2_katta_tanaffus.mp3` (15 daqiqalik katta tanaffus uchun)
-3. `public/audio/voice_3_tanaffus_tugadi.mp3` (Katta tanaffus tugab darsga kirish uchun)
-4. `public/audio/voice_4_smena_almashinuvi.mp3` (12:20 dagi smena almashinuvi uchun)
-5. `public/audio/voice_5_kun_yakuni.mp3` (16:30 dagi kun yakuni uchun)
-
-Shuningdek, tizimning ichidagi **📢 E'lon & Tabrik** modali orqali ham istalgan matningizni AI orqali bir zumda yangi audio faylga aylantirib yuklab olishingiz mumkin!
+## 📁 Audio Fayllar Joylashuvi (`public/audio/`):
+- `voice_1_freesound.mp3` — 1-Voice (Freesound diqqat signali)
+- `voice_2_mon_p1_in.mp3` — 2-Voice (Dushanba 1-kirish)
+- `voice_3_mon_p1_out.mp3` — 3-Voice (Dushanba 1-chiqish)
+- `voice_4_mon_p2_in.mp3` — 4-Voice (Dushanba 2-kirish)
+- `voice_5_mon_p2_out.mp3` — 5-Voice (Dushanba 2-chiqish)
+- `voice_6_mon_p3_in.mp3` — 6-Voice (Dushanba 3-kirish)
+- `voice_7_mon_p3_out.mp3` — 7-Voice (Dushanba 3-chiqish)
+- `voice_8_tue_p1_in.mp3` — 8-Voice (Seshanba 1-kirish)
+- `voice_9_tue_p1_out.mp3` — 9-Voice (Seshanba 1-chiqish)
+- `voice_10_tue_p2_in.mp3` — 10-Voice (Seshanba 2-kirish)
+- `voice_11_tue_p2_out.mp3` — 11-Voice (Seshanba 2-chiqish)
+- `voice_12_tue_p3_in.mp3` — 12-Voice (Seshanba 3-kirish)
+- `voice_13_tue_p3_out.mp3` — 13-Voice (Seshanba 3-chiqish)
 
 ---
 
-## 🚀 Ishga tushirish:
+## 🚀 Ishga Tushirish:
 ```bash
 npm start
 ```
-Brauzerda ochish: **http://localhost:3000**
+Brauzerda: **http://localhost:3000**
