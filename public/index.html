@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Guliston Tibbiyot Texnikumi — Aqlli Qo'ng'iroq Tizimi</title>
+<title>Guliston Tibbiyot Texnikumi — Aqlli Ovoz Tizimi</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
 <style>
 /* ========================================================
    GULISTON TIBBIYOT TEXNIKUMI AQLLI QO'NG'IROG'I
-   DUSHANBA VA SESHANBA MAXSUS OVOZLI TIZIMI (1-13 VOICES)
+   DUSHANBA, SESHANBA, CHORSHANBA, PAYSHANBA OVOZLAR TIZIMI
    ======================================================== */
 :root {
   --ac: #0ea5e9;
@@ -236,7 +236,7 @@ header {
 /* Asosiy Grid */
 .grid-main {
   display: grid;
-  grid-template-columns: 1.4fr 1.05fr;
+  grid-template-columns: 1.35fr 1.15fr;
   gap: 20px;
 }
 @media (max-width: 992px) {
@@ -468,9 +468,10 @@ header {
   margin-bottom: 12px;
   border-bottom: 1px solid var(--line);
   padding-bottom: 8px;
+  flex-wrap: wrap;
 }
 .sound-tab-btn {
-  padding: 6px 12px;
+  padding: 6px 11px;
   border-radius: 8px;
   border: 1px solid transparent;
   background: none;
@@ -800,7 +801,7 @@ body.tv-mode .tv-marquee {
       <div class="logo-text-group">
         <span class="logo-badge">⚕️ 2026-2027 O'quv yili</span>
         <div class="logo-title">Guliston Tibbiyot Texnikumi</div>
-        <small class="logo-desc">Aqlli qo'ng'iroq va maxsus ovozli xabarlar tizimi (1-13 Voices)</small>
+        <small class="logo-desc">Aqlli qo'ng'iroq va maxsus haftalik ovozlar tizimi (Du-Se-Chor-Pay)</small>
       </div>
     </div>
     <div class="header-actions">
@@ -815,7 +816,7 @@ body.tv-mode .tv-marquee {
 
   <!-- Audio unlock banner -->
   <div class="audio-warn" id="audioWarnBanner">
-    <span>🔇 <b>Muhim eslatma:</b> Brauzer 1-voice (chime) va qolgan audio e'lonlarni to'sqinliksiz ijro etishi uchun sahifada ovozni faollashtiring.</span>
+    <span>🔇 <b>Muhim eslatma:</b> Brauzer 1-voice (freesound chime) va dars ovozlarini to'sqinliksiz ijro etishi uchun sahifada ovozni yoqing.</span>
     <button class="btn success sm" onclick="unlockAudioEngine()">🔊 Ovozni faollashtirish</button>
   </div>
 
@@ -906,7 +907,7 @@ body.tv-mode .tv-marquee {
 
         <!-- TV Rejimida Yuguruvchi Satr (Marquee) -->
         <div class="tv-marquee" id="tvMarquee">
-          <span>🏥 Guliston tibbiyot texnikumi • 2026-2027 o'quv yili rasmiy qo'ng'iroqlar jadvali • Oq xalat va sanitariya qoidalariga qat'iy rioya qiling! • Navbatchi ma'muriyat: 1-qavat</span>
+          <span>🏥 Guliston tibbiyot texnikumi • 2026-2027 o'quv yili qo'ng'iroqlar jadvali • Oq xalat va sanitariya qoidalariga qat'iy rioya qiling! • Navbatchi ma'muriyat: 1-qavat</span>
         </div>
       </div>
 
@@ -941,20 +942,22 @@ body.tv-mode .tv-marquee {
       </div>
     </div>
 
-    <!-- Right Column: Settings, 13 Voices List, Days & Simulation -->
+    <!-- Right Column: Settings, 4 Days Voices List, Days & Simulation -->
     <div>
-      <!-- Audio System Card (13 Custom Voices) -->
+      <!-- Audio System Card (Haftalik Ovozlar Tizimi) -->
       <div class="card">
         <div class="card-title">
-          <span class="badge-dot">Maxsus Ovozlar Tizimi (1-13 Voices)</span>
-          <span style="font-size:11px; color:var(--ok); font-weight:700;">✅ Qo'ng'iroqsiz: 1-Voice ➔ Voice</span>
+          <span class="badge-dot">Haftalik Ovozlar Tizimi</span>
+          <span style="font-size:11px; color:var(--ok); font-weight:700;">✅ 1-Voice (Chime) ➔ Voice</span>
         </div>
 
-        <!-- Tabs for Dushanba / Seshanba voices -->
+        <!-- Tabs for 4 Days -->
         <div class="sound-tabs">
-          <button class="sound-tab-btn active" id="tabMonBtn" onclick="switchVoiceTab('mon')">📅 Dushanba (1-7)</button>
-          <button class="sound-tab-btn" id="tabTueBtn" onclick="switchVoiceTab('tue')">📅 Seshanba (8-13)</button>
-          <button class="sound-tab-btn" id="tabCommonBtn" onclick="switchVoiceTab('common')">🔔 Barcha ovozlar</button>
+          <button class="sound-tab-btn active" id="tabMonBtn" onclick="switchVoiceTab('mon')">📅 Dushanba</button>
+          <button class="sound-tab-btn" id="tabTueBtn" onclick="switchVoiceTab('tue')">📅 Seshanba</button>
+          <button class="sound-tab-btn" id="tabWedBtn" onclick="switchVoiceTab('wed')">📅 Chorshanba</button>
+          <button class="sound-tab-btn" id="tabThuBtn" onclick="switchVoiceTab('thu')">📅 Payshanba</button>
+          <button class="sound-tab-btn" id="tabAllBtn" onclick="switchVoiceTab('all')">🔔 Barchasi</button>
         </div>
 
         <!-- Sound Cards Container -->
@@ -985,7 +988,7 @@ body.tv-mode .tv-marquee {
 
         <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;">
           <button class="btn success" id="testVoice1OnlyBtn">🔔 1-Voice (Freesound chime)</button>
-          <button class="btn warning" id="testSampleChainBtn">▶ Sinov: 1-Voice ➔ 2-Voice</button>
+          <button class="btn warning" id="testSampleChainBtn">▶ Sinov: 1-Voice ➔ Bugungi Voice</button>
           <button class="btn ghost" id="stopAudioBtn">⏹ To'xtatish</button>
         </div>
       </div>
@@ -1002,9 +1005,11 @@ body.tv-mode .tv-marquee {
         <div style="margin-top: 16px;">
           <label class="field-label">Ovozlar kunlik tartibi:</label>
           <select id="voiceDayModeSelect" style="font-weight: 700;">
-            <option value="auto" selected>⚡ Avtomatik: Dushanba kuni Dushanba ovozlari, Seshanba kuni Seshanba ovozlari</option>
-            <option value="mon">📅 Doim Dushanba ovozlari (2, 3, 4, 5, 6, 7-Voice)</option>
-            <option value="tue">📅 Doim Seshanba ovozlari (8, 9, 10, 11, 12, 13-Voice)</option>
+            <option value="auto" selected>⚡ Avtomatik: Har kuni o'z kuniga mos maxsus ovozlar yangraydi</option>
+            <option value="mon">📅 Doim Dushanba ovozlari</option>
+            <option value="tue">📅 Doim Seshanba ovozlari</option>
+            <option value="wed">📅 Doim Chorshanba ovozlari</option>
+            <option value="thu">📅 Doim Payshanba ovozlari</option>
           </select>
         </div>
 
@@ -1024,7 +1029,7 @@ body.tv-mode .tv-marquee {
           <span class="badge-dot">Tezkor Sinov (Simulyatsiya)</span>
         </div>
         <p style="font-size: 13px; color: var(--mut); margin-bottom: 12px;">
-          Tanlangan kun (Dushanba yoki Seshanba) bo'yicha 1-voice va tegishli voice zanjirini tezlashtirilgan tarzda eshitib ko'ring.
+          Haftaning istalgan kunini tanlab, 1-voice va kunlik ovozlar zanjirini tezlashtirilgan tarzda tekshiring.
         </p>
         <div class="form-grid">
           <div>
@@ -1032,6 +1037,8 @@ body.tv-mode .tv-marquee {
             <select id="simDaySelect">
               <option value="1" selected>📅 Dushanba (2, 3, 4, 5, 6, 7-Voice)</option>
               <option value="2">📅 Seshanba (8, 9, 10, 11, 12, 13-Voice)</option>
+              <option value="3">📅 Chorshanba (1, 2, 3, 4, 5, 6-Voice)</option>
+              <option value="4">📅 Payshanba (7, 8, 9, 10, 11, 12-Voice)</option>
             </select>
           </div>
           <div>
@@ -1068,30 +1075,51 @@ body.tv-mode .tv-marquee {
       </div>
     </div>
 
-    <!-- Manual Bell Trigger & Medical Emergency Siren -->
+    <!-- Manual Bell Trigger & Emergency Siren -->
     <div class="card">
       <div class="card-title">
         <span class="badge-dot">Qo'lda boshqarish & Favqulodda signal</span>
       </div>
       <p style="font-size: 13px; color: var(--mut); margin-bottom: 12px;">
-        Zarur bo'lganda istalgan ovoz zanjirini qo'lda ishga tushirish.
+        Haftaning barcha kunlari bo'yicha tezkor qo'lda ijro etish.
       </p>
       <div class="quick-controls">
         <button class="btn success sm" id="manualFreesoundBtn">🔔 1-Voice (Freesound)</button>
-        <button class="btn ghost sm" id="manualMon1In">Du 1-kirish (2-V)</button>
-        <button class="btn ghost sm" id="manualMon1Out">Du 1-chiqish (3-V)</button>
-        <button class="btn ghost sm" id="manualMon2In">Du 2-kirish (4-V)</button>
-        <button class="btn ghost sm" id="manualMon2Out">Du 2-chiqish (5-V)</button>
-        <button class="btn ghost sm" id="manualMon3In">Du 3-kirish (6-V)</button>
-        <button class="btn ghost sm" id="manualMon3Out">Du 3-chiqish (7-V)</button>
-        <button class="btn warning sm" id="manualTue1In">Se 1-kirish (8-V)</button>
-        <button class="btn warning sm" id="manualTue1Out">Se 1-chiqish (9-V)</button>
-        <button class="btn warning sm" id="manualTue2In">Se 2-kirish (10-V)</button>
-        <button class="btn warning sm" id="manualTue2Out">Se 2-chiqish (11-V)</button>
-        <button class="btn warning sm" id="manualTue3In">Se 3-kirish (12-V)</button>
-        <button class="btn warning sm" id="manualTue3Out">Se 3-chiqish (13-V)</button>
-        <button class="btn ghost sm" id="manualAnthemBtn">🇺🇿 Davlat Madhiyasi</button>
-        <button class="btn danger sm" id="manualSiren">🚨 Qizil Kod (Sirena)</button>
+
+        <!-- Dushanba -->
+        <button class="btn ghost sm" id="manualMon1In">Du 1-kir (2-V)</button>
+        <button class="btn ghost sm" id="manualMon1Out">Du 1-chiq (3-V)</button>
+        <button class="btn ghost sm" id="manualMon2In">Du 2-kir (4-V)</button>
+        <button class="btn ghost sm" id="manualMon2Out">Du 2-chiq (5-V)</button>
+        <button class="btn ghost sm" id="manualMon3In">Du 3-kir (6-V)</button>
+        <button class="btn ghost sm" id="manualMon3Out">Du 3-chiq (7-V)</button>
+
+        <!-- Seshanba -->
+        <button class="btn warning sm" id="manualTue1In">Se 1-kir (8-V)</button>
+        <button class="btn warning sm" id="manualTue1Out">Se 1-chiq (9-V)</button>
+        <button class="btn warning sm" id="manualTue2In">Se 2-kir (10-V)</button>
+        <button class="btn warning sm" id="manualTue2Out">Se 2-chiq (11-V)</button>
+        <button class="btn warning sm" id="manualTue3In">Se 3-kir (12-V)</button>
+        <button class="btn warning sm" id="manualTue3Out">Se 3-chiq (13-V)</button>
+
+        <!-- Chorshanba -->
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed1In">Chor 1-kir (1-V)</button>
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed1Out">Chor 1-chiq (2-V)</button>
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed2In">Chor 2-kir (3-V)</button>
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed2Out">Chor 2-chiq (4-V)</button>
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed3In">Chor 3-kir (5-V)</button>
+        <button class="btn ghost sm" style="border-color:#0ea5e9; color:#0ea5e9;" id="manualWed3Out">Chor 3-chiq (6-V)</button>
+
+        <!-- Payshanba -->
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu1In">Pay 1-kir (7-V)</button>
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu1Out">Pay 1-chiq (8-V)</button>
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu2In">Pay 2-kir (9-V)</button>
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu2Out">Pay 2-chiq (10-V)</button>
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu3In">Pay 3-kir (11-V)</button>
+        <button class="btn ghost sm" style="border-color:#8b5cf6; color:#a78bfa;" id="manualThu3Out">Pay 3-chiq (12-V)</button>
+
+        <button class="btn ghost sm" id="manualAnthemBtn">🇺🇿 Madhiya</button>
+        <button class="btn danger sm" id="manualSiren">🚨 Qizil Kod</button>
         <button class="btn ghost sm" id="manualStop">⏹ To'xtatish</button>
       </div>
     </div>
@@ -1262,160 +1290,259 @@ function getAudioUrl(fileName) {
   return '/audio/' + fileName;
 }
 
-// 1-13 TA MAXSUS OVOZLAR
+// BARCHA 4 KUNLIK MAXSUS OVOZLAR
 const AUDIO_PATHS = {
-  voice1: getAudioUrl("voice_1_freesound.mp3"), // 1-Voice (Freesound diqqat signali)
-  // Dushanba
-  voice2: getAudioUrl("voice_2_mon_p1_in.mp3"),  // Dushanba 1-para kirish (08:30)
-  voice3: getAudioUrl("voice_3_mon_p1_out.mp3"), // Dushanba 1-para chiqish (09:40)
-  voice4: getAudioUrl("voice_4_mon_p2_in.mp3"),  // Dushanba 2-para kirish (09:45)
-  voice5: getAudioUrl("voice_5_mon_p2_out.mp3"), // Dushanba 2-para chiqish - Katta tanaffus (10:55)
-  voice6: getAudioUrl("voice_6_mon_p3_in.mp3"),  // Dushanba 3-para kirish (11:10)
-  voice7: getAudioUrl("voice_7_mon_p3_out.mp3"), // Dushanba 3-para chiqish - Darslar yakuni (12:20)
-  // Seshanba
-  voice8: getAudioUrl("voice_8_tue_p1_in.mp3"),   // Seshanba 1-para kirish (08:30)
-  voice9: getAudioUrl("voice_9_tue_p1_out.mp3"),  // Seshanba 1-para chiqish (09:40)
-  voice10: getAudioUrl("voice_10_tue_p2_in.mp3"), // Seshanba 2-para kirish (09:45)
-  voice11: getAudioUrl("voice_11_tue_p2_out.mp3"),// Seshanba 2-para chiqish - Katta tanaffus (10:55)
-  voice12: getAudioUrl("voice_12_tue_p3_in.mp3"), // Seshanba 3-para kirish (11:10)
-  voice13: getAudioUrl("voice_13_tue_p3_out.mp3"),// Seshanba 3-para chiqish - Darslar yakuni (12:20)
+  voice1: getAudioUrl("voice_1_freesound.mp3"), // 1-Voice: Freesound diqqat signali (chime)
+  
+  // DUSHANBA (2, 3, 4, 5, 6, 7-Voice)
+  mon_p1_in: getAudioUrl("voice_2_mon_p1_in.mp3"),
+  mon_p1_out: getAudioUrl("voice_3_mon_p1_out.mp3"),
+  mon_p2_in: getAudioUrl("voice_4_mon_p2_in.mp3"),
+  mon_p2_out: getAudioUrl("voice_5_mon_p2_out.mp3"),
+  mon_p3_in: getAudioUrl("voice_6_mon_p3_in.mp3"),
+  mon_p3_out: getAudioUrl("voice_7_mon_p3_out.mp3"),
+
+  // SESHANBA (8, 9, 10, 11, 12, 13-Voice)
+  tue_p1_in: getAudioUrl("voice_8_tue_p1_in.mp3"),
+  tue_p1_out: getAudioUrl("voice_9_tue_p1_out.mp3"),
+  tue_p2_in: getAudioUrl("voice_10_tue_p2_in.mp3"),
+  tue_p2_out: getAudioUrl("voice_11_tue_p2_out.mp3"),
+  tue_p3_in: getAudioUrl("voice_12_tue_p3_in.mp3"),
+  tue_p3_out: getAudioUrl("voice_13_tue_p3_out.mp3"),
+
+  // CHORSHANBA (1, 2, 3, 4, 5, 6-Voice)
+  wed_p1_in: getAudioUrl("voice_wed_p1_in.mp3"),
+  wed_p1_out: getAudioUrl("voice_wed_p1_out.mp3"),
+  wed_p2_in: getAudioUrl("voice_wed_p2_in.mp3"),
+  wed_p2_out: getAudioUrl("voice_wed_p2_out.mp3"),
+  wed_p3_in: getAudioUrl("voice_wed_p3_in.mp3"),
+  wed_p3_out: getAudioUrl("voice_wed_p3_out.mp3"),
+
+  // PAYSHANBA (7, 8, 9, 10, 11, 12-Voice)
+  thu_p1_in: getAudioUrl("voice_thu_p1_in.mp3"),
+  thu_p1_out: getAudioUrl("voice_thu_p1_out.mp3"),
+  thu_p2_in: getAudioUrl("voice_thu_p2_in.mp3"),
+  thu_p2_out: getAudioUrl("voice_thu_p2_out.mp3"),
+  thu_p3_in: getAudioUrl("voice_thu_p3_in.mp3"),
+  thu_p3_out: getAudioUrl("voice_thu_p3_out.mp3"),
+
   // Umumiy
   anthem: getAudioUrl("madhiya.mp3"),
   emergencyVoice: getAudioUrl("voice_emergency.mp3"),
   sanitaryVoice: getAudioUrl("voice_sanitariya.mp3")
 };
 
-// 13 ta Ovoz haqida to'liq ma'lumotlar
+// Barcha Ovozlar Kartotekasi
 const VOICES_INFO = [
+  // 1-VOICE: Freesound chime
   {
-    num: 1,
-    id: "voice1",
-    tag: "Chime",
+    day: "common",
+    tag: "Doimiy",
     title: "1-Voice (Freesound diqqat signali)",
     time: "Doim barcha e'lonlardan oldin",
     desc: "Barcha xabarlardan oldin birinchi bo'lib ijro etiladigan tiniq diqqat signali.",
     url: AUDIO_PATHS.voice1,
-    day: "common"
+    isChime: true
   },
+
+  // DUSHANBA
   {
-    num: 2,
-    id: "voice2",
+    day: "mon",
     tag: "Dushanba",
-    title: "2-Voice: Dushanba 1-para kirish",
+    title: "2-Voice: Dushanba 1-para kirish (08:30)",
     time: "08:30 da",
     desc: "\"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Yangi haftani yangi maqsad bilan boshlaymiz va omad tilab qolamiz. Tibbiyotda eng katta ishonch inson salomatligi sizga omonat qilinishidir...\"",
-    url: AUDIO_PATHS.voice2,
-    day: "mon"
+    url: AUDIO_PATHS.mon_p1_in
   },
   {
-    num: 3,
-    id: "voice3",
+    day: "mon",
     tag: "Dushanba",
-    title: "3-Voice: Dushanba 1-para tugashi",
+    title: "3-Voice: Dushanba 1-para tugashi (09:40)",
     time: "09:40 da",
     desc: "\"Birinchi para yakunlandi. Aziz talabalar, kasbga hurmat katta gaplardan emas, kichik ishlardan boshlanadi. Ya'ni darsga vaqtida kirish, ustozni diqqat bilan tinglash...\"",
-    url: AUDIO_PATHS.voice3,
-    day: "mon"
+    url: AUDIO_PATHS.mon_p1_out
   },
   {
-    num: 4,
-    id: "voice4",
+    day: "mon",
     tag: "Dushanba",
-    title: "4-Voice: Dushanba 2-para kirish",
+    title: "4-Voice: Dushanba 2-para kirish (09:45)",
     time: "09:45 da",
-    desc: "\"Diqqat, aziz talabalar, ikkinchi para boshlanmoqda. Kelajakda bemor sizning javobingizga emas, to'g'ri qaroringizga muhtoj bo'ladi. Shuning uchun tushunmagan mavzuni yashirmang...\"",
-    url: AUDIO_PATHS.voice4,
-    day: "mon"
+    desc: "\"Diqqat, aziz talabalar, ikkinchi para boshlanmoqda. Kelajakda bemor sizning javobingizga emas, to'g'ri qaroringizga muhtoj bo'ladi...\"",
+    url: AUDIO_PATHS.mon_p2_in
   },
   {
-    num: 5,
-    id: "voice5",
+    day: "mon",
     tag: "Dushanba",
-    title: "5-Voice: Dushanba 2-para tugashi (Katta tanaffus)",
+    title: "5-Voice: Dushanba 2-para tugashi - Katta tanaffus (10:55)",
     time: "10:55 da",
     desc: "\"Ikkinchi para yakunlandi. Endi katta tanaffus. Bir fikrni yodda tuting. Ishonch bir kunda paydo bo'lmaydi. U kundalik halol mehnat orqali orttiriladi...\"",
-    url: AUDIO_PATHS.voice5,
-    day: "mon"
+    url: AUDIO_PATHS.mon_p2_out
   },
   {
-    num: 6,
-    id: "voice6",
+    day: "mon",
     tag: "Dushanba",
-    title: "6-Voice: Dushanba 3-para kirish",
+    title: "6-Voice: Dushanba 3-para kirish (11:10)",
     time: "11:10 da",
     desc: "\"Hurmatli talabalar, uchinchi para boshlanadi. So'nggi darsda ham e'tiborni yo'qotmang. Inson salomatligi bilan ishlaydigan mutaxassis uchun mayda tafsilot ham muhim bo'lishi mumkin...\"",
-    url: AUDIO_PATHS.voice6,
-    day: "mon"
+    url: AUDIO_PATHS.mon_p3_in
   },
   {
-    num: 7,
-    id: "voice7",
+    day: "mon",
     tag: "Dushanba",
-    title: "7-Voice: Dushanba 3-para tugashi (Kun yakuni)",
+    title: "7-Voice: Dushanba 3-para tugashi - Kun yakuni (12:20)",
     time: "12:20 da",
-    desc: "\"Aziz talabalar, bugungi mashg'ulotlar yakunlandi. O'zingizdan bir savol so'rang: Bugun qaysi bilimimni amalda tushuntira olaman? Agar javobingiz aniq bo'lsa, kuningiz mazmunli o'tgan...\"",
-    url: AUDIO_PATHS.voice7,
-    day: "mon"
+    desc: "\"Aziz talabalar, bugungi mashg'ulotlar yakunlandi. O'zingizdan bir savol so'rang: Bugun qaysi bilimimni amalda tushuntira olaman?...\"",
+    url: AUDIO_PATHS.mon_p3_out
   },
+
+  // SESHANBA
   {
-    num: 8,
-    id: "voice8",
+    day: "tue",
     tag: "Seshanba",
-    title: "8-Voice: Seshanba 1-para kirish",
+    title: "8-Voice: Seshanba 1-para kirish (08:30)",
     time: "08:30 da",
-    desc: "\"Assalomu alaykum, aziz talabalar va ustozlar! Bugungi kunimiz ilmga qiziqish va faol savollar kuni bo'lsin. Tibbiyotda yodlashning o'zi kamlik qiladi. Nima uchun shunday bo'lishini tushunish muhim...\"",
-    url: AUDIO_PATHS.voice8,
-    day: "tue"
+    desc: "\"Assalomu alaykum, aziz talabalar va ustozlar! Bugungi kunimiz ilmga qiziqish va faol savollar kuni bo'lsin. Tibbiyotda yodlashning o'zi kamlik qiladi...\"",
+    url: AUDIO_PATHS.tue_p1_in
   },
   {
-    num: 9,
-    id: "voice9",
+    day: "tue",
     tag: "Seshanba",
-    title: "9-Voice: Seshanba 1-para tugashi",
+    title: "9-Voice: Seshanba 1-para tugashi (09:40)",
     time: "09:40 da",
-    desc: "\"Birinchi para yakunlandi. Bugungi foydali odat: o'rgangan mavzuingizni oddiy so'zlar bilan bir daqiqada tushuntirib ko'ring. Tushuntira olmasangiz, qaysi qismi noaniqligini aniqlang...\"",
-    url: AUDIO_PATHS.voice9,
-    day: "tue"
+    desc: "\"Birinchi para yakunlandi. Bugungi foydali odat: o'rgangan mavzuingizni oddiy so'zlar bilan bir daqiqada tushuntirib ko'ring...\"",
+    url: AUDIO_PATHS.tue_p1_out
   },
   {
-    num: 10,
-    id: "voice10",
+    day: "tue",
     tag: "Seshanba",
-    title: "10-Voice: Seshanba 2-para kirish",
+    title: "10-Voice: Seshanba 2-para kirish (09:45)",
     time: "09:45 da",
-    desc: "\"Aziz talabalar, ikkinchi para boshlanmoqda. Amaliy mashg'ulotda faqat natijaga emas, bajarish ketma-ketligiga ham qarang. To'g'ri usul va xavfsiz yondashuvni birgalikda o'rganing...\"",
-    url: AUDIO_PATHS.voice10,
-    day: "tue"
+    desc: "\"Aziz talabalar, ikkinchi para boshlanmoqda. Amaliy mashg'ulotda faqat natijaga emas, bajarish ketma-ketligiga ham qarang...\"",
+    url: AUDIO_PATHS.tue_p2_in
   },
   {
-    num: 11,
-    id: "voice11",
+    day: "tue",
     tag: "Seshanba",
-    title: "11-Voice: Seshanba 2-para tugashi (Katta tanaffus)",
+    title: "11-Voice: Seshanba 2-para tugashi - Katta tanaffus (10:55)",
     time: "10:55 da",
-    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Bilingki, xatoni mashg'ulotda ko'rish va tuzatish kelajakdagi xavfsiz ishga tayyorgarlik. Xatoni yashirmang, sababini tushuning...\"",
-    url: AUDIO_PATHS.voice11,
-    day: "tue"
+    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Bilingki, xatoni mashg'ulotda ko'rish va tuzatish kelajakdagi xavfsiz ishga tayyorgarlik...\"",
+    url: AUDIO_PATHS.tue_p2_out
   },
   {
-    num: 12,
-    id: "voice12",
+    day: "tue",
     tag: "Seshanba",
-    title: "12-Voice: Seshanba 3-para kirish",
+    title: "12-Voice: Seshanba 3-para kirish (11:10)",
     time: "11:10 da",
     desc: "\"Diqqat, uchinchi para boshlanmoqda. O'zingizga bitta vazifa qo'ying: bugungi darsdan kamida bir yangi atamani mazmuni va amaliy qo'llanishi bilan yodda qoldiring...\"",
-    url: AUDIO_PATHS.voice12,
-    day: "tue"
+    url: AUDIO_PATHS.tue_p3_in
   },
   {
-    num: 13,
-    id: "voice13",
+    day: "tue",
     tag: "Seshanba",
-    title: "13-Voice: Seshanba 3-para tugashi (Kun yakuni)",
+    title: "13-Voice: Seshanba 3-para tugashi - Kun yakuni (12:20)",
     time: "12:20 da",
-    desc: "\"Aziz talabalar, bugungi darslar yakunlandi. Endi besh daqiqa ajratib, daftarlaringizdagi uch muhim fikrni qayta ko'ring. Qisqa takrorlash ertangi mashg'ulotga tayyorgarlik bo'ladi...\"",
-    url: AUDIO_PATHS.voice13,
-    day: "tue"
+    desc: "\"Aziz talabalar, bugungi darslar yakunlandi. Endi besh daqiqa ajratib, daftarlaringizdagi uch muhim fikrni qayta ko'ring...\"",
+    url: AUDIO_PATHS.tue_p3_out
+  },
+
+  // CHORSHANBA
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "1-Voice: Chorshanba 1-para kirish (08:30)",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va hurmatli ustozlar! Bugun tibbiyotdagi eng asosiy qadriyatlardan biri xavfsizlik haqida o'ylaymiz. Tozalik, tartib va ehtiyotkorlik bemorga ham, tibbiyot xodimiga ham xizmat qiladi...\"",
+    url: AUDIO_PATHS.wed_p1_in
+  },
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "2-Voice: Chorshanba 1-para tugashi (09:40)",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Foydali eslatma: qo'l gigiyenasi infeksiyalar tarqalishini kamaytirishning eng muhim usullaridan biridir. Qo'l yuvishda sovun va suvdan to'g'ri foydalaning...\"",
+    url: AUDIO_PATHS.wed_p1_out
+  },
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "3-Voice: Chorshanba 2-para kirish (09:45)",
+    time: "09:45 da",
+    desc: "\"Aziz talabalar, ikkinchi para boshlanmoqda. Tibbiyotda asbob-uskunadan foydalanishdan oldin uning vazifasi va xavfsizlik tartibini bilish kerak...\"",
+    url: AUDIO_PATHS.wed_p2_in
+  },
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "4-Voice: Chorshanba 2-para tugashi - Katta tanaffus (10:55)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Ovqatlanishdan oldin qo'llaringiz tozaligiga e'tibor bering. Umumiy joylarni ozoda saqlash boshqalarning salomatligiga hurmatdir...\"",
+    url: AUDIO_PATHS.wed_p2_out
+  },
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "5-Voice: Chorshanba 3-para kirish (11:10)",
+    time: "11:10 da",
+    desc: "\"Diqqat, uchinchi para boshlanadi. Kasbiy xavfsizlikni faqat qoidalarni yodlash deb tushunmang. Nima uchun aynan shu tartib zarurligini ham o'rganing...\"",
+    url: AUDIO_PATHS.wed_p3_in
+  },
+  {
+    day: "wed",
+    tag: "Chorshanba",
+    title: "6-Voice: Chorshanba 3-para tugashi - Kun yakuni (12:20)",
+    time: "12:20 da",
+    desc: "\"Hurmatli talabalar, bugungi darslar yakunlandi. Bir oddiy xulosani eslab qoling: xavfsiz muhit tasodifan paydo bo'lmaydi. U har bir insonning to'g'ri harakatidan shakllanadi...\"",
+    url: AUDIO_PATHS.wed_p3_out
+  },
+
+  // PAYSHANBA
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "7-Voice: Payshanba 1-para kirish (08:30)",
+    time: "08:30 da",
+    desc: "\"Assalomu alaykum, aziz talabalar va ustozlar! Bugun kasbimizning eng muhim tomoniga — inson bilan muomalaga e'tibor qaratamiz. Bemorni tinglash, uning tashvishini jiddiy qabul qilish...\"",
+    url: AUDIO_PATHS.thu_p1_in
+  },
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "8-Voice: Payshanba 1-para tugashi (09:40)",
+    time: "09:40 da",
+    desc: "\"Birinchi para yakunlandi. Aziz talabalar, yaxshi suhbatdosh faqat gapirmaydi, diqqat bilan tinglaydi ham. Suhbat paytida odamning so'zini bo'lmaslik, savolini tushunishga urinish...\"",
+    url: AUDIO_PATHS.thu_p1_out
+  },
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "9-Voice: Payshanba 2-para kirish (09:45)",
+    time: "09:45 da",
+    desc: "\"Diqqat, ikkinchi para boshlanmoqda. Tibbiy ma'lumotni oddiy va tushunarli tilda izohlash ham mahorat talab qiladi. Murakkab atamani bilish muhim, ammo uni bemor tushunadigan so'zga aylantira olish...\"",
+    url: AUDIO_PATHS.thu_p2_in
+  },
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "10-Voice: Payshanba 2-para tugashi - Katta tanaffus (10:55)",
+    time: "10:55 da",
+    desc: "\"Ikkinchi para tugadi. Katta tanaffus boshlandi. Ovqatlanishdan oldin qo'llaringiz tozaligiga e'tibor bering. Umumiy joylarni ozoda saqlash boshqalarning salomatligiga hurmatdir...\"",
+    url: AUDIO_PATHS.thu_p2_out
+  },
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "11-Voice: Payshanba 3-para kirish (11:10)",
+    time: "11:10 da",
+    desc: "\"Diqqat, uchinchi para boshlanadi. Kasbiy xavfsizlikni faqat qoidalarni yodlash deb tushunmang. Nima uchun aynan shu tartib zarurligini ham o'rganing...\"",
+    url: AUDIO_PATHS.thu_p3_in
+  },
+  {
+    day: "thu",
+    tag: "Payshanba",
+    title: "12-Voice: Payshanba 3-para tugashi - Kun yakuni (12:20)",
+    time: "12:20 da",
+    desc: "\"Hurmatli talabalar, bugungi darslar yakunlandi. Bir oddiy xulosani eslab qoling: xavfsiz muhit tasodifan paydo bo'lmaydi. U har bir insonning to'g'ri harakatidan shakllanadi...\"",
+    url: AUDIO_PATHS.thu_p3_out
   }
 ];
 
@@ -1427,7 +1554,7 @@ let AppConfig = {
   anthemTime: "08:29",
   workingDays: [1, 2, 3, 4, 5, 6], // Du-Sh
   activeShift: "I va II Smena (To'liq kun)",
-  voiceDayMode: "auto" // 'auto', 'mon', 'tue'
+  voiceDayMode: "auto" // 'auto', 'mon', 'tue', 'wed', 'thu'
 };
 
 let schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
@@ -1444,7 +1571,7 @@ let activeVoiceTab = "mon";
 let isSimulation = false;
 let simFakeSeconds = 0;
 let simSpeed = 120;
-let simFakeDay = 1; // 1 = Dushanba, 2 = Seshanba
+let simFakeDay = 1; // 1=Du, 2=Se, 3=Chor, 4=Pay
 let lastSimRealTs = null;
 
 function getMasterPlayer() {
@@ -1488,7 +1615,7 @@ function stopAllAudio() {
   if (icon) icon.classList.remove("bell-ring-active");
 }
 
-/* KETMA-KET AUDIO IJRO: 1-VOICE ➔ MAQSADLI VOICE (HECH QANDAY QO'NG'IROQSIZ) */
+/* KETMA-KET AUDIO IJRO: 1-VOICE (CHIME) ➔ MAQSADLI VOICE (QO'NG'IROQSIZ) */
 function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
   if (AppConfig.muted) return;
   unlockAudioEngine();
@@ -1521,7 +1648,7 @@ function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
 
     player.onended = callNext;
     player.onerror = () => {
-      console.warn("Audio fayl yuklanmadi:", url);
+      console.warn("Audio yuklanmadi:", url);
       callNext();
     };
 
@@ -1529,8 +1656,8 @@ function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
     const playPromise = player.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn("Audio ijro brauzer tomonidan bloklandi:", err);
-        showToast("⚠️ Brauzer ovozni chekladi. Ovozni to'liq eshitish uchun sahifaga bosing!", "warning");
+        console.warn("Audio ijro bloklandi:", err);
+        showToast("⚠️ Brauzer ovozni chekladi. Ovozni eshitish uchun sahifaga bosing!", "warning");
         callNext();
       });
     }
@@ -1613,11 +1740,11 @@ function getCurrentDayTime() {
     lastSimRealTs = now;
     simFakeSeconds += delta * simSpeed;
     if (simFakeSeconds >= 86400) simFakeSeconds %= 86400;
-    const dayName = simFakeDay === 2 ? "Seshanba" : "Dushanba";
+    const dayNames = { 1: "Dushanba", 2: "Seshanba", 3: "Chorshanba", 4: "Payshanba", 5: "Juma", 6: "Shanba" };
     return {
       dayOfWeek: simFakeDay,
       currentSec: simFakeSeconds,
-      dateString: `${dayName} (Simulyatsiya rejimi)`
+      dateString: `${dayNames[simFakeDay] || 'Dushanba'} (Simulyatsiya rejimi)`
     };
   }
 
@@ -1632,20 +1759,34 @@ function getCurrentDayTime() {
   return { dayOfWeek, currentSec, dateString };
 }
 
-/* Ovozlar kunini aniqlash: Dushanba (1) yoki Seshanba (2) */
+/* Ovozlar kunini aniqlash: 1=Du, 2=Se, 3=Chor, 4=Pay */
 function getActiveVoiceDay(currentDayOfWeek) {
   if (AppConfig.voiceDayMode === 'mon') return 1;
   if (AppConfig.voiceDayMode === 'tue') return 2;
-  // 'auto': Seshanba (2), Payshanba (4), Shanba (6) bo'lsa Seshanba ovozlari (8-13)
-  // Dushanba (1), Chorshanba (3), Juma (5) bo'lsa Dushanba ovozlari (2-7)
-  return (currentDayOfWeek === 2 || currentDayOfWeek === 4 || currentDayOfWeek === 6) ? 2 : 1;
+  if (AppConfig.voiceDayMode === 'wed') return 3;
+  if (AppConfig.voiceDayMode === 'thu') return 4;
+  
+  // 'auto':
+  // 1 = Dushanba (1-7 voices)
+  // 2 = Seshanba (8-13 voices)
+  // 3 = Chorshanba (Chor 1-6 voices)
+  // 4 = Payshanba (Pay 7-12 voices)
+  // 5 (Juma) = Dushanba/Chorshanba
+  // 6 (Shanba) = Seshanba/Payshanba
+  if (currentDayOfWeek === 1) return 1;
+  if (currentDayOfWeek === 2) return 2;
+  if (currentDayOfWeek === 3) return 3;
+  if (currentDayOfWeek === 4) return 4;
+  if (currentDayOfWeek === 5) return 3; // Juma
+  if (currentDayOfWeek === 6) return 4; // Shanba
+  return 1;
 }
 
 /* KUNLIK SIGNAL REJASI (EVENT SCHEDULE PLANNER) */
 function compileDailyEvents(targetDayOfWeek = null) {
   const { dayOfWeek } = getCurrentDayTime();
   const day = targetDayOfWeek !== null ? targetDayOfWeek : dayOfWeek;
-  const isTuesday = (getActiveVoiceDay(day) === 2);
+  const activeDay = getActiveVoiceDay(day);
   const events = [];
 
   // 1. Davlat Madhiyasi (08:29)
@@ -1661,48 +1802,71 @@ function compileDailyEvents(targetDayOfWeek = null) {
     });
   }
 
-  // 2. Paralar bo'yicha maxsus 1-13 ovozlar zanjiri
-  // Dushanba:
-  // 1-kirish (08:30): 1-voice + 2-voice
-  // 1-chiqish (09:40): 1-voice + 3-voice
-  // 2-kirish (09:45): 1-voice + 4-voice
-  // 2-chiqish (10:55): 1-voice + 5-voice (Katta tanaffus)
-  // 3-kirish (11:10): 1-voice + 6-voice
-  // 3-chiqish (12:20): 1-voice + 7-voice (Kun yakuni)
+  // 2. Paralar bo'yicha ovozlar to'plami
+  // DUSHANBA: 1-kir(2-V), 1-chiq(3-V), 2-kir(4-V), 2-chiq(5-V), 3-kir(6-V), 3-chiq(7-V)
+  // SESHANBA: 1-kir(8-V), 1-chiq(9-V), 2-kir(10-V), 2-chiq(11-V), 3-kir(12-V), 3-chiq(13-V)
+  // CHORSHANBA: 1-kir(1-V), 1-chiq(2-V), 2-kir(3-V), 2-chiq(4-V), 3-kir(5-V), 3-chiq(6-V)
+  // PAYSHANBA: 1-kir(7-V), 1-chiq(8-V), 2-kir(9-V), 2-chiq(10-V), 3-kir(11-V), 3-chiq(12-V)
 
-  // Seshanba:
-  // 1-kirish (08:30): 1-voice + 8-voice
-  // 1-chiqish (09:40): 1-voice + 9-voice
-  // 2-kirish (09:45): 1-voice + 10-voice
-  // 2-chiqish (10:55): 1-voice + 11-voice (Katta tanaffus)
-  // 3-kirish (11:10): 1-voice + 12-voice
-  // 3-chiqish (12:20): 1-voice + 13-voice (Kun yakuni)
+  const dayVoiceMap = {
+    1: { // Dushanba
+      name: "Dushanba",
+      p1_in: { url: AUDIO_PATHS.mon_p1_in, label: "2-Voice" },
+      p1_out: { url: AUDIO_PATHS.mon_p1_out, label: "3-Voice" },
+      p2_in: { url: AUDIO_PATHS.mon_p2_in, label: "4-Voice" },
+      p2_out: { url: AUDIO_PATHS.mon_p2_out, label: "5-Voice" },
+      p3_in: { url: AUDIO_PATHS.mon_p3_in, label: "6-Voice" },
+      p3_out: { url: AUDIO_PATHS.mon_p3_out, label: "7-Voice" }
+    },
+    2: { // Seshanba
+      name: "Seshanba",
+      p1_in: { url: AUDIO_PATHS.tue_p1_in, label: "8-Voice" },
+      p1_out: { url: AUDIO_PATHS.tue_p1_out, label: "9-Voice" },
+      p2_in: { url: AUDIO_PATHS.tue_p2_in, label: "10-Voice" },
+      p2_out: { url: AUDIO_PATHS.tue_p2_out, label: "11-Voice" },
+      p3_in: { url: AUDIO_PATHS.tue_p3_in, label: "12-Voice" },
+      p3_out: { url: AUDIO_PATHS.tue_p3_out, label: "13-Voice" }
+    },
+    3: { // Chorshanba
+      name: "Chorshanba",
+      p1_in: { url: AUDIO_PATHS.wed_p1_in, label: "1-Voice" },
+      p1_out: { url: AUDIO_PATHS.wed_p1_out, label: "2-Voice" },
+      p2_in: { url: AUDIO_PATHS.wed_p2_in, label: "3-Voice" },
+      p2_out: { url: AUDIO_PATHS.wed_p2_out, label: "4-Voice" },
+      p3_in: { url: AUDIO_PATHS.wed_p3_in, label: "5-Voice" },
+      p3_out: { url: AUDIO_PATHS.wed_p3_out, label: "6-Voice" }
+    },
+    4: { // Payshanba
+      name: "Payshanba",
+      p1_in: { url: AUDIO_PATHS.thu_p1_in, label: "7-Voice" },
+      p1_out: { url: AUDIO_PATHS.thu_p1_out, label: "8-Voice" },
+      p2_in: { url: AUDIO_PATHS.thu_p2_in, label: "9-Voice" },
+      p2_out: { url: AUDIO_PATHS.thu_p2_out, label: "10-Voice" },
+      p3_in: { url: AUDIO_PATHS.thu_p3_in, label: "11-Voice" },
+      p3_out: { url: AUDIO_PATHS.thu_p3_out, label: "12-Voice" }
+    }
+  };
+
+  const vSet = dayVoiceMap[activeDay] || dayVoiceMap[1];
 
   schedule.forEach((slot, index) => {
     const startSec = timeToSec(slot.start);
     const endSec = timeToSec(slot.end);
     const shiftLabel = slot.shift ? `[${slot.shift}] ` : "";
 
-    // Kirish va Chiqish ovozlarini aniqlaymiz
-    let inVoice = isTuesday ? AUDIO_PATHS.voice8 : AUDIO_PATHS.voice2;
-    let inVoiceNum = isTuesday ? 8 : 2;
-    let outVoice = isTuesday ? AUDIO_PATHS.voice9 : AUDIO_PATHS.voice3;
-    let outVoiceNum = isTuesday ? 9 : 3;
+    let inVoiceObj = vSet.p1_in;
+    let outVoiceObj = vSet.p1_out;
 
     if (slot.start === "09:45" || slot.id === 2 || slot.id === 5) {
-      inVoice = isTuesday ? AUDIO_PATHS.voice10 : AUDIO_PATHS.voice4;
-      inVoiceNum = isTuesday ? 10 : 4;
+      inVoiceObj = vSet.p2_in;
     } else if (slot.start === "11:10" || slot.id === 3 || slot.id === 6) {
-      inVoice = isTuesday ? AUDIO_PATHS.voice12 : AUDIO_PATHS.voice6;
-      inVoiceNum = isTuesday ? 12 : 6;
+      inVoiceObj = vSet.p3_in;
     }
 
     if (slot.end === "10:55" || slot.id === 2 || slot.id === 5) {
-      outVoice = isTuesday ? AUDIO_PATHS.voice11 : AUDIO_PATHS.voice5;
-      outVoiceNum = isTuesday ? 11 : 5;
+      outVoiceObj = vSet.p2_out;
     } else if (slot.end === "12:20" || slot.end === "16:30" || index === schedule.length - 1) {
-      outVoice = isTuesday ? AUDIO_PATHS.voice13 : AUDIO_PATHS.voice7;
-      outVoiceNum = isTuesday ? 13 : 7;
+      outVoiceObj = vSet.p3_out;
     }
 
     // Dars boshlanishi (KIRISH)
@@ -1711,9 +1875,9 @@ function compileDailyEvents(targetDayOfWeek = null) {
       timeSec: startSec,
       timeStr: slot.start,
       title: `${shiftLabel}${slot.name} boshlandi`,
-      sub: `1-Voice ➔ ${inVoiceNum}-Voice (${isTuesday ? 'Seshanba' : 'Dushanba'})`,
+      sub: `1-Voice ➔ ${inVoiceObj.label} (${vSet.name})`,
       type: "lesson_start",
-      sequence: [AUDIO_PATHS.voice1, inVoice],
+      sequence: [AUDIO_PATHS.voice1, inVoiceObj.url],
       slotId: slot.id
     });
 
@@ -1726,9 +1890,9 @@ function compileDailyEvents(targetDayOfWeek = null) {
       timeSec: endSec,
       timeStr: slot.end,
       title: isDayEnd ? `${shiftLabel}${slot.name} tugadi (Kun yakuni)` : (isBigBreak ? `${shiftLabel}${slot.name} tugadi (Katta tanaffus)` : `${shiftLabel}${slot.name} tugadi`),
-      sub: `1-Voice ➔ ${outVoiceNum}-Voice (${isTuesday ? 'Seshanba' : 'Dushanba'})`,
+      sub: `1-Voice ➔ ${outVoiceObj.label} (${vSet.name})`,
       type: isDayEnd ? "day_end" : (isBigBreak ? "lunch_start" : "break_start"),
-      sequence: [AUDIO_PATHS.voice1, outVoice],
+      sequence: [AUDIO_PATHS.voice1, outVoiceObj.url],
       slotId: slot.id
     });
   });
@@ -1982,7 +2146,9 @@ function switchVoiceTab(tab) {
   activeVoiceTab = tab;
   document.getElementById("tabMonBtn")?.classList.toggle("active", tab === 'mon');
   document.getElementById("tabTueBtn")?.classList.toggle("active", tab === 'tue');
-  document.getElementById("tabCommonBtn")?.classList.toggle("active", tab === 'common');
+  document.getElementById("tabWedBtn")?.classList.toggle("active", tab === 'wed');
+  document.getElementById("tabThuBtn")?.classList.toggle("active", tab === 'thu');
+  document.getElementById("tabAllBtn")?.classList.toggle("active", tab === 'all');
   renderVoiceCards();
 }
 
@@ -1991,16 +2157,18 @@ function renderVoiceCards() {
   if (!container) return;
 
   let filtered = VOICES_INFO;
-  if (activeVoiceTab === 'mon') {
-    filtered = VOICES_INFO.filter(v => v.day === 'mon' || v.day === 'common');
-  } else if (activeVoiceTab === 'tue') {
-    filtered = VOICES_INFO.filter(v => v.day === 'tue' || v.day === 'common');
+  if (activeVoiceTab !== 'all') {
+    filtered = VOICES_INFO.filter(v => v.day === activeVoiceTab || v.day === 'common');
   }
 
   container.innerHTML = filtered.map(v => {
-    const borderCol = v.day === 'mon' ? '#0ea5e9' : (v.day === 'tue' ? '#10b981' : '#f59e0b');
-    // Test zanjiri: agar 1-voice bo'lsa faqat 1-voice o'zi, aks holda [1-voice, shu voice]
-    const seq = (v.num === 1) ? [AUDIO_PATHS.voice1] : [AUDIO_PATHS.voice1, v.url];
+    let borderCol = '#f59e0b';
+    if (v.day === 'mon') borderCol = '#0ea5e9';
+    else if (v.day === 'tue') borderCol = '#10b981';
+    else if (v.day === 'wed') borderCol = '#06b6d4';
+    else if (v.day === 'thu') borderCol = '#8b5cf6';
+
+    const seq = v.isChime ? [AUDIO_PATHS.voice1] : [AUDIO_PATHS.voice1, v.url];
     const seqStr = JSON.stringify(seq).replace(/"/g, '&quot;');
 
     return `
@@ -2013,7 +2181,7 @@ function renderVoiceCards() {
           <i>${v.desc}</i>
         </div>
         <div style="font-size:11px; color:var(--mut);">
-          <span class="rule-tag">${v.tag}</span> Vaqti: <b>${v.time}</b> • Ketma-ketlik: ${v.num === 1 ? 'Faqat 1-Voice' : '1-Voice ➔ ' + v.num + '-Voice'}
+          <span class="rule-tag">${v.tag}</span> Vaqti: <b>${v.time}</b> • Ketma-ketlik: ${v.isChime ? 'Faqat 1-Voice' : '1-Voice ➔ Audio Voice'}
         </div>
       </div>
     `;
@@ -2167,64 +2335,53 @@ function bindFormControls() {
     playAudioSequence([AUDIO_PATHS.voice1]);
   });
   document.getElementById("testSampleChainBtn")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice2]);
+    const { dayOfWeek } = getCurrentDayTime();
+    const day = getActiveVoiceDay(dayOfWeek);
+    let sampleVoice = AUDIO_PATHS.mon_p1_in;
+    if (day === 2) sampleVoice = AUDIO_PATHS.tue_p1_in;
+    else if (day === 3) sampleVoice = AUDIO_PATHS.wed_p1_in;
+    else if (day === 4) sampleVoice = AUDIO_PATHS.thu_p1_in;
+    playAudioSequence([AUDIO_PATHS.voice1, sampleVoice]);
   });
   document.getElementById("stopAudioBtn")?.addEventListener("click", stopAllAudio);
 
-  // Manual Bell Buttons (1-13 Voices)
+  // Manual Trigger Buttons
   document.getElementById("manualFreesoundBtn")?.addEventListener("click", () => {
     playAudioSequence([AUDIO_PATHS.voice1]);
     addBellLog("🔔 Qo'lda 1-Voice (Freesound) chalindi");
   });
-  document.getElementById("manualMon1In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice2]);
-    addBellLog("🔔 Dushanba 1-kirish: 1-V ➔ 2-V");
-  });
-  document.getElementById("manualMon1Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice3]);
-    addBellLog("🔔 Dushanba 1-chiqish: 1-V ➔ 3-V");
-  });
-  document.getElementById("manualMon2In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice4]);
-    addBellLog("🔔 Dushanba 2-kirish: 1-V ➔ 4-V");
-  });
-  document.getElementById("manualMon2Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice5]);
-    addBellLog("🔔 Dushanba 2-chiqish (Katta tanaffus): 1-V ➔ 5-V");
-  });
-  document.getElementById("manualMon3In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice6]);
-    addBellLog("🔔 Dushanba 3-kirish: 1-V ➔ 6-V");
-  });
-  document.getElementById("manualMon3Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice7]);
-    addBellLog("🔔 Dushanba 3-chiqish (Kun yakuni): 1-V ➔ 7-V");
-  });
 
-  document.getElementById("manualTue1In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice8]);
-    addBellLog("🔔 Seshanba 1-kirish: 1-V ➔ 8-V");
-  });
-  document.getElementById("manualTue1Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice9]);
-    addBellLog("🔔 Seshanba 1-chiqish: 1-V ➔ 9-V");
-  });
-  document.getElementById("manualTue2In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice10]);
-    addBellLog("🔔 Seshanba 2-kirish: 1-V ➔ 10-V");
-  });
-  document.getElementById("manualTue2Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice11]);
-    addBellLog("🔔 Seshanba 2-chiqish (Katta tanaffus): 1-V ➔ 11-V");
-  });
-  document.getElementById("manualTue3In")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice12]);
-    addBellLog("🔔 Seshanba 3-kirish: 1-V ➔ 12-V");
-  });
-  document.getElementById("manualTue3Out")?.addEventListener("click", () => {
-    playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.voice13]);
-    addBellLog("🔔 Seshanba 3-chiqish (Kun yakuni): 1-V ➔ 13-V");
-  });
+  // Dushanba
+  document.getElementById("manualMon1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p1_in]); addBellLog("🔔 Du 1-kir: 1-V ➔ 2-V"); });
+  document.getElementById("manualMon1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p1_out]); addBellLog("🔔 Du 1-chiq: 1-V ➔ 3-V"); });
+  document.getElementById("manualMon2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p2_in]); addBellLog("🔔 Du 2-kir: 1-V ➔ 4-V"); });
+  document.getElementById("manualMon2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p2_out]); addBellLog("🔔 Du 2-chiq: 1-V ➔ 5-V"); });
+  document.getElementById("manualMon3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p3_in]); addBellLog("🔔 Du 3-kir: 1-V ➔ 6-V"); });
+  document.getElementById("manualMon3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p3_out]); addBellLog("🔔 Du 3-chiq: 1-V ➔ 7-V"); });
+
+  // Seshanba
+  document.getElementById("manualTue1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p1_in]); addBellLog("🔔 Se 1-kir: 1-V ➔ 8-V"); });
+  document.getElementById("manualTue1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p1_out]); addBellLog("🔔 Se 1-chiq: 1-V ➔ 9-V"); });
+  document.getElementById("manualTue2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p2_in]); addBellLog("🔔 Se 2-kir: 1-V ➔ 10-V"); });
+  document.getElementById("manualTue2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p2_out]); addBellLog("🔔 Se 2-chiq: 1-V ➔ 11-V"); });
+  document.getElementById("manualTue3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p3_in]); addBellLog("🔔 Se 3-kir: 1-V ➔ 12-V"); });
+  document.getElementById("manualTue3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p3_out]); addBellLog("🔔 Se 3-chiq: 1-V ➔ 13-V"); });
+
+  // Chorshanba
+  document.getElementById("manualWed1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p1_in]); addBellLog("🔔 Chor 1-kir: 1-V ➔ Chor 1-V"); });
+  document.getElementById("manualWed1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p1_out]); addBellLog("🔔 Chor 1-chiq: 1-V ➔ Chor 2-V"); });
+  document.getElementById("manualWed2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p2_in]); addBellLog("🔔 Chor 2-kir: 1-V ➔ Chor 3-V"); });
+  document.getElementById("manualWed2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p2_out]); addBellLog("🔔 Chor 2-chiq: 1-V ➔ Chor 4-V"); });
+  document.getElementById("manualWed3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p3_in]); addBellLog("🔔 Chor 3-kir: 1-V ➔ Chor 5-V"); });
+  document.getElementById("manualWed3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p3_out]); addBellLog("🔔 Chor 3-chiq: 1-V ➔ Chor 6-V"); });
+
+  // Payshanba
+  document.getElementById("manualThu1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p1_in]); addBellLog("🔔 Pay 1-kir: 1-V ➔ Pay 7-V"); });
+  document.getElementById("manualThu1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p1_out]); addBellLog("🔔 Pay 1-chiq: 1-V ➔ Pay 8-V"); });
+  document.getElementById("manualThu2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p2_in]); addBellLog("🔔 Pay 2-kir: 1-V ➔ Pay 9-V"); });
+  document.getElementById("manualThu2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p2_out]); addBellLog("🔔 Pay 2-chiq: 1-V ➔ Pay 10-V"); });
+  document.getElementById("manualThu3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_in]); addBellLog("🔔 Pay 3-kir: 1-V ➔ Pay 11-V"); });
+  document.getElementById("manualThu3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_out]); addBellLog("🔔 Pay 3-chiq: 1-V ➔ Pay 12-V"); });
 
   document.getElementById("manualAnthemBtn")?.addEventListener("click", () => {
     playAudioSequence([AUDIO_PATHS.anthem], 120000);
@@ -2298,7 +2455,8 @@ function bindFormControls() {
     lastSimRealTs = performance.now();
     isSimulation = true;
     triggeredEventsToday.clear();
-    const dayName = simFakeDay === 2 ? "Seshanba" : "Dushanba";
+    const dayNames = { 1: "Dushanba", 2: "Seshanba", 3: "Chorshanba", 4: "Payshanba" };
+    const dayName = dayNames[simFakeDay] || "Dushanba";
     document.getElementById("systemModeTag").textContent = `Simulyatsiya: ${dayName} (×${simSpeed})`;
     document.getElementById("systemModeTag").style.color = "var(--wr)";
     renderTodayBellList();
@@ -2491,16 +2649,16 @@ function saveScheduleFromModal() {
 
 function saveState() {
   try {
-    localStorage.setItem("med_bell_config_v3", JSON.stringify(AppConfig));
-    localStorage.setItem("med_bell_schedule_v3", JSON.stringify(schedule));
+    localStorage.setItem("med_bell_config_v4", JSON.stringify(AppConfig));
+    localStorage.setItem("med_bell_schedule_v4", JSON.stringify(schedule));
   } catch (e) {}
 }
 
 function loadState() {
   try {
-    const savedConfig = localStorage.getItem("med_bell_config_v3");
+    const savedConfig = localStorage.getItem("med_bell_config_v4");
     if (savedConfig) AppConfig = { ...AppConfig, ...JSON.parse(savedConfig) };
-    const savedSchedule = localStorage.getItem("med_bell_schedule_v3");
+    const savedSchedule = localStorage.getItem("med_bell_schedule_v4");
     if (savedSchedule) schedule = JSON.parse(savedSchedule);
   } catch (e) {}
   applyConfigToUI();
