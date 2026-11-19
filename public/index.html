@@ -1065,6 +1065,12 @@ body.tv-mode .tv-marquee {
             <span style="color: var(--ink-secondary);">Rejim: <b id="breakMusicModeBadge" style="color: var(--ac);">Barcha tanaffuslarda</b></span>
             <span style="color: var(--ink-secondary);">Ovoz: <b id="breakMusicVolumeBadge" style="color: var(--ok);">30%</b></span>
           </div>
+
+          <!-- Native Audio player right on the card -->
+          <div id="cardAudioPlayerContainer" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line); display: none;">
+            <small style="color: var(--ink-secondary); display: block; margin-bottom: 4px; font-weight: 600;">🎧 Musiqani to'g'ridan-to'g'ri tinglash:</small>
+            <audio id="breakMusicCardAudioControls" controls style="width: 100%; height: 34px; border-radius: 8px;"></audio>
+          </div>
         </div>
 
         <div style="display: flex; gap: 8px;">
@@ -1453,17 +1459,24 @@ body.tv-mode .tv-marquee {
     </div>
 
     <!-- Current Stored Music Card -->
-    <div id="currentMusicTrackCard" style="background: var(--chip-bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
-        <span style="font-size: 26px;">🎼</span>
-        <div style="overflow: hidden;">
-          <b id="currentTrackName" style="font-size: 14px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Musiqa o'rnatilmagan</b>
-          <small id="currentTrackMeta" style="color: var(--mut); font-size: 12px;">Hozircha audio fayl saqlanmagan</small>
+    <div id="currentMusicTrackCard" style="background: var(--chip-bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+          <span style="font-size: 26px;">🎼</span>
+          <div style="overflow: hidden;">
+            <b id="currentTrackName" style="font-size: 14px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Musiqa o'rnatilmagan</b>
+            <small id="currentTrackMeta" style="color: var(--mut); font-size: 12px;">Hozircha audio fayl saqlanmagan</small>
+          </div>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button class="btn ghost sm" id="modalPreviewMusicBtn">▶️ Tinglash</button>
+          <button class="btn danger sm" id="deleteCustomMusicBtn" title="Musiqani xotiradan o'chirish">🗑</button>
         </div>
       </div>
-      <div style="display: flex; gap: 6px; align-items: center;">
-        <button class="btn ghost sm" id="modalPreviewMusicBtn">▶️ Tinglash</button>
-        <button class="btn danger sm" id="deleteCustomMusicBtn" title="Musiqani xotiradan o'chirish">🗑</button>
+      <!-- Native audio player preview directly in modal! -->
+      <div id="modalAudioPlayerContainer" style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); display: none;">
+        <small style="color: var(--ink-secondary); display: block; margin-bottom: 4px; font-weight: 600;">🎧 To'g'ridan-to'g'ri tinglash pleyeri:</small>
+        <audio id="breakMusicModalAudioControls" controls style="width: 100%; height: 36px; border-radius: 8px;"></audio>
       </div>
     </div>
 
@@ -1911,6 +1924,7 @@ let activeVoiceTab = "mon";
 // Tanaffus musiqasi va Direktor holatlari
 let isVoiceSequencePlaying = false;
 let isBreakMusicPlaying = false;
+let isBreakMusicPreviewing = false;
 let currentBreakMusicBlobUrl = null;
 let breakMusicFadeInterval = null;
 let pendingDirectorAction = null;
@@ -1961,6 +1975,8 @@ function openMusicDB() {
 }
 
 async function saveBreakMusicToDB(file) {
+  // ArrayBuffer ko'rinishida saqlash brauzer yopilib ochilganda ham 100% barqaror ishlaydi
+  const buffer = await file.arrayBuffer();
   const db = await openMusicDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(DB_STORE, "readwrite");
@@ -1969,7 +1985,7 @@ async function saveBreakMusicToDB(file) {
       name: file.name,
       size: file.size,
       type: file.type || "audio/mpeg",
-      blob: file,
+      buffer: buffer,
       updatedAt: new Date().toISOString()
     };
     const req = store.put(record, DB_KEY);
@@ -2004,16 +2020,44 @@ async function loadAndInitBreakMusic() {
   try {
     const record = await getBreakMusicFromDB();
     const player = getBreakMusicPlayer();
-    if (record && record.blob) {
+    const cardControls = document.getElementById("breakMusicCardAudioControls");
+    const cardContainer = document.getElementById("cardAudioPlayerContainer");
+    const modalControls = document.getElementById("breakMusicModalAudioControls");
+    const modalContainer = document.getElementById("modalAudioPlayerContainer");
+
+    if (record && (record.buffer || record.blob)) {
       if (currentBreakMusicBlobUrl) {
-        URL.revokeObjectURL(currentBreakMusicBlobUrl);
+        try { URL.revokeObjectURL(currentBreakMusicBlobUrl); } catch (e) {}
       }
-      currentBreakMusicBlobUrl = URL.createObjectURL(record.blob);
+      let blob;
+      if (record.buffer) {
+        blob = new Blob([record.buffer], { type: record.type || "audio/mpeg" });
+      } else if (record.blob instanceof Blob) {
+        blob = record.blob;
+      } else {
+        blob = new Blob([record.blob], { type: record.type || "audio/mpeg" });
+      }
+      currentBreakMusicBlobUrl = URL.createObjectURL(blob);
       if (player) {
         player.src = currentBreakMusicBlobUrl;
         player.load();
       }
+      if (cardControls) {
+        cardControls.src = currentBreakMusicBlobUrl;
+        cardControls.load();
+      }
+      if (cardContainer) {
+        cardContainer.style.display = "block";
+      }
+      if (modalControls) {
+        modalControls.src = currentBreakMusicBlobUrl;
+        modalControls.load();
+      }
+      if (modalContainer) {
+        modalContainer.style.display = "block";
+      }
       AppConfig.breakMusic = AppConfig.breakMusic || {};
+      AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off");
       AppConfig.breakMusic.hasCustomTrack = true;
       AppConfig.breakMusic.fileName = record.name;
       AppConfig.breakMusic.fileSize = record.size;
@@ -2024,6 +2068,18 @@ async function loadAndInitBreakMusic() {
       AppConfig.breakMusic.fileSize = 0;
       if (player) {
         player.removeAttribute("src");
+      }
+      if (cardControls) {
+        cardControls.removeAttribute("src");
+      }
+      if (cardContainer) {
+        cardContainer.style.display = "none";
+      }
+      if (modalControls) {
+        modalControls.removeAttribute("src");
+      }
+      if (modalContainer) {
+        modalContainer.style.display = "none";
       }
     }
     updateBreakMusicUI();
@@ -2149,18 +2205,19 @@ function fadeAudio(audioEl, targetVol, durationMs = 2000, onComplete) {
 }
 
 function startBreakMusic() {
-  if (isVoiceSequencePlaying || AppConfig.muted) return;
+  if (isVoiceSequencePlaying || AppConfig.muted || isBreakMusicPreviewing) return;
   const player = getBreakMusicPlayer();
   if (!player || !player.src) return;
 
-  const targetVol = Math.max(0, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
-  player.volume = 0;
+  const targetVol = Math.max(0.05, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
+  player.volume = 0.05;
+  player.loop = true;
   
   const playPromise = player.play();
   if (playPromise !== undefined) {
     playPromise.then(() => {
       isBreakMusicPlaying = true;
-      fadeAudio(player, targetVol, 2000);
+      fadeAudio(player, targetVol, 1500);
       updateBreakMusicStatusUI();
     }).catch(err => {
       console.warn("Break music play blocked:", err);
@@ -2169,11 +2226,12 @@ function startBreakMusic() {
 }
 
 function stopBreakMusic(smooth = true) {
+  if (isBreakMusicPreviewing) return;
   const player = getBreakMusicPlayer();
   if (!player) return;
 
   if (smooth && !player.paused) {
-    fadeAudio(player, 0, 2000, () => {
+    fadeAudio(player, 0, 1500, () => {
       player.pause();
       isBreakMusicPlaying = false;
       updateBreakMusicStatusUI();
@@ -2191,6 +2249,11 @@ function stopBreakMusic(smooth = true) {
 }
 
 function handleBreakMusicTick(inBreak, isBig, bRemain) {
+  // Agar hozir sinov (preview) tinglanayotgan bo'lsa, asosiy soat taymeri uni to'xtatmasin!
+  if (isBreakMusicPreviewing) {
+    return;
+  }
+
   if (!inBreak || AppConfig.muted || !AppConfig.breakMusic?.enabled || isVoiceSequencePlaying) {
     if (isBreakMusicPlaying) {
       stopBreakMusic(false);
@@ -2230,7 +2293,7 @@ function checkAndResumeBreakMusic() {
   if (AppConfig.muted) return;
   if (!AppConfig.breakMusic || !AppConfig.breakMusic.enabled || AppConfig.breakMusic.mode === "off") return;
   if (!AppConfig.breakMusic.hasCustomTrack) return;
-  if (isVoiceSequencePlaying) return;
+  if (isVoiceSequencePlaying || isBreakMusicPreviewing) return;
 
   const { currentSec, dayOfWeek } = getCurrentDayTime();
   if (!AppConfig.workingDays.includes(dayOfWeek)) return;
@@ -2316,7 +2379,7 @@ function updateBreakMusicStatusUI() {
   const previewModalBtn = document.getElementById("modalPreviewMusicBtn");
   const cardIcon = document.getElementById("breakMusicCardIcon");
 
-  if (isBreakMusicPlaying) {
+  if (isBreakMusicPreviewing || isBreakMusicPlaying) {
     if (previewCardBtn) previewCardBtn.textContent = "⏹ To'xtatish";
     if (previewModalBtn) previewModalBtn.textContent = "⏹ To'xtatish";
     if (cardIcon) cardIcon.style.animation = "pulse 1.2s infinite";
@@ -2325,6 +2388,49 @@ function updateBreakMusicStatusUI() {
     if (previewModalBtn) previewModalBtn.textContent = "▶️ Tinglash";
     if (cardIcon) cardIcon.style.animation = "none";
   }
+}
+
+function startBreakMusicPreview() {
+  const player = getBreakMusicPlayer();
+  if (!player || !player.src) return;
+
+  unlockAudioEngine();
+  isBreakMusicPreviewing = true;
+  isBreakMusicPlaying = true;
+  player.loop = true;
+  const vol = Math.max(0.1, (AppConfig.breakMusic?.volume || 30) / 100);
+  player.volume = vol;
+
+  player.play().then(() => {
+    updateBreakMusicStatusUI();
+    showToast("🎵 Tanaffus musiqasi ijro etilmoqda (Sinov). To'xtatish uchun tugmani bosing.", "success");
+  }).catch(err => {
+    console.warn("Preview play error:", err);
+    isBreakMusicPreviewing = false;
+    isBreakMusicPlaying = false;
+    updateBreakMusicStatusUI();
+    showToast("⚠️ Brauzer ovoz ijrosini chekladi. Sahifaning istalgan joyiga bosing!", "warning");
+  });
+}
+
+function stopBreakMusicPreview() {
+  const player = getBreakMusicPlayer();
+  isBreakMusicPreviewing = false;
+  isBreakMusicPlaying = false;
+  if (player) {
+    player.pause();
+    player.currentTime = 0;
+  }
+  const modalControls = document.getElementById("breakMusicModalAudioControls");
+  if (modalControls) {
+    modalControls.pause();
+  }
+  const cardControls = document.getElementById("breakMusicCardAudioControls");
+  if (cardControls) {
+    cardControls.pause();
+  }
+  updateBreakMusicStatusUI();
+  showToast("⏹ Sinov musiqasi to'xtatildi.", "info");
 }
 
 function toggleBreakMusicPreview() {
@@ -2336,21 +2442,10 @@ function toggleBreakMusicPreview() {
     return;
   }
 
-  if (isBreakMusicPlaying) {
-    stopBreakMusic(false);
-    showToast("Musiqa to'xtatildi.", "info");
+  if (isBreakMusicPreviewing || isBreakMusicPlaying) {
+    stopBreakMusicPreview();
   } else {
-    unlockAudioEngine();
-    const vol = (AppConfig.breakMusic?.volume || 30) / 100;
-    player.volume = vol;
-    player.play().then(() => {
-      isBreakMusicPlaying = true;
-      updateBreakMusicStatusUI();
-      showToast("🎵 Tanaffus musiqasi sinov tariqasida ijro etilmoqda...", "success");
-    }).catch(err => {
-      console.warn("Play error:", err);
-      showToast("Audio ijro etilmadi. Brauzer ovoz ruxsatini tekshiring.", "warning");
-    });
+    startBreakMusicPreview();
   }
 }
 
@@ -2364,22 +2459,8 @@ function openBreakMusicModal() {
 function closeBreakMusicModal() {
   const modal = document.getElementById("breakMusicModal");
   if (modal) modal.classList.remove("open");
-  
-  // Agar sinov musiqasi o'ynayotgan bo'lsa va ayni damda tanaffus bo'lmasa, to'xtatamiz
-  const { currentSec, dayOfWeek } = getCurrentDayTime();
-  let currentlyInBreak = false;
-  if (AppConfig.workingDays.includes(dayOfWeek)) {
-    for (let i = 0; i < schedule.length - 1; i++) {
-      const sEnd = timeToSec(schedule[i].end);
-      const nextStart = timeToSec(schedule[i+1].start);
-      if (currentSec >= sEnd && currentSec < nextStart) {
-        currentlyInBreak = true;
-        break;
-      }
-    }
-  }
-  if (!currentlyInBreak && isBreakMusicPlaying) {
-    stopBreakMusic(false);
+  if (isBreakMusicPreviewing) {
+    stopBreakMusicPreview();
   }
 }
 
@@ -2391,20 +2472,23 @@ async function handleBreakMusicUpload(file) {
   }
 
   try {
-    showToast("⏳ Musiqa saqlanmoqda...", "info");
+    showToast("⏳ Musiqa saqlanmoqda va tayyorlanmoqda...", "info");
     const record = await saveBreakMusicToDB(file);
     await loadAndInitBreakMusic();
     saveState();
     showToast(`🎵 "${record.name}" muvaffaqiyatli saqlab olindi va tanaffus musiqasi sifatida o'rnatildi!`, "success");
+    // Musiqa yuklangach direktor darhol eshitib ko'rishi uchun ijroni boshlaymiz
+    startBreakMusicPreview();
   } catch (err) {
     console.error("Musiqa saqlashda xatolik:", err);
-    alert("Musiqa saqlashda xatolik yuz berdi: " + err.message);
+    alert("Musiqa saqlashda xatolik yuz berdi: " + (err.message || err));
   }
 }
 
 async function handleDeleteBreakMusic() {
   if (!confirm("Hozirgi saqlangan tanaffus musiqasini xotiradan o'chirmoqchimisiz?")) return;
   try {
+    if (isBreakMusicPreviewing) stopBreakMusicPreview();
     await deleteBreakMusicFromDB();
     await loadAndInitBreakMusic();
     saveState();
@@ -2461,6 +2545,12 @@ function unlockAudioEngine(silent = false) {
     if (player && (!player.src || player.src.startsWith("data:"))) {
       player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
       player.play().catch(() => {});
+    }
+
+    const breakPlayer = getBreakMusicPlayer();
+    if (breakPlayer && (!breakPlayer.src || breakPlayer.src.startsWith("data:"))) {
+      breakPlayer.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+      breakPlayer.play().then(() => { breakPlayer.pause(); }).catch(() => {});
     }
 
     isAudioEngineUnlocked = true;
@@ -3659,8 +3749,15 @@ function bindFormControls() {
   }
 
   document.getElementById("saveBreakMusicSettingsBtn")?.addEventListener("click", () => {
+    AppConfig.breakMusic = AppConfig.breakMusic || {};
+    const modeSel = document.getElementById("breakMusicModeSelect");
+    if (modeSel) AppConfig.breakMusic.mode = modeSel.value;
+    const volRng = document.getElementById("breakMusicVolRange");
+    if (volRng) AppConfig.breakMusic.volume = Number(volRng.value);
+    AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off");
     saveState();
     closeBreakMusicModal();
+    updateBreakMusicUI();
     showToast("💾 Tanaffus musiqasi sozlamalari muvaffaqiyatli saqlandi!", "success");
   });
 
@@ -3839,6 +3936,10 @@ function loadState() {
         fileSize: 0,
         hasCustomTrack: false
       };
+    } else {
+      if (AppConfig.breakMusic.enabled === undefined) AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off");
+      if (!AppConfig.breakMusic.mode) AppConfig.breakMusic.mode = "all";
+      if (AppConfig.breakMusic.volume === undefined) AppConfig.breakMusic.volume = 30;
     }
 
     const savedSchedule = localStorage.getItem("med_bell_schedule_v5");
