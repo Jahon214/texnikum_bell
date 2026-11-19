@@ -2331,6 +2331,7 @@ function startBreakMusic() {
   if (!player || !player.src) return;
 
   isBreakMusicStarting = true;
+  player.muted = false;
   const targetVol = Math.max(0.05, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
   player.volume = 0.05;
   player.loop = true;
@@ -2406,22 +2407,9 @@ function applyMusicToBreaks(slots = null, days = null) {
     return;
   }
 
-  // To'g'ridan-to'g'ri foydalanuvchi tugma bosishidan foydalanib breakPlayer'ni avtomatik ijroga tayyorlash
   const bPlayer = getBreakMusicPlayer();
-  if (bPlayer && bPlayer.src) {
-    const origVol = bPlayer.volume;
-    const origMuted = bPlayer.muted;
-    bPlayer.muted = true;
-    bPlayer.play().then(() => {
-      if (!isBreakMusicPlaying && !isBreakMusicPreviewing) {
-        bPlayer.pause();
-      }
-      bPlayer.muted = origMuted;
-      bPlayer.volume = origVol;
-    }).catch(e => {
-      bPlayer.muted = origMuted;
-      bPlayer.volume = origVol;
-    });
+  if (bPlayer) {
+    bPlayer.muted = false;
   }
 
   let selectedSlots = slots;
@@ -2507,6 +2495,7 @@ function testSimulateBreakNow() {
 
     isBreakMusicPreviewing = true;
     isBreakMusicPlaying = true;
+    player.muted = false;
     player.loop = true;
     const targetVol = Math.max(0.1, (AppConfig.breakMusic?.volume || 30) / 100);
     player.volume = 0.05;
@@ -2761,9 +2750,10 @@ function startBreakMusicPreview() {
   const player = getBreakMusicPlayer();
   if (!player || !player.src) return;
 
-  unlockAudioEngine();
+  unlockAudioEngine(true);
   isBreakMusicPreviewing = true;
   isBreakMusicPlaying = true;
+  player.muted = false;
   player.loop = true;
   const vol = Math.max(0.1, (AppConfig.breakMusic?.volume || 30) / 100);
   player.volume = vol;
@@ -2890,6 +2880,11 @@ function preloadTodayAudio() {
 }
 
 function testCurrentTimeVoice() {
+  if (AppConfig.muted) {
+    AppConfig.muted = false;
+    applyConfigToUI();
+    showToast("🔔 Ovoz yoqildi!", "info");
+  }
   const { dayOfWeek } = getCurrentDayTime();
   const day = getActiveVoiceDay(dayOfWeek);
   const sampleMap = {
@@ -2914,68 +2909,76 @@ function unlockAudioEngine(silent = false) {
     if (audioCtx && audioCtx.state === "suspended") {
       audioCtx.resume();
     }
-    const player = getMasterPlayer();
-    if (player) {
-      if (!player.src) {
-        player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+
+    if (!isAudioEngineUnlocked) {
+      isAudioEngineUnlocked = true;
+
+      // Web Audio orqali 1-martalik bo'sh buffer ijro etib sahifada audio ruxsatini ochish
+      try {
+        const buffer = audioCtx.createBuffer(1, 1, 22050);
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start(0);
+      } catch (e) {}
+
+      const player = getMasterPlayer();
+      if (player) {
+        player.muted = false;
+        if (!player.src || player.src.startsWith("data:")) {
+          player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+          player.play().then(() => {
+            if (!isVoiceSequencePlaying) player.pause();
+          }).catch(() => {});
+        }
       }
-      const prevMuted = player.muted;
-      player.muted = true;
-      player.play().then(() => {
-        if (!isVoiceSequencePlaying) player.pause();
-        player.muted = prevMuted;
-      }).catch(() => { player.muted = prevMuted; });
-    }
 
-    const breakPlayer = getBreakMusicPlayer();
-    if (breakPlayer) {
-      if (!breakPlayer.src) {
-        breakPlayer.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+      const breakPlayer = getBreakMusicPlayer();
+      if (breakPlayer) {
+        breakPlayer.muted = false;
+        if (!breakPlayer.src || breakPlayer.src.startsWith("data:")) {
+          breakPlayer.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+          breakPlayer.play().then(() => {
+            if (!isBreakMusicPlaying && !isBreakMusicPreviewing) breakPlayer.pause();
+          }).catch(() => {});
+        }
       }
-      const prevMuted = breakPlayer.muted;
-      breakPlayer.muted = true;
-      breakPlayer.play().then(() => {
-        if (!isBreakMusicPlaying && !isBreakMusicPreviewing) breakPlayer.pause();
-        breakPlayer.muted = prevMuted;
-      }).catch(() => { breakPlayer.muted = prevMuted; });
-    }
 
-    isAudioEngineUnlocked = true;
-
-    // Update Banner to Active State
-    const warn = document.getElementById("audioWarnBanner");
-    if (warn) {
-      warn.style.background = "linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(14, 165, 233, 0.22))";
-      warn.style.borderColor = "rgba(16, 185, 129, 0.5)";
-      warn.style.cursor = "default";
-      warn.onclick = null;
-      warn.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#10b981; box-shadow:0 0 10px #10b981;"></span>
-          <div>
-            <b style="color: #10b981;">✅ Real vaqt tizimi to'liq faol!</b>
-            <span style="color: var(--ink-secondary); font-size: 12px; margin-left: 6px;">
-              Kompyuter soati va haftaning kuni aniqlandi. 1-va 2-smena qo'ng'iroqlari avtomatik yangraydi.
-            </span>
+      // Update Banner to Active State
+      const warn = document.getElementById("audioWarnBanner");
+      if (warn) {
+        warn.style.background = "linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(14, 165, 233, 0.22))";
+        warn.style.borderColor = "rgba(16, 185, 129, 0.5)";
+        warn.style.cursor = "default";
+        warn.onclick = null;
+        warn.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#10b981; box-shadow:0 0 10px #10b981;"></span>
+            <div>
+              <b style="color: #10b981;">✅ Real vaqt tizimi to'liq faol!</b>
+              <span style="color: var(--ink-secondary); font-size: 12px; margin-left: 6px;">
+                Kompyuter soati va haftaning kuni aniqlandi. 1-va 2-smena qo'ng'iroqlari avtomatik yangraydi.
+              </span>
+            </div>
           </div>
-        </div>
-        <button class="btn ghost sm" onclick="testCurrentTimeVoice()" style="border-color:#10b981; color:#10b981; white-space:nowrap;">▶ Sinov ovozi</button>
-      `;
-    }
+          <button class="btn ghost sm" onclick="testCurrentTimeVoice()" style="border-color:#10b981; color:#10b981; white-space:nowrap;">▶ Sinov ovozi</button>
+        `;
+      }
 
-    const unlockBtn = document.getElementById("audioUnlockBtn");
-    if (unlockBtn) {
-      unlockBtn.textContent = "✅ Ovoz faol";
-      unlockBtn.className = "btn ghost";
-      unlockBtn.style.color = "var(--ok)";
-      unlockBtn.style.borderColor = "var(--ok)";
-    }
+      const unlockBtn = document.getElementById("audioUnlockBtn");
+      if (unlockBtn) {
+        unlockBtn.textContent = "✅ Ovoz faol";
+        unlockBtn.className = "btn ghost";
+        unlockBtn.style.color = "var(--ok)";
+        unlockBtn.style.borderColor = "var(--ok)";
+      }
 
-    if (silent !== true && typeof silent !== "object") {
-      showToast("🔊 Ovoz tizimi real vaqt rejimida muvaffaqiyatli faollashtirildi!", "success");
-    }
+      if (silent !== true && typeof silent !== "object") {
+        showToast("🔊 Ovoz tizimi real vaqt rejimida muvaffaqiyatli faollashtirildi!", "success");
+      }
 
-    preloadTodayAudio();
+      preloadTodayAudio();
+    }
   } catch (e) {
     console.warn("Audio unlock xatosi:", e);
   }
@@ -2999,18 +3002,23 @@ function stopAllAudio() {
 
 /* KETMA-KET AUDIO IJRO: 1-VOICE (CHIME) ➔ MAQSADLI VOICE (QO'NG'IROQSIZ) */
 function playAudioSequence(audioUrls, totalAnimDuration = 20000, onSequenceEnd = null) {
-  if (AppConfig.muted) return;
-  unlockAudioEngine();
-  isVoiceSequencePlaying = true;
+  if (AppConfig.muted) {
+    AppConfig.muted = false;
+    applyConfigToUI();
+    showToast("🔔 Ovoz yoqildi!", "info");
+  }
+  unlockAudioEngine(true);
   stopBreakMusic(false);
   stopAllAudio();
   isVoiceSequencePlaying = true;
   animateBellIcon(totalAnimDuration);
 
-  currentChain = audioUrls.filter(Boolean);
+  currentChain = (audioUrls || []).filter(Boolean);
   chainIndex = 0;
 
   const player = getMasterPlayer();
+  if (!player) return;
+  player.muted = false;
 
   function playNext() {
     if (chainIndex >= currentChain.length) {
@@ -3028,7 +3036,9 @@ function playAudioSequence(audioUrls, totalAnimDuration = 20000, onSequenceEnd =
     chainIndex++;
 
     activeAudio = player;
-    player.volume = Math.max(0, Math.min(1, AppConfig.volume / 100));
+    player.muted = false;
+    const effVolume = Math.max(0.1, Math.min(1, (AppConfig.volume || 90) / 100));
+    player.volume = effVolume;
 
     let nextCalled = false;
     const callNext = () => {
@@ -3038,18 +3048,20 @@ function playAudioSequence(audioUrls, totalAnimDuration = 20000, onSequenceEnd =
     };
 
     player.onended = callNext;
-    player.onerror = () => {
-      console.warn("Audio yuklanmadi:", url);
+    player.onerror = (err) => {
+      console.warn("Audio yuklanmadi:", url, err);
       callNext();
     };
 
     player.src = url;
+    player.load();
     const playPromise = player.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
-        console.warn("Audio ijro bloklandi:", err);
-        showToast("⚠️ Brauzer ovozni chekladi. Ovozni eshitish uchun sahifaga bosing!", "warning");
-        callNext();
+        console.warn("Audio ijro xatosi:", err);
+        if (err.name !== "AbortError") {
+          callNext();
+        }
       });
     }
 
@@ -3730,6 +3742,7 @@ function bindFormControls() {
       muteBtn.className = AppConfig.muted ? "btn danger" : "btn ghost";
       if (AppConfig.muted) stopAllAudio();
       saveState();
+      showToast(AppConfig.muted ? "🔇 Ovoz butunlay o'chirildi (Muted)" : "🔔 Ovoz yoqildi va faol!", AppConfig.muted ? "warning" : "success");
     };
   }
 
@@ -4395,6 +4408,10 @@ function loadState() {
   try {
     const savedConfig = localStorage.getItem("med_bell_config_v5");
     if (savedConfig) AppConfig = { ...AppConfig, ...JSON.parse(savedConfig) };
+
+    if (typeof AppConfig.volume !== "number" || isNaN(AppConfig.volume) || AppConfig.volume <= 0) {
+      AppConfig.volume = 90;
+    }
 
     if (!AppConfig.breakMusic) {
       AppConfig.breakMusic = {
