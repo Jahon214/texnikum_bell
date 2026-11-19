@@ -789,6 +789,8 @@ body.tv-mode .tv-marquee {
 
 <!-- Master Audio Player -->
 <audio id="masterAudioPlayer" preload="auto" playsinline style="display:none;"></audio>
+<!-- Break Music Player (Background Music during breaks) -->
+<audio id="breakMusicPlayer" preload="auto" playsinline loop style="display:none;"></audio>
 
 <div class="container">
   <!-- Exit TV button -->
@@ -801,10 +803,12 @@ body.tv-mode .tv-marquee {
       <div class="logo-text-group">
         <span class="logo-badge">⚕️ 2026-2027 O'quv yili</span>
         <div class="logo-title">Guliston Tibbiyot Texnikumi</div>
-        <small class="logo-desc">Aqlli qo'ng'iroq va maxsus haftalik ovozlar tizimi (Du-Se-Chor-Pay)</small>
+        <small class="logo-desc">Aqlli qo'ng'iroq va maxsus haftalik ovozlar tizimi (Du-Se-Chor-Pay-Ju-Sha)</small>
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn ghost" id="directorAuthBtn" title="Guliston tibbiyot texnikumi direktori kirishi (PIN-kod)">🔐 Direktor kirishi</button>
+      <button class="btn ghost" id="breakMusicModalBtn" title="Tanaffus musiqasi sozlamalari">🎵 Tanaffus musiqasi</button>
       <button class="btn primary" id="announcementModalBtn" style="background: linear-gradient(135deg, #0ea5e9, #10b981); color: #fff; border: none; font-weight: 700; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.45);">📢 E'lon & Tabrik</button>
       <button class="btn danger" id="headerEmergencyBtn" title="Favqulodda tibbiy signal (Qizil Kod)">🚨 Qizil Kod</button>
       <button class="btn ghost" id="tvToggleBtn" title="Katta ekranda namoyish qilish">📺 TV rejimi</button>
@@ -1032,6 +1036,39 @@ body.tv-mode .tv-marquee {
             <button class="btn ghost sm" id="presetShift1">🩺 Faqat I Smena (08:30 - 12:20)</button>
             <button class="btn ghost sm" id="presetShift2">🌙 Faqat II Smena (12:50 - 16:30)</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Break Background Music Card -->
+      <div class="card" id="breakMusicCard" style="margin-top: 20px; border-color: rgba(16, 185, 129, 0.4); background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(15, 23, 42, 0.4) 100%);">
+        <div class="card-title">
+          <span class="badge-dot" style="background: var(--ok); box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">Tanaffus Fon Musiqasi</span>
+          <span class="pill lesson" id="breakMusicStatusPill" style="margin: 0; font-size: 11px;">Musiqa faol</span>
+        </div>
+        <p style="font-size: 13px; color: var(--mut); margin-bottom: 12px;">
+          Dars yakunlanib qo'ng'iroq chalingach, tanaffus paytida yoqimli fon musiqasi yangraydi. Musiqa brauzer xotirasiga (IndexedDB) saqlanib, har kuni o'z-o'zidan ishlaydi.
+        </p>
+
+        <div style="background: var(--chip-bg); border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--line);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+              <span style="font-size: 24px;" id="breakMusicCardIcon">🎵</span>
+              <div style="overflow: hidden;">
+                <b id="breakMusicCardTitle" style="font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Musiqa yuklanmagan</b>
+                <small id="breakMusicCardSub" style="color: var(--mut); font-size: 11px;">Yuklash uchun quyidagi tugmani bosing</small>
+              </div>
+            </div>
+            <button class="btn ghost sm" id="previewBreakMusicCardBtn" style="white-space: nowrap;">▶️ Test tinglash</button>
+          </div>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 12px;">
+            <span style="color: var(--ink-secondary);">Rejim: <b id="breakMusicModeBadge" style="color: var(--ac);">Barcha tanaffuslarda</b></span>
+            <span style="color: var(--ink-secondary);">Ovoz: <b id="breakMusicVolumeBadge" style="color: var(--ok);">30%</b></span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn success sm" id="openBreakMusicModalBtn" style="flex: 1; font-weight: 700;">⚙️ Musiqani sozlash & Yuklash</button>
         </div>
       </div>
 
@@ -1284,6 +1321,156 @@ body.tv-mode .tv-marquee {
         <button class="btn ghost" id="cancelScheduleModal">Bekor qilish</button>
         <button class="btn success" id="saveScheduleModal">Saqlash</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Director PIN Authentication & Settings -->
+<div class="modal-overlay" id="directorAuthModal">
+  <div class="modal-box" style="max-width: 500px;">
+    <div class="modal-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 26px;">👔</span>
+        <div>
+          <h3 style="margin: 0; font-size: 18px;">Direktor Ruxsati & PIN Boshqaruvi</h3>
+          <small style="color: var(--mut);">Guliston tibbiyot texnikumi ma'muriyati</small>
+        </div>
+      </div>
+      <button class="modal-close" id="closeDirectorAuthModal">&times;</button>
+    </div>
+
+    <!-- Login View (when not authorized) -->
+    <div id="directorLoginSection">
+      <div style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 16px;">
+        <p style="font-size: 13px; margin: 0; color: var(--ink);" id="directorAuthPromptReason">
+          Dars jadvali va tanaffus musiqasini o'zgartirish uchun direktorning 4 xonali PIN kodini kiriting.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="field-label" for="directorPinInput" style="text-align: center; display: block;">Direktor PIN kodi:</label>
+        <input type="password" id="directorPinInput" maxlength="8" placeholder="••••" autocomplete="current-password"
+               style="font-size: 28px; text-align: center; letter-spacing: 10px; padding: 12px; font-weight: 800; border-radius: 12px; width: 100%; box-sizing: border-box;">
+        <small style="display: block; text-align: center; margin-top: 6px; color: var(--mut);">
+          * Standart boshlang'ich PIN kod: <b>2026</b>
+        </small>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 10px; background: var(--chip-bg); border-radius: 10px;">
+        <input type="checkbox" id="directorRememberCheckbox" checked style="width: 18px; height: 18px; accent-color: var(--ac);">
+        <label for="directorRememberCheckbox" style="font-size: 13px; font-weight: 600; cursor: pointer;">
+          Ushbu kompyuterda meni eslab qolish (har safar so'ramasin)
+        </label>
+      </div>
+
+      <div id="directorAuthErrorMsg" style="display: none; color: var(--er); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 14px; text-align: center;"></div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn ghost" id="cancelDirectorAuthBtn">Bekor qilish</button>
+        <button class="btn primary" id="submitDirectorPinBtn" style="min-width: 120px; font-weight: 700;">Kirish</button>
+      </div>
+    </div>
+
+    <!-- Authorized View (when authorized) -->
+    <div id="directorActiveSection" style="display: none;">
+      <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 28px;">✅</span>
+          <div>
+            <b style="color: var(--ok); font-size: 14px; display: block;">Direktor vakolati faol!</b>
+            <small style="color: var(--ink-secondary);">Siz jadval, ovozlar va musiqani bemalol tahrirlashingiz mumkin.</small>
+          </div>
+        </div>
+        <button class="btn danger sm" id="directorLogoutBtn">Chiqish 🚪</button>
+      </div>
+
+      <div style="border-top: 1px solid var(--line); padding-top: 14px; margin-top: 14px;">
+        <h4 style="font-size: 14px; margin-bottom: 10px;">🔑 PIN kodni o'zgartirish</h4>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label class="field-label" for="newPinInput">Yangi PIN kod (kamida 4 ta belgi):</label>
+            <input type="password" id="newPinInput" maxlength="8" placeholder="Yangi PIN kod" style="width: 100%;">
+          </div>
+          <div>
+            <label class="field-label" for="confirmPinInput">Yangi PIN kodni qayta kiriting:</label>
+            <input type="password" id="confirmPinInput" maxlength="8" placeholder="Yangi PIN kodni tasdiqlang" style="width: 100%;">
+          </div>
+        </div>
+        <div id="directorChangePinMsg" style="display: none; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 12px;"></div>
+        <button class="btn success sm" id="saveNewPinBtn" style="width: 100%; font-weight: 700;">💾 Yangi PIN kodni saqlash</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Break Music Manager (IndexedDB) -->
+<div class="modal-overlay" id="breakMusicModal">
+  <div class="modal-box" style="max-width: 600px;">
+    <div class="modal-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 26px;">🎵</span>
+        <div>
+          <h3 style="margin: 0; font-size: 18px;">Tanaffus Fon Musiqasi Boshqaruvi</h3>
+          <small style="color: var(--mut);">Direktor tanlagan yoqimli musiqa doimiy saqlanadi</small>
+        </div>
+      </div>
+      <button class="modal-close" id="closeBreakMusicModal">&times;</button>
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 13px; color: var(--ink-secondary); margin-bottom: 14px; line-height: 1.5;">
+      Darslar tugagach qo'ng'iroq va ovozlar chalingandan so'ng, tanaffus davomida sokin musiqa ijro etiladi. Keyingi para boshlanishiga 6 soniya qolganida musiqa avtomatik pasayib to'xtaydi. Musiqa bir marta yuklangach, brauzerda (IndexedDB) bir umr saqlanadi.
+    </p>
+
+    <!-- Settings Grid -->
+    <div class="form-grid" style="margin-bottom: 16px;">
+      <div>
+        <label class="field-label" for="breakMusicModeSelect">Ijro tartibi (Rejim):</label>
+        <select id="breakMusicModeSelect">
+          <option value="all">Barcha tanaffuslarda (5 daqiqa va katta tanaffus)</option>
+          <option value="big">Faqat katta tanaffuslarda (10:55-11:10 va 12:20-12:50)</option>
+          <option value="off">Musiqani o'chirish</option>
+        </select>
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label class="field-label" for="breakMusicVolRange" style="margin-bottom:0;">Musiqa ovozi:</label>
+          <b id="modalBreakVolLabel" style="color: var(--ok); font-size: 13px;">30%</b>
+        </div>
+        <input type="range" id="breakMusicVolRange" min="0" max="100" value="30" style="width: 100%;">
+        <small style="color: var(--mut); font-size: 11px;">* Sokin fon uchun 20-35% tavsiya etiladi</small>
+      </div>
+    </div>
+
+    <!-- Dropzone for File Upload -->
+    <div style="margin-bottom: 16px;">
+      <input type="file" id="breakMusicFileInput" accept="audio/*" style="display: none;">
+      <div id="breakMusicDropzone" style="border: 2px dashed rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05); border-radius: 16px; padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.2s;">
+        <span style="font-size: 36px; display: block; margin-bottom: 8px;">📁</span>
+        <b style="font-size: 14px; color: var(--ink); display: block;">Musiqa faylini bu yerga tashlang yoki fayl tanlash uchun bosing</b>
+        <small style="color: var(--mut); font-size: 12px; display: block; margin-top: 4px;">MP3, WAV, M4A, OGG formatlari qo'llab-quvvatlanadi (Hajmi chegaralanmagan)</small>
+      </div>
+    </div>
+
+    <!-- Current Stored Music Card -->
+    <div id="currentMusicTrackCard" style="background: var(--chip-bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+        <span style="font-size: 26px;">🎼</span>
+        <div style="overflow: hidden;">
+          <b id="currentTrackName" style="font-size: 14px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Musiqa o'rnatilmagan</b>
+          <small id="currentTrackMeta" style="color: var(--mut); font-size: 12px;">Hozircha audio fayl saqlanmagan</small>
+        </div>
+      </div>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <button class="btn ghost sm" id="modalPreviewMusicBtn">▶️ Tinglash</button>
+        <button class="btn danger sm" id="deleteCustomMusicBtn" title="Musiqani xotiradan o'chirish">🗑</button>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button class="btn ghost" id="cancelBreakMusicModalBtn">Yopish</button>
+      <button class="btn success" id="saveBreakMusicSettingsBtn" style="font-weight: 700;">💾 Saqlash</button>
     </div>
   </div>
 </div>
@@ -1700,7 +1887,15 @@ let AppConfig = {
   anthemTime: "08:29",
   workingDays: [1, 2, 3, 4, 5, 6], // Du-Sh
   activeShift: "I va II Smena (To'liq kun)",
-  voiceDayMode: "auto" // 'auto', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'
+  voiceDayMode: "auto", // 'auto', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'
+  breakMusic: {
+    enabled: true,
+    mode: "all", // "all" (barcha tanaffuslarda), "big" (katta tanaffusda), "off"
+    volume: 30, // 0 - 100%
+    fileName: "",
+    fileSize: 0,
+    hasCustomTrack: false
+  }
 };
 
 let schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
@@ -1713,6 +1908,14 @@ let triggeredEventsToday = new Set();
 let cachedGeneratedAudioUrl = null;
 let activeVoiceTab = "mon";
 
+// Tanaffus musiqasi va Direktor holatlari
+let isVoiceSequencePlaying = false;
+let isBreakMusicPlaying = false;
+let currentBreakMusicBlobUrl = null;
+let breakMusicFadeInterval = null;
+let pendingDirectorAction = null;
+let isDirectorSessionActive = sessionStorage.getItem("med_bell_director_active") === "true" || localStorage.getItem("med_bell_director_remember") === "true";
+
 // Simulyatsiya holati
 let isSimulation = false;
 let simFakeSeconds = 0;
@@ -1724,7 +1927,492 @@ function getMasterPlayer() {
   return document.getElementById("masterAudioPlayer");
 }
 
+function getBreakMusicPlayer() {
+  return document.getElementById("breakMusicPlayer");
+}
+
 let isAudioEngineUnlocked = false;
+
+/* ========================================================
+   INDEXEDDB: DIRECTORS CUSTOM BREAK MUSIC PERSISTENCE
+   (Musiqani bir marta yuklab, kompyuterda bir umr saqlash)
+   ======================================================== */
+const DB_NAME = "MedBellDB";
+const DB_VERSION = 1;
+const DB_STORE = "break_music";
+const DB_KEY = "director_custom_track";
+
+function openMusicDB() {
+  return new Promise((resolve, reject) => {
+    if (!window.indexedDB) {
+      reject(new Error("IndexedDB brauzer tomonidan qo'llab-quvvatlanmaydi"));
+      return;
+    }
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(DB_STORE)) {
+        db.createObjectStore(DB_STORE);
+      }
+    };
+    request.onsuccess = (e) => resolve(e.target.result);
+    request.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function saveBreakMusicToDB(file) {
+  const db = await openMusicDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readwrite");
+    const store = tx.objectStore(DB_STORE);
+    const record = {
+      name: file.name,
+      size: file.size,
+      type: file.type || "audio/mpeg",
+      blob: file,
+      updatedAt: new Date().toISOString()
+    };
+    const req = store.put(record, DB_KEY);
+    req.onsuccess = () => resolve(record);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function getBreakMusicFromDB() {
+  const db = await openMusicDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readonly");
+    const store = tx.objectStore(DB_STORE);
+    const req = store.get(DB_KEY);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function deleteBreakMusicFromDB() {
+  const db = await openMusicDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(DB_STORE, "readwrite");
+    const store = tx.objectStore(DB_STORE);
+    const req = store.delete(DB_KEY);
+    req.onsuccess = () => resolve(true);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function loadAndInitBreakMusic() {
+  try {
+    const record = await getBreakMusicFromDB();
+    const player = getBreakMusicPlayer();
+    if (record && record.blob) {
+      if (currentBreakMusicBlobUrl) {
+        URL.revokeObjectURL(currentBreakMusicBlobUrl);
+      }
+      currentBreakMusicBlobUrl = URL.createObjectURL(record.blob);
+      if (player) {
+        player.src = currentBreakMusicBlobUrl;
+        player.load();
+      }
+      AppConfig.breakMusic = AppConfig.breakMusic || {};
+      AppConfig.breakMusic.hasCustomTrack = true;
+      AppConfig.breakMusic.fileName = record.name;
+      AppConfig.breakMusic.fileSize = record.size;
+    } else {
+      AppConfig.breakMusic = AppConfig.breakMusic || {};
+      AppConfig.breakMusic.hasCustomTrack = false;
+      AppConfig.breakMusic.fileName = "";
+      AppConfig.breakMusic.fileSize = 0;
+      if (player) {
+        player.removeAttribute("src");
+      }
+    }
+    updateBreakMusicUI();
+  } catch (err) {
+    console.warn("Break music yuklashda xatolik:", err);
+  }
+}
+
+/* ========================================================
+   DIRECTOR AUTHENTICATION & PIN MANAGEMENT
+   ======================================================== */
+const DEFAULT_DIRECTOR_PIN = "2026";
+
+function getDirectorPin() {
+  return localStorage.getItem("med_bell_director_pin") || DEFAULT_DIRECTOR_PIN;
+}
+
+function setDirectorPin(newPin) {
+  localStorage.setItem("med_bell_director_pin", String(newPin).trim());
+}
+
+function isDirectorAuthorized() {
+  return isDirectorSessionActive === true;
+}
+
+function requireDirectorAuth(callback, reason = "Ushbu amalni bajarish uchun direktor PIN kodi talab etiladi.") {
+  if (isDirectorAuthorized()) {
+    if (typeof callback === "function") callback();
+    return;
+  }
+  pendingDirectorAction = callback;
+  openDirectorAuthModal(reason);
+}
+
+function openDirectorAuthModal(reason) {
+  const modal = document.getElementById("directorAuthModal");
+  if (!modal) return;
+
+  const reasonEl = document.getElementById("directorAuthPromptReason");
+  if (reasonEl && reason) reasonEl.textContent = reason;
+
+  const errEl = document.getElementById("directorAuthErrorMsg");
+  if (errEl) errEl.style.display = "none";
+
+  const pinInput = document.getElementById("directorPinInput");
+  if (pinInput) pinInput.value = "";
+
+  const loginSec = document.getElementById("directorLoginSection");
+  const activeSec = document.getElementById("directorActiveSection");
+
+  if (isDirectorAuthorized()) {
+    if (loginSec) loginSec.style.display = "none";
+    if (activeSec) activeSec.style.display = "block";
+  } else {
+    if (loginSec) loginSec.style.display = "block";
+    if (activeSec) activeSec.style.display = "none";
+    setTimeout(() => {
+      if (pinInput) pinInput.focus();
+    }, 150);
+  }
+
+  modal.classList.add("open");
+}
+
+function closeDirectorAuthModal() {
+  const modal = document.getElementById("directorAuthModal");
+  if (modal) modal.classList.remove("open");
+  pendingDirectorAction = null;
+}
+
+function updateDirectorUI() {
+  const btn = document.getElementById("directorAuthBtn");
+  if (!btn) return;
+
+  if (isDirectorAuthorized()) {
+    btn.innerHTML = "👔 Direktor (Faol)";
+    btn.className = "btn warning";
+    btn.style.background = "linear-gradient(135deg, #f59e0b, #d97706)";
+    btn.style.color = "#ffffff";
+    btn.style.border = "none";
+    btn.style.fontWeight = "700";
+    btn.title = "Direktor vakolati faol (Boshqaruv / Chiqish uchun bosing)";
+  } else {
+    btn.innerHTML = "🔐 Direktor kirishi";
+    btn.className = "btn ghost";
+    btn.style.background = "";
+    btn.style.color = "";
+    btn.style.border = "";
+    btn.style.fontWeight = "";
+    btn.title = "Guliston tibbiyot texnikumi direktori kirishi (PIN-kod)";
+  }
+}
+
+/* ========================================================
+   BREAK MUSIC AUDIO ENGINE (SMOOTH FADE & PLAYBACK)
+   ======================================================== */
+function fadeAudio(audioEl, targetVol, durationMs = 2000, onComplete) {
+  if (breakMusicFadeInterval) {
+    clearInterval(breakMusicFadeInterval);
+    breakMusicFadeInterval = null;
+  }
+  if (!audioEl) return;
+  const startVol = audioEl.volume;
+  const stepTime = 50;
+  const steps = Math.max(1, Math.floor(durationMs / stepTime));
+  const volStep = (targetVol - startVol) / steps;
+  let currentStep = 0;
+
+  breakMusicFadeInterval = setInterval(() => {
+    currentStep++;
+    let newVol = audioEl.volume + volStep;
+    if (newVol < 0) newVol = 0;
+    if (newVol > 1) newVol = 1;
+    audioEl.volume = newVol;
+
+    if (currentStep >= steps || Math.abs(audioEl.volume - targetVol) < 0.02) {
+      audioEl.volume = Math.max(0, Math.min(1, targetVol));
+      clearInterval(breakMusicFadeInterval);
+      breakMusicFadeInterval = null;
+      if (onComplete) onComplete();
+    }
+  }, stepTime);
+}
+
+function startBreakMusic() {
+  if (isVoiceSequencePlaying || AppConfig.muted) return;
+  const player = getBreakMusicPlayer();
+  if (!player || !player.src) return;
+
+  const targetVol = Math.max(0, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
+  player.volume = 0;
+  
+  const playPromise = player.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      isBreakMusicPlaying = true;
+      fadeAudio(player, targetVol, 2000);
+      updateBreakMusicStatusUI();
+    }).catch(err => {
+      console.warn("Break music play blocked:", err);
+    });
+  }
+}
+
+function stopBreakMusic(smooth = true) {
+  const player = getBreakMusicPlayer();
+  if (!player) return;
+
+  if (smooth && !player.paused) {
+    fadeAudio(player, 0, 2000, () => {
+      player.pause();
+      isBreakMusicPlaying = false;
+      updateBreakMusicStatusUI();
+    });
+  } else {
+    if (breakMusicFadeInterval) {
+      clearInterval(breakMusicFadeInterval);
+      breakMusicFadeInterval = null;
+    }
+    player.pause();
+    player.currentTime = 0;
+    isBreakMusicPlaying = false;
+    updateBreakMusicStatusUI();
+  }
+}
+
+function handleBreakMusicTick(inBreak, isBig, bRemain) {
+  if (!inBreak || AppConfig.muted || !AppConfig.breakMusic?.enabled || isVoiceSequencePlaying) {
+    if (isBreakMusicPlaying) {
+      stopBreakMusic(false);
+    }
+    return;
+  }
+
+  const mode = AppConfig.breakMusic.mode || "all";
+  if (mode === "off") {
+    if (isBreakMusicPlaying) stopBreakMusic(false);
+    return;
+  }
+  if (mode === "big" && !isBig) {
+    if (isBreakMusicPlaying) stopBreakMusic(false);
+    return;
+  }
+
+  if (!AppConfig.breakMusic.hasCustomTrack) {
+    return;
+  }
+
+  // Dars boshlanishiga 6 soniyadan kam qolganida musiqa silliq pasayib to'xtaydi
+  if (bRemain <= 6) {
+    if (isBreakMusicPlaying) {
+      stopBreakMusic(true);
+    }
+    return;
+  }
+
+  // Tanaffus davom etmoqda va darsga 6 soniyadan ko'proq vaqt bor
+  if (!isBreakMusicPlaying) {
+    startBreakMusic();
+  }
+}
+
+function checkAndResumeBreakMusic() {
+  if (AppConfig.muted) return;
+  if (!AppConfig.breakMusic || !AppConfig.breakMusic.enabled || AppConfig.breakMusic.mode === "off") return;
+  if (!AppConfig.breakMusic.hasCustomTrack) return;
+  if (isVoiceSequencePlaying) return;
+
+  const { currentSec, dayOfWeek } = getCurrentDayTime();
+  if (!AppConfig.workingDays.includes(dayOfWeek)) return;
+
+  for (let i = 0; i < schedule.length - 1; i++) {
+    const slot = schedule[i];
+    const nextSlot = schedule[i + 1];
+    const sEnd = timeToSec(slot.end);
+    const nextStart = timeToSec(nextSlot.start);
+
+    if (currentSec >= sEnd && currentSec < nextStart) {
+      const bDuration = nextStart - sEnd;
+      const isBig = (slot.breakName && slot.breakName.toLowerCase().includes("katta")) || bDuration >= 900;
+      const mode = AppConfig.breakMusic.mode || "all";
+      const allowed = (mode === "all") || (mode === "big" && isBig);
+      const bRemain = nextStart - currentSec;
+
+      if (allowed && bRemain > 6) {
+        startBreakMusic();
+      }
+      return;
+    }
+  }
+}
+
+function updateBreakMusicUI() {
+  const cfg = AppConfig.breakMusic || {};
+  
+  // Card elements
+  const titleEl = document.getElementById("breakMusicCardTitle");
+  const subEl = document.getElementById("breakMusicCardSub");
+  const modeBadge = document.getElementById("breakMusicModeBadge");
+  const volBadge = document.getElementById("breakMusicVolumeBadge");
+  const statusPill = document.getElementById("breakMusicStatusPill");
+
+  // Modal elements
+  const trackNameModal = document.getElementById("currentTrackName");
+  const trackMetaModal = document.getElementById("currentTrackMeta");
+  const modeSelect = document.getElementById("breakMusicModeSelect");
+  const volRange = document.getElementById("breakMusicVolRange");
+  const volLabel = document.getElementById("modalBreakVolLabel");
+
+  const modeTexts = {
+    all: "Barcha tanaffuslarda",
+    big: "Faqat katta tanaffusda",
+    off: "O'chirilgan"
+  };
+
+  const modeText = modeTexts[cfg.mode] || "Barcha tanaffuslarda";
+  if (modeBadge) modeBadge.textContent = modeText;
+  if (volBadge) volBadge.textContent = `${cfg.volume || 30}%`;
+
+  if (modeSelect) modeSelect.value = cfg.mode || "all";
+  if (volRange) volRange.value = cfg.volume !== undefined ? cfg.volume : 30;
+  if (volLabel) volLabel.textContent = `${cfg.volume !== undefined ? cfg.volume : 30}%`;
+
+  if (cfg.hasCustomTrack && cfg.fileName) {
+    const sizeMb = cfg.fileSize ? (cfg.fileSize / (1024 * 1024)).toFixed(1) + " MB" : "";
+    if (titleEl) titleEl.textContent = cfg.fileName;
+    if (subEl) subEl.textContent = `Doimiy saqlangan audio (${sizeMb})`;
+    if (trackNameModal) trackNameModal.textContent = cfg.fileName;
+    if (trackMetaModal) trackMetaModal.textContent = `Doimiy saqlangan audio (${sizeMb})`;
+    if (statusPill) {
+      statusPill.className = cfg.mode === "off" ? "pill off" : "pill lesson";
+      statusPill.textContent = cfg.mode === "off" ? "O'chirilgan" : "Musiqa o'rnatilgan";
+    }
+  } else {
+    if (titleEl) titleEl.textContent = "Musiqa yuklanmagan";
+    if (subEl) subEl.textContent = "Yuklash uchun quyidagi tugmani bosing";
+    if (trackNameModal) trackNameModal.textContent = "Musiqa o'rnatilmagan";
+    if (trackMetaModal) trackMetaModal.textContent = "Hozircha audio fayl saqlanmagan";
+    if (statusPill) {
+      statusPill.className = "pill off";
+      statusPill.textContent = "Yuklanmagan";
+    }
+  }
+
+  updateBreakMusicStatusUI();
+}
+
+function updateBreakMusicStatusUI() {
+  const previewCardBtn = document.getElementById("previewBreakMusicCardBtn");
+  const previewModalBtn = document.getElementById("modalPreviewMusicBtn");
+  const cardIcon = document.getElementById("breakMusicCardIcon");
+
+  if (isBreakMusicPlaying) {
+    if (previewCardBtn) previewCardBtn.textContent = "⏹ To'xtatish";
+    if (previewModalBtn) previewModalBtn.textContent = "⏹ To'xtatish";
+    if (cardIcon) cardIcon.style.animation = "pulse 1.2s infinite";
+  } else {
+    if (previewCardBtn) previewCardBtn.textContent = "▶️ Test tinglash";
+    if (previewModalBtn) previewModalBtn.textContent = "▶️ Tinglash";
+    if (cardIcon) cardIcon.style.animation = "none";
+  }
+}
+
+function toggleBreakMusicPreview() {
+  const player = getBreakMusicPlayer();
+  if (!player || !player.src) {
+    requireDirectorAuth(() => {
+      openBreakMusicModal();
+    }, "Tanaffus musiqasini yuklash uchun direktor PIN kodi kerak.");
+    return;
+  }
+
+  if (isBreakMusicPlaying) {
+    stopBreakMusic(false);
+    showToast("Musiqa to'xtatildi.", "info");
+  } else {
+    unlockAudioEngine();
+    const vol = (AppConfig.breakMusic?.volume || 30) / 100;
+    player.volume = vol;
+    player.play().then(() => {
+      isBreakMusicPlaying = true;
+      updateBreakMusicStatusUI();
+      showToast("🎵 Tanaffus musiqasi sinov tariqasida ijro etilmoqda...", "success");
+    }).catch(err => {
+      console.warn("Play error:", err);
+      showToast("Audio ijro etilmadi. Brauzer ovoz ruxsatini tekshiring.", "warning");
+    });
+  }
+}
+
+function openBreakMusicModal() {
+  const modal = document.getElementById("breakMusicModal");
+  if (!modal) return;
+  updateBreakMusicUI();
+  modal.classList.add("open");
+}
+
+function closeBreakMusicModal() {
+  const modal = document.getElementById("breakMusicModal");
+  if (modal) modal.classList.remove("open");
+  
+  // Agar sinov musiqasi o'ynayotgan bo'lsa va ayni damda tanaffus bo'lmasa, to'xtatamiz
+  const { currentSec, dayOfWeek } = getCurrentDayTime();
+  let currentlyInBreak = false;
+  if (AppConfig.workingDays.includes(dayOfWeek)) {
+    for (let i = 0; i < schedule.length - 1; i++) {
+      const sEnd = timeToSec(schedule[i].end);
+      const nextStart = timeToSec(schedule[i+1].start);
+      if (currentSec >= sEnd && currentSec < nextStart) {
+        currentlyInBreak = true;
+        break;
+      }
+    }
+  }
+  if (!currentlyInBreak && isBreakMusicPlaying) {
+    stopBreakMusic(false);
+  }
+}
+
+async function handleBreakMusicUpload(file) {
+  if (!file) return;
+  if (!file.type.startsWith("audio/") && !file.name.match(/\.(mp3|wav|ogg|m4a|aac)$/i)) {
+    alert("Iltimos, faqat audio fayl (.mp3, .wav, .m4a) tanlang!");
+    return;
+  }
+
+  try {
+    showToast("⏳ Musiqa saqlanmoqda...", "info");
+    const record = await saveBreakMusicToDB(file);
+    await loadAndInitBreakMusic();
+    saveState();
+    showToast(`🎵 "${record.name}" muvaffaqiyatli saqlab olindi va tanaffus musiqasi sifatida o'rnatildi!`, "success");
+  } catch (err) {
+    console.error("Musiqa saqlashda xatolik:", err);
+    alert("Musiqa saqlashda xatolik yuz berdi: " + err.message);
+  }
+}
+
+async function handleDeleteBreakMusic() {
+  if (!confirm("Hozirgi saqlangan tanaffus musiqasini xotiradan o'chirmoqchimisiz?")) return;
+  try {
+    await deleteBreakMusicFromDB();
+    await loadAndInitBreakMusic();
+    saveState();
+    showToast("🗑 Tanaffus musiqasi xotiradan o'chirildi.", "info");
+  } catch (err) {
+    console.error("Musiqani o'chirishda xatolik:", err);
+  }
+}
 
 function preloadTodayAudio() {
   try {
@@ -1819,6 +2507,7 @@ function unlockAudioEngine(silent = false) {
 function stopAllAudio() {
   currentChain = [];
   chainIndex = 0;
+  isVoiceSequencePlaying = false;
   const player = getMasterPlayer();
   if (player) {
     try {
@@ -1835,7 +2524,10 @@ function stopAllAudio() {
 function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
   if (AppConfig.muted) return;
   unlockAudioEngine();
+  isVoiceSequencePlaying = true;
+  stopBreakMusic(false);
   stopAllAudio();
+  isVoiceSequencePlaying = true;
   animateBellIcon(totalAnimDuration);
 
   currentChain = audioUrls.filter(Boolean);
@@ -1847,6 +2539,8 @@ function playAudioSequence(audioUrls, totalAnimDuration = 20000) {
     if (chainIndex >= currentChain.length) {
       currentChain = [];
       chainIndex = 0;
+      isVoiceSequencePlaying = false;
+      checkAndResumeBreakMusic();
       return;
     }
     const url = currentChain[chainIndex];
@@ -2219,6 +2913,7 @@ function updateLiveHeroState(sec, isWorkingDay) {
     statusSub.textContent = "Guliston tibbiyot texnikumi jadvali bo'yicha bugun dam olish kuni.";
     progressCircle.style.strokeDashoffset = circleCircumference;
     chipNextBell.textContent = "--:--";
+    handleBreakMusicTick(false, false, 0);
     return;
   }
 
@@ -2235,6 +2930,7 @@ function updateLiveHeroState(sec, isWorkingDay) {
     progressCircle.style.strokeDashoffset = circleCircumference;
     chipNextBell.textContent = secToHHMM(firstLessonStart);
     highlightActiveTableRow(null);
+    handleBreakMusicTick(false, false, 0);
     return;
   }
 
@@ -2246,6 +2942,7 @@ function updateLiveHeroState(sec, isWorkingDay) {
     progressCircle.style.strokeDashoffset = "0";
     chipNextBell.textContent = "Tugadi";
     highlightActiveTableRow(null);
+    handleBreakMusicTick(false, false, 0);
     return;
   }
 
@@ -2296,6 +2993,7 @@ function updateLiveHeroState(sec, isWorkingDay) {
     progressCircle.style.strokeDashoffset = circleCircumference * (1 - bPercent);
     chipNextBell.textContent = secToHHMM(breakDetails.end);
     highlightActiveTableRow(null);
+    handleBreakMusicTick(true, isBig, bRemain);
   } else if (currentSlot) {
     const lStart = timeToSec(currentSlot.start);
     const lEnd = timeToSec(currentSlot.end);
@@ -2313,6 +3011,9 @@ function updateLiveHeroState(sec, isWorkingDay) {
     progressCircle.style.strokeDashoffset = circleCircumference * (1 - lPercent);
     chipNextBell.textContent = secToHHMM(lEnd);
     highlightActiveTableRow(currentSlot.id);
+    handleBreakMusicTick(false, false, 0);
+  } else {
+    handleBreakMusicTick(false, false, 0);
   }
 }
 
@@ -2680,38 +3381,46 @@ function bindFormControls() {
     addBellLog("⏹ Audio to'xtatildi");
   });
 
-  // Presets
+  // Presets (Direktor ruxsati bilan)
   document.getElementById("presetFullDay")?.addEventListener("click", () => {
-    schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
-    AppConfig.activeShift = "I va II Smena (To'liq kun)";
-    updateShiftBadge();
-    renderScheduleTable();
-    renderTodayBellList();
-    saveState();
-    showToast("📋 I va II Smena (To'liq kunlik jadval) o'rnatildi!", "success");
+    requireDirectorAuth(() => {
+      schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+      AppConfig.activeShift = "I va II Smena (To'liq kun)";
+      updateShiftBadge();
+      renderScheduleTable();
+      renderTodayBellList();
+      saveState();
+      showToast("📋 I va II Smena (To'liq kunlik jadval) o'rnatildi!", "success");
+    }, "Smena jadvalini o'zgartirish uchun direktor PIN kodi talab etiladi.");
   });
   document.getElementById("presetShift1")?.addEventListener("click", () => {
-    schedule = JSON.parse(JSON.stringify(SCHEDULE_I_SMENA));
-    AppConfig.activeShift = "I Smena (08:30 - 12:20)";
-    updateShiftBadge();
-    renderScheduleTable();
-    renderTodayBellList();
-    saveState();
-    showToast("🩺 Faqat I Smena (08:30 - 12:20) o'rnatildi!", "success");
+    requireDirectorAuth(() => {
+      schedule = JSON.parse(JSON.stringify(SCHEDULE_I_SMENA));
+      AppConfig.activeShift = "I Smena (08:30 - 12:20)";
+      updateShiftBadge();
+      renderScheduleTable();
+      renderTodayBellList();
+      saveState();
+      showToast("🩺 Faqat I Smena (08:30 - 12:20) o'rnatildi!", "success");
+    }, "Smena jadvalini o'zgartirish uchun direktor PIN kodi talab etiladi.");
   });
   document.getElementById("presetShift2")?.addEventListener("click", () => {
-    schedule = JSON.parse(JSON.stringify(SCHEDULE_II_SMENA));
-    AppConfig.activeShift = "II Smena (12:50 - 16:30)";
-    updateShiftBadge();
-    renderScheduleTable();
-    renderTodayBellList();
-    saveState();
-    showToast("🌙 Faqat II Smena (12:50 - 16:30) o'rnatildi!", "success");
+    requireDirectorAuth(() => {
+      schedule = JSON.parse(JSON.stringify(SCHEDULE_II_SMENA));
+      AppConfig.activeShift = "II Smena (12:50 - 16:30)";
+      updateShiftBadge();
+      renderScheduleTable();
+      renderTodayBellList();
+      saveState();
+      showToast("🌙 Faqat II Smena (12:50 - 16:30) o'rnatildi!", "success");
+    }, "Smena jadvalini o'zgartirish uchun direktor PIN kodi talab etiladi.");
   });
 
-  // Edit Schedule Modal
+  // Edit Schedule Modal (Direktor ruxsati bilan)
   const scheduleModal = document.getElementById("scheduleModal");
-  document.getElementById("editScheduleBtn")?.addEventListener("click", openScheduleModal);
+  document.getElementById("editScheduleBtn")?.addEventListener("click", () => {
+    requireDirectorAuth(openScheduleModal, "Dars va paralar jadvalini tahrirlash uchun direktor PIN kodi talab etiladi.");
+  });
   document.getElementById("closeScheduleModal")?.addEventListener("click", () => {
     scheduleModal.classList.remove("open");
   });
@@ -2721,15 +3430,17 @@ function bindFormControls() {
   document.getElementById("saveScheduleModal")?.addEventListener("click", saveScheduleFromModal);
   document.getElementById("addScheduleSlotBtn")?.addEventListener("click", addScheduleItemInModal);
   document.getElementById("resetDefaultBtn")?.addEventListener("click", () => {
-    if (confirm("Jadvalni Guliston tibbiyot texnikumi rasmiy jadvaliga qaytarishni xohlaysizmi?")) {
-      schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
-      AppConfig.activeShift = "I va II Smena (To'liq kun)";
-      updateShiftBadge();
-      renderScheduleTable();
-      renderTodayBellList();
-      saveState();
-      showToast("Jadval rasmiy standart holatga qaytarildi", "info");
-    }
+    requireDirectorAuth(() => {
+      if (confirm("Jadvalni Guliston tibbiyot texnikumi rasmiy jadvaliga qaytarishni xohlaysizmi?")) {
+        schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+        AppConfig.activeShift = "I va II Smena (To'liq kun)";
+        updateShiftBadge();
+        renderScheduleTable();
+        renderTodayBellList();
+        saveState();
+        showToast("Jadval rasmiy standart holatga qaytarildi", "info");
+      }
+    }, "Standart jadvalga qaytarish uchun direktor PIN kodi talab etiladi.");
   });
 
   // Simulation controls
@@ -2741,7 +3452,7 @@ function bindFormControls() {
     lastSimRealTs = performance.now();
     isSimulation = true;
     triggeredEventsToday.clear();
-    const dayNames = { 1: "Dushanba", 2: "Seshanba", 3: "Chorshanba", 4: "Payshanba" };
+    const dayNames = { 1: "Dushanba", 2: "Seshanba", 3: "Chorshanba", 4: "Payshanba", 5: "Juma", 6: "Shanba" };
     const dayName = dayNames[simFakeDay] || "Dushanba";
     document.getElementById("systemModeTag").textContent = `Simulyatsiya: ${dayName} (×${simSpeed})`;
     document.getElementById("systemModeTag").style.color = "var(--wr)";
@@ -2765,18 +3476,192 @@ function bindFormControls() {
     showToast("Sozlamalar JSON formatida chiqarildi. Nusxalab oling!", "success");
   });
   document.getElementById("importBackupBtn")?.addEventListener("click", () => {
-    try {
-      const data = JSON.parse(backupText.value);
-      if (data.schedule) schedule = data.schedule;
-      if (data.config) AppConfig = { ...AppConfig, ...data.config };
-      renderScheduleTable();
-      renderTodayBellList();
-      applyConfigToUI();
-      saveState();
-      showToast("Sozlamalar muvaffaqiyatli tiklandi!", "success");
-    } catch (e) {
-      alert("Xato: Yaroqsiz JSON formati!");
+    requireDirectorAuth(() => {
+      try {
+        const data = JSON.parse(backupText.value);
+        if (data.schedule) schedule = data.schedule;
+        if (data.config) AppConfig = { ...AppConfig, ...data.config };
+        renderScheduleTable();
+        renderTodayBellList();
+        applyConfigToUI();
+        saveState();
+        showToast("Sozlamalar muvaffaqiyatli tiklandi!", "success");
+      } catch (e) {
+        alert("Xato: Yaroqsiz JSON formati!");
+      }
+    }, "Sozlamalarni zaxiradan tiklash uchun direktor PIN kodi talab etiladi.");
+  });
+
+  // ==========================================
+  // DIREKTOR VA TANAFFUS MUSIQASI TUGMALARI
+  // ==========================================
+  const triggerDirectorModal = () => {
+    openDirectorAuthModal("Guliston tibbiyot texnikumi rahbariyati boshqaruv paneli");
+  };
+  document.getElementById("directorAuthBtn")?.addEventListener("click", triggerDirectorModal);
+  document.getElementById("closeDirectorAuthModal")?.addEventListener("click", closeDirectorAuthModal);
+  document.getElementById("cancelDirectorAuthBtn")?.addEventListener("click", closeDirectorAuthModal);
+
+  function handleDirectorLoginAction() {
+    const pinInput = document.getElementById("directorPinInput");
+    const errEl = document.getElementById("directorAuthErrorMsg");
+    const pin = pinInput ? pinInput.value.trim() : "";
+    const expectedPin = getDirectorPin();
+
+    if (pin === expectedPin) {
+      isDirectorSessionActive = true;
+      sessionStorage.setItem("med_bell_director_active", "true");
+      const remember = document.getElementById("directorRememberCheckbox")?.checked;
+      if (remember) {
+        localStorage.setItem("med_bell_director_remember", "true");
+      }
+      updateDirectorUI();
+      closeDirectorAuthModal();
+      showToast("✅ Xush kelibsiz, hurmatli Direktor! To'liq ruxsat berildi.", "success");
+      if (typeof pendingDirectorAction === "function") {
+        const action = pendingDirectorAction;
+        pendingDirectorAction = null;
+        action();
+      }
+    } else {
+      if (errEl) {
+        errEl.textContent = "❌ Noto'g'ri PIN kod! Qaytadan urinib ko'ring (standart: 2026).";
+        errEl.style.display = "block";
+      }
+      if (pinInput) {
+        pinInput.value = "";
+        pinInput.focus();
+      }
     }
+  }
+
+  document.getElementById("submitDirectorPinBtn")?.addEventListener("click", handleDirectorLoginAction);
+  document.getElementById("directorPinInput")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleDirectorLoginAction();
+  });
+
+  document.getElementById("directorLogoutBtn")?.addEventListener("click", () => {
+    isDirectorSessionActive = false;
+    sessionStorage.removeItem("med_bell_director_active");
+    localStorage.removeItem("med_bell_director_remember");
+    updateDirectorUI();
+    closeDirectorAuthModal();
+    showToast("🚪 Direktor rejimidan chiqildi.", "info");
+  });
+
+  document.getElementById("saveNewPinBtn")?.addEventListener("click", () => {
+    const newPin = document.getElementById("newPinInput")?.value.trim();
+    const confirmPin = document.getElementById("confirmPinInput")?.value.trim();
+    const msgEl = document.getElementById("directorChangePinMsg");
+
+    if (!newPin || newPin.length < 4) {
+      if (msgEl) {
+        msgEl.style.display = "block";
+        msgEl.style.color = "var(--er)";
+        msgEl.style.background = "rgba(239, 68, 68, 0.1)";
+        msgEl.textContent = "PIN kod kamida 4 ta belgidan iborat bo'lishi kerak!";
+      }
+      return;
+    }
+    if (newPin !== confirmPin) {
+      if (msgEl) {
+        msgEl.style.display = "block";
+        msgEl.style.color = "var(--er)";
+        msgEl.style.background = "rgba(239, 68, 68, 0.1)";
+        msgEl.textContent = "Yangi PIN kodlar bir-biriga mos kelmadi!";
+      }
+      return;
+    }
+
+    setDirectorPin(newPin);
+    if (msgEl) {
+      msgEl.style.display = "block";
+      msgEl.style.color = "var(--ok)";
+      msgEl.style.background = "rgba(16, 185, 129, 0.1)";
+      msgEl.textContent = "✅ Yangi PIN kod muvaffaqiyatli saqlandi!";
+    }
+    showToast("🔑 Direktor PIN kodi yangilandi!", "success");
+    setTimeout(() => {
+      if (msgEl) msgEl.style.display = "none";
+      const np = document.getElementById("newPinInput");
+      const cp = document.getElementById("confirmPinInput");
+      if (np) np.value = "";
+      if (cp) cp.value = "";
+    }, 2500);
+  });
+
+  // Tanaffus Musiqasi Boshqaruvi (Direktor ruxsati bilan)
+  const triggerBreakMusicModal = () => {
+    requireDirectorAuth(openBreakMusicModal, "Tanaffus musiqasini sozlash va yuklash uchun direktor PIN kodi talab etiladi.");
+  };
+  document.getElementById("breakMusicModalBtn")?.addEventListener("click", triggerBreakMusicModal);
+  document.getElementById("openBreakMusicModalBtn")?.addEventListener("click", triggerBreakMusicModal);
+  document.getElementById("closeBreakMusicModal")?.addEventListener("click", closeBreakMusicModal);
+  document.getElementById("cancelBreakMusicModalBtn")?.addEventListener("click", closeBreakMusicModal);
+
+  // Dropzone va fayl tanlash
+  const dropzone = document.getElementById("breakMusicDropzone");
+  const fileInput = document.getElementById("breakMusicFileInput");
+  if (dropzone && fileInput) {
+    dropzone.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleBreakMusicUpload(e.target.files[0]);
+      }
+    });
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = "var(--ac)";
+      dropzone.style.background = "rgba(14, 165, 233, 0.12)";
+    });
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.style.borderColor = "rgba(16, 185, 129, 0.4)";
+      dropzone.style.background = "rgba(16, 185, 129, 0.05)";
+    });
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = "rgba(16, 185, 129, 0.4)";
+      dropzone.style.background = "rgba(16, 185, 129, 0.05)";
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleBreakMusicUpload(e.dataTransfer.files[0]);
+      }
+    });
+  }
+
+  document.getElementById("deleteCustomMusicBtn")?.addEventListener("click", handleDeleteBreakMusic);
+  document.getElementById("previewBreakMusicCardBtn")?.addEventListener("click", toggleBreakMusicPreview);
+  document.getElementById("modalPreviewMusicBtn")?.addEventListener("click", toggleBreakMusicPreview);
+
+  const modalVolRange = document.getElementById("breakMusicVolRange");
+  const modalVolLabel = document.getElementById("modalBreakVolLabel");
+  if (modalVolRange) {
+    modalVolRange.addEventListener("input", () => {
+      const val = Number(modalVolRange.value);
+      if (modalVolLabel) modalVolLabel.textContent = `${val}%`;
+      AppConfig.breakMusic = AppConfig.breakMusic || {};
+      AppConfig.breakMusic.volume = val;
+      const player = getBreakMusicPlayer();
+      if (player && isBreakMusicPlaying) {
+        player.volume = val / 100;
+      }
+      const badge = document.getElementById("breakMusicVolumeBadge");
+      if (badge) badge.textContent = `${val}%`;
+    });
+  }
+
+  const modalModeSelect = document.getElementById("breakMusicModeSelect");
+  if (modalModeSelect) {
+    modalModeSelect.addEventListener("change", () => {
+      AppConfig.breakMusic = AppConfig.breakMusic || {};
+      AppConfig.breakMusic.mode = modalModeSelect.value;
+      updateBreakMusicUI();
+    });
+  }
+
+  document.getElementById("saveBreakMusicSettingsBtn")?.addEventListener("click", () => {
+    saveState();
+    closeBreakMusicModal();
+    showToast("💾 Tanaffus musiqasi sozlamalari muvaffaqiyatli saqlandi!", "success");
   });
 
   // Announcement Modal
@@ -2944,6 +3829,17 @@ function loadState() {
   try {
     const savedConfig = localStorage.getItem("med_bell_config_v5");
     if (savedConfig) AppConfig = { ...AppConfig, ...JSON.parse(savedConfig) };
+
+    if (!AppConfig.breakMusic) {
+      AppConfig.breakMusic = {
+        enabled: true,
+        mode: "all",
+        volume: 30,
+        fileName: "",
+        fileSize: 0,
+        hasCustomTrack: false
+      };
+    }
 
     const savedSchedule = localStorage.getItem("med_bell_schedule_v5");
     if (savedSchedule) {
@@ -3192,6 +4088,10 @@ function initApp() {
   bindFormControls();
   renderWeekDays();
   renderScheduleTable();
+  updateDirectorUI();
+
+  // Tanaffus musiqasini IndexedDB dan yuklab olish
+  loadAndInitBreakMusic();
 
   // Boshqa kompyuterda ochilganda ham amaldagi haftaning kunini avtomatik aniqlab tanlash
   const dayMap = { 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat', 0: 'mon' };
