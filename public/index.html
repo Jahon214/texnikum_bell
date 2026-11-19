@@ -2333,7 +2333,7 @@ function startBreakMusic() {
   isBreakMusicStarting = true;
   player.muted = false;
   const targetVol = Math.max(0.05, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
-  player.volume = 0.05;
+  player.volume = Math.max(0.08, targetVol * 0.35);
   player.loop = true;
   
   const playPromise = player.play();
@@ -2341,7 +2341,7 @@ function startBreakMusic() {
     playPromise.then(() => {
       isBreakMusicStarting = false;
       isBreakMusicPlaying = true;
-      fadeAudio(player, targetVol, 1500);
+      fadeAudio(player, targetVol, 800);
       updateBreakMusicStatusUI();
     }).catch(err => {
       isBreakMusicStarting = false;
@@ -2351,7 +2351,7 @@ function startBreakMusic() {
   } else {
     isBreakMusicStarting = false;
     isBreakMusicPlaying = true;
-    fadeAudio(player, targetVol, 1500);
+    fadeAudio(player, targetVol, 800);
     updateBreakMusicStatusUI();
   }
 }
@@ -2573,15 +2573,15 @@ function handleBreakMusicTick(inBreak, isBig, bRemain, slotId) {
     }
   }
 
-  // Dars boshlanishiga 6 soniyadan kam qolganida musiqa silliq pasayib to'xtaydi
-  if (bRemain <= 6) {
+  // Dars boshlanishiga 3 soniyadan kam qolganida musiqa silliq pasayib to'xtaydi
+  if (bRemain <= 3) {
     if (isBreakMusicPlaying) {
       stopBreakMusic(true);
     }
     return;
   }
 
-  // Tanaffus davom etmoqda va darsga 6 soniyadan ko'proq vaqt bor
+  // Tanaffus davom etmoqda va darsga 3 soniyadan ko'proq vaqt bor
   if (!isBreakMusicPlaying && !isBreakMusicStarting) {
     startBreakMusic();
   }
@@ -2604,7 +2604,7 @@ function checkAndResumeBreakMusic() {
 
     if (currentSec >= sEnd && currentSec < nextStart) {
       const bRemain = nextStart - currentSec;
-      if (isBreakMusicAssigned(slot.id, dayOfWeek) && bRemain > 6) {
+      if (isBreakMusicAssigned(slot.id, dayOfWeek) && bRemain > 3) {
         startBreakMusic();
       }
       return;
@@ -2988,6 +2988,8 @@ function stopAllAudio() {
   currentChain = [];
   chainIndex = 0;
   isVoiceSequencePlaying = false;
+  stopBreakMusic(false);
+  stopBreakMusicPreview();
   const player = getMasterPlayer();
   if (player) {
     try {
@@ -3305,15 +3307,16 @@ function compileDailyEvents(targetDayOfWeek = null) {
 
     // Dars tugashi (CHIQISH)
     const isBigBreak = (slot.end === "10:55");
-    const isDayEnd = (slot.end === "12:20" || slot.end === "16:30" || index === schedule.length - 1);
+    const isDayEnd = (index === schedule.length - 1);
+    const isShiftBreak = (slot.end === "12:20" && !isDayEnd);
 
     events.push({
       id: `end_${slot.id}`,
       timeSec: endSec,
       timeStr: slot.end,
-      title: isDayEnd ? `${shiftLabel}${slot.name} tugadi (Kun yakuni)` : (isBigBreak ? `${shiftLabel}${slot.name} tugadi (Katta tanaffus)` : `${shiftLabel}${slot.name} tugadi`),
+      title: isDayEnd ? `${shiftLabel}${slot.name} tugadi (Kun yakuni)` : (isBigBreak ? `${shiftLabel}${slot.name} tugadi (Katta tanaffus)` : (isShiftBreak ? `${shiftLabel}${slot.name} tugadi (Smena almashinuvi)` : `${shiftLabel}${slot.name} tugadi`)),
       sub: `1-Voice ➔ ${outVoiceObj.label} (${vSet.name})`,
-      type: isDayEnd ? "day_end" : (isBigBreak ? "lunch_start" : "break_start"),
+      type: isDayEnd ? "day_end" : (isBigBreak || isShiftBreak ? "lunch_start" : "break_start"),
       sequence: [AUDIO_PATHS.voice1, outVoiceObj.url],
       slotId: slot.id
     });
@@ -3378,7 +3381,20 @@ function mainTick() {
           showToast("📢 Rejalashtirilgan maxsus e'lon tanaffusda ijro etilmoqda!", "info");
         }
 
-        playAudioSequence(seq, 25000);
+        const isBreakBell = (evt.type === 'break_start' || evt.type === 'lunch_start') && evt.slotId && isBreakMusicAssigned(evt.slotId, dayOfWeek);
+        if (isBreakBell) {
+          playAudioSequence(seq, 25000, () => {
+            if (isBreakMusicAssigned(evt.slotId, dayOfWeek)) {
+              startBreakMusic();
+              showToast("🎵 Dars tugash voice'i yakunlandi. Tanaffus musiqasi boshlandi (Kirish qo'ng'irog'igacha yangraydi)", "success");
+            }
+          });
+        } else {
+          if (evt.type === 'lesson_start') {
+            stopBreakMusic(false);
+          }
+          playAudioSequence(seq, 25000);
+        }
         addBellLog(`⏰ ${evt.timeStr} — ${evt.title} (${evt.sub})`);
         renderTodayBellList();
       }
@@ -3625,6 +3641,41 @@ function switchVoiceTab(tab) {
   renderVoiceCards();
 }
 
+function testVoiceItem(seq, isOut, title) {
+  if (isOut && AppConfig.breakMusic?.hasCustomTrack && AppConfig.breakMusic?.enabled) {
+    showToast(`🔔 ${title}: Voice yangramoqda, tugashi bilan musiqa boshlanadi...`, "info");
+    playAudioSequence(seq, 25000, () => {
+      showToast("🎵 Dars tugash voice'i yakunlandi! Tanaffus musiqasi boshlandi (Kirishgacha yangraydi)...", "success");
+      startBreakMusic();
+    });
+  } else {
+    if (!isOut) stopBreakMusic(true);
+    playAudioSequence(seq, 25000);
+  }
+}
+
+function playBellItem(evtId) {
+  const { dayOfWeek } = getCurrentDayTime();
+  const events = compileDailyEvents(dayOfWeek);
+  const evt = events.find(e => e.id === evtId);
+  if (!evt) return;
+
+  const isBreakBell = (evt.type === "break_start" || evt.type === "lunch_start") && evt.slotId && isBreakMusicAssigned(evt.slotId, dayOfWeek);
+
+  if (isBreakBell) {
+    showToast(`🔔 ${evt.title}: Voice yangramoqda, yakunlanishi bilan musiqa boshlanadi...`, "info");
+    playAudioSequence(evt.sequence, 25000, () => {
+      if (AppConfig.breakMusic?.hasCustomTrack && AppConfig.breakMusic?.enabled) {
+        showToast("🎵 Dars tugash voice'i yakunlandi! Tanaffus musiqasi boshlandi (Kirish qo'ng'irog'igacha yangraydi)...", "success");
+        startBreakMusic();
+      }
+    });
+  } else {
+    stopBreakMusic(true);
+    playAudioSequence(evt.sequence, 25000);
+  }
+}
+
 function renderVoiceCards() {
   const container = document.getElementById("soundCardsContainer");
   if (!container) return;
@@ -3644,13 +3695,15 @@ function renderVoiceCards() {
     else if (v.day === 'sat') borderCol = '#f59e0b';
 
     const seq = v.isChime ? [AUDIO_PATHS.voice1] : [AUDIO_PATHS.voice1, v.url];
-    const seqStr = JSON.stringify(seq).replace(/"/g, '&quot;');
+    const isOut = !v.isChime && (v.title.includes("tugashi") || v.title.includes("chiqish"));
+    const seqJson = JSON.stringify(seq).replace(/"/g, '&quot;');
+    const safeTitle = (v.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
     return `
       <div class="sound-badge-card" style="border-left-color: ${borderCol};">
         <div class="sound-badge-title">
           <span>${v.title}</span>
-          <button class="btn ghost sm" onclick="playAudioSequence(${seqStr})" style="padding:4px 9px;">▶ Sinash</button>
+          <button class="btn ghost sm" onclick="testVoiceItem(${seqJson}, ${isOut}, '${safeTitle}')" style="padding:4px 9px;">▶ Sinash</button>
         </div>
         <div class="sound-badge-desc">
           <i>${v.desc}</i>
@@ -3684,14 +3737,14 @@ function renderTodayBellList() {
     ` : '';
 
     return `
-      <div class="bell-item-row ${statusClass}" onclick="playAudioSequence(${JSON.stringify(evt.sequence).replace(/"/g, '&quot;')})" style="cursor:pointer;" title="Sinab ko'rish uchun bosing">
+      <div class="bell-item-row ${statusClass}" onclick="playBellItem('${evt.id}')" style="cursor:pointer;" title="Sinab ko'rish uchun bosing">
         <div>
           <b>${evt.timeStr}</b> — <span>${evt.title}</span>
           <div style="font-size:11px; color:var(--ac);">${evt.sub}</div>
           ${musicBadge}
         </div>
         <div>
-          <span class="btn ghost sm" style="padding:3px 8px; font-size:11px;">▶ Ijro</span>
+          <button class="btn ghost sm" onclick="event.stopPropagation(); playBellItem('${evt.id}')" style="padding:3px 8px; font-size:11px;">▶ Ijro</button>
         </div>
       </div>
     `;
@@ -3837,53 +3890,74 @@ function bindFormControls() {
     addBellLog("🔔 Qo'lda 1-Voice (Freesound) chalindi");
   });
 
+  function playManualOutBell(dayNum, slotId, label, outVoiceUrl) {
+    const seq = [AUDIO_PATHS.voice1, outVoiceUrl];
+    addBellLog(`🔔 ${label}`);
+    const assigned = isBreakMusicAssigned(slotId, dayNum);
+    if (assigned && AppConfig.breakMusic?.hasCustomTrack && AppConfig.breakMusic?.enabled) {
+      showToast(`🔔 ${label}: Voice yangramoqda, yakunlanishi bilan musiqa boshlanadi...`, "info");
+      playAudioSequence(seq, 25000, () => {
+        showToast("🎵 Dars tugash voice'i yakunlandi! Tanaffus musiqasi boshlandi (Kirishgacha yangraydi)...", "success");
+        startBreakMusic();
+      });
+    } else {
+      playAudioSequence(seq, 25000);
+    }
+  }
+
+  function playManualInBell(label, inVoiceUrl) {
+    stopBreakMusic(true);
+    addBellLog(`🔔 ${label}`);
+    playAudioSequence([AUDIO_PATHS.voice1, inVoiceUrl], 25000);
+  }
+
   // Dushanba
-  document.getElementById("manualMon1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p1_in]); addBellLog("🔔 Du 1-kir: 1-V ➔ 2-V"); });
-  document.getElementById("manualMon1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p1_out]); addBellLog("🔔 Du 1-chiq: 1-V ➔ 3-V"); });
-  document.getElementById("manualMon2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p2_in]); addBellLog("🔔 Du 2-kir: 1-V ➔ 4-V"); });
-  document.getElementById("manualMon2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p2_out]); addBellLog("🔔 Du 2-chiq: 1-V ➔ 5-V"); });
-  document.getElementById("manualMon3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p3_in]); addBellLog("🔔 Du 3-kir: 1-V ➔ 6-V"); });
-  document.getElementById("manualMon3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.mon_p3_out]); addBellLog("🔔 Du 3-chiq: 1-V ➔ 7-V"); });
+  document.getElementById("manualMon1In")?.addEventListener("click", () => { playManualInBell("Du 1-kir: 1-V ➔ 2-V", AUDIO_PATHS.mon_p1_in); });
+  document.getElementById("manualMon1Out")?.addEventListener("click", () => { playManualOutBell(1, 1, "Du 1-chiq: 1-V ➔ 3-V", AUDIO_PATHS.mon_p1_out); });
+  document.getElementById("manualMon2In")?.addEventListener("click", () => { playManualInBell("Du 2-kir: 1-V ➔ 4-V", AUDIO_PATHS.mon_p2_in); });
+  document.getElementById("manualMon2Out")?.addEventListener("click", () => { playManualOutBell(1, 2, "Du 2-chiq: 1-V ➔ 5-V", AUDIO_PATHS.mon_p2_out); });
+  document.getElementById("manualMon3In")?.addEventListener("click", () => { playManualInBell("Du 3-kir: 1-V ➔ 6-V", AUDIO_PATHS.mon_p3_in); });
+  document.getElementById("manualMon3Out")?.addEventListener("click", () => { playManualOutBell(1, 3, "Du 3-chiq: 1-V ➔ 7-V", AUDIO_PATHS.mon_p3_out); });
 
   // Seshanba
-  document.getElementById("manualTue1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p1_in]); addBellLog("🔔 Se 1-kir: 1-V ➔ 8-V"); });
-  document.getElementById("manualTue1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p1_out]); addBellLog("🔔 Se 1-chiq: 1-V ➔ 9-V"); });
-  document.getElementById("manualTue2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p2_in]); addBellLog("🔔 Se 2-kir: 1-V ➔ 10-V"); });
-  document.getElementById("manualTue2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p2_out]); addBellLog("🔔 Se 2-chiq: 1-V ➔ 11-V"); });
-  document.getElementById("manualTue3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p3_in]); addBellLog("🔔 Se 3-kir: 1-V ➔ 12-V"); });
-  document.getElementById("manualTue3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.tue_p3_out]); addBellLog("🔔 Se 3-chiq: 1-V ➔ 13-V"); });
+  document.getElementById("manualTue1In")?.addEventListener("click", () => { playManualInBell("Se 1-kir: 1-V ➔ 8-V", AUDIO_PATHS.tue_p1_in); });
+  document.getElementById("manualTue1Out")?.addEventListener("click", () => { playManualOutBell(2, 1, "Se 1-chiq: 1-V ➔ 9-V", AUDIO_PATHS.tue_p1_out); });
+  document.getElementById("manualTue2In")?.addEventListener("click", () => { playManualInBell("Se 2-kir: 1-V ➔ 10-V", AUDIO_PATHS.tue_p2_in); });
+  document.getElementById("manualTue2Out")?.addEventListener("click", () => { playManualOutBell(2, 2, "Se 2-chiq: 1-V ➔ 11-V", AUDIO_PATHS.tue_p2_out); });
+  document.getElementById("manualTue3In")?.addEventListener("click", () => { playManualInBell("Se 3-kir: 1-V ➔ 12-V", AUDIO_PATHS.tue_p3_in); });
+  document.getElementById("manualTue3Out")?.addEventListener("click", () => { playManualOutBell(2, 3, "Se 3-chiq: 1-V ➔ 13-V", AUDIO_PATHS.tue_p3_out); });
 
   // Chorshanba
-  document.getElementById("manualWed1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p1_in]); addBellLog("🔔 Chor 1-kir: 1-V ➔ Chor 1-V"); });
-  document.getElementById("manualWed1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p1_out]); addBellLog("🔔 Chor 1-chiq: 1-V ➔ Chor 2-V"); });
-  document.getElementById("manualWed2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p2_in]); addBellLog("🔔 Chor 2-kir: 1-V ➔ Chor 3-V"); });
-  document.getElementById("manualWed2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p2_out]); addBellLog("🔔 Chor 2-chiq: 1-V ➔ Chor 4-V"); });
-  document.getElementById("manualWed3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p3_in]); addBellLog("🔔 Chor 3-kir: 1-V ➔ Chor 5-V"); });
-  document.getElementById("manualWed3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.wed_p3_out]); addBellLog("🔔 Chor 3-chiq: 1-V ➔ Chor 6-V"); });
+  document.getElementById("manualWed1In")?.addEventListener("click", () => { playManualInBell("Chor 1-kir: 1-V ➔ Chor 1-V", AUDIO_PATHS.wed_p1_in); });
+  document.getElementById("manualWed1Out")?.addEventListener("click", () => { playManualOutBell(3, 1, "Chor 1-chiq: 1-V ➔ Chor 2-V", AUDIO_PATHS.wed_p1_out); });
+  document.getElementById("manualWed2In")?.addEventListener("click", () => { playManualInBell("Chor 2-kir: 1-V ➔ Chor 3-V", AUDIO_PATHS.wed_p2_in); });
+  document.getElementById("manualWed2Out")?.addEventListener("click", () => { playManualOutBell(3, 2, "Chor 2-chiq: 1-V ➔ Chor 4-V", AUDIO_PATHS.wed_p2_out); });
+  document.getElementById("manualWed3In")?.addEventListener("click", () => { playManualInBell("Chor 3-kir: 1-V ➔ Chor 5-V", AUDIO_PATHS.wed_p3_in); });
+  document.getElementById("manualWed3Out")?.addEventListener("click", () => { playManualOutBell(3, 3, "Chor 3-chiq: 1-V ➔ Chor 6-V", AUDIO_PATHS.wed_p3_out); });
 
   // Payshanba
-  document.getElementById("manualThu1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p1_in]); addBellLog("🔔 Pay 1-kir: 1-V ➔ Pay 7-V"); });
-  document.getElementById("manualThu1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p1_out]); addBellLog("🔔 Pay 1-chiq: 1-V ➔ Pay 8-V"); });
-  document.getElementById("manualThu2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p2_in]); addBellLog("🔔 Pay 2-kir: 1-V ➔ Pay 9-V"); });
-  document.getElementById("manualThu2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p2_out]); addBellLog("🔔 Pay 2-chiq: 1-V ➔ Pay 10-V"); });
-  document.getElementById("manualThu3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_in]); addBellLog("🔔 Pay 3-kir: 1-V ➔ Pay 11-V"); });
-  document.getElementById("manualThu3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.thu_p3_out]); addBellLog("🔔 Pay 3-chiq: 1-V ➔ Pay 12-V"); });
+  document.getElementById("manualThu1In")?.addEventListener("click", () => { playManualInBell("Pay 1-kir: 1-V ➔ Pay 7-V", AUDIO_PATHS.thu_p1_in); });
+  document.getElementById("manualThu1Out")?.addEventListener("click", () => { playManualOutBell(4, 1, "Pay 1-chiq: 1-V ➔ Pay 8-V", AUDIO_PATHS.thu_p1_out); });
+  document.getElementById("manualThu2In")?.addEventListener("click", () => { playManualInBell("Pay 2-kir: 1-V ➔ Pay 9-V", AUDIO_PATHS.thu_p2_in); });
+  document.getElementById("manualThu2Out")?.addEventListener("click", () => { playManualOutBell(4, 2, "Pay 2-chiq: 1-V ➔ Pay 10-V", AUDIO_PATHS.thu_p2_out); });
+  document.getElementById("manualThu3In")?.addEventListener("click", () => { playManualInBell("Pay 3-kir: 1-V ➔ Pay 11-V", AUDIO_PATHS.thu_p3_in); });
+  document.getElementById("manualThu3Out")?.addEventListener("click", () => { playManualOutBell(4, 3, "Pay 3-chiq: 1-V ➔ Pay 12-V", AUDIO_PATHS.thu_p3_out); });
 
   // Juma
-  document.getElementById("manualFri1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p1_in]); addBellLog("🔔 Ju 1-kir: 1-V ➔ Ju 1-V"); });
-  document.getElementById("manualFri1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p1_out]); addBellLog("🔔 Ju 1-chiq: 1-V ➔ Ju 2-V"); });
-  document.getElementById("manualFri2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p2_in]); addBellLog("🔔 Ju 2-kir: 1-V ➔ Ju 3-V"); });
-  document.getElementById("manualFri2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p2_out]); addBellLog("🔔 Ju 2-chiq: 1-V ➔ Ju 4-V"); });
-  document.getElementById("manualFri3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p3_in]); addBellLog("🔔 Ju 3-kir: 1-V ➔ Ju 5-V"); });
-  document.getElementById("manualFri3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.fri_p3_out]); addBellLog("🔔 Ju 3-chiq: 1-V ➔ Ju 6-V"); });
+  document.getElementById("manualFri1In")?.addEventListener("click", () => { playManualInBell("Ju 1-kir: 1-V ➔ Ju 1-V", AUDIO_PATHS.fri_p1_in); });
+  document.getElementById("manualFri1Out")?.addEventListener("click", () => { playManualOutBell(5, 1, "Ju 1-chiq: 1-V ➔ Ju 2-V", AUDIO_PATHS.fri_p1_out); });
+  document.getElementById("manualFri2In")?.addEventListener("click", () => { playManualInBell("Ju 2-kir: 1-V ➔ Ju 3-V", AUDIO_PATHS.fri_p2_in); });
+  document.getElementById("manualFri2Out")?.addEventListener("click", () => { playManualOutBell(5, 2, "Ju 2-chiq: 1-V ➔ Ju 4-V", AUDIO_PATHS.fri_p2_out); });
+  document.getElementById("manualFri3In")?.addEventListener("click", () => { playManualInBell("Ju 3-kir: 1-V ➔ Ju 5-V", AUDIO_PATHS.fri_p3_in); });
+  document.getElementById("manualFri3Out")?.addEventListener("click", () => { playManualOutBell(5, 3, "Ju 3-chiq: 1-V ➔ Ju 6-V", AUDIO_PATHS.fri_p3_out); });
 
   // Shanba
-  document.getElementById("manualSat1In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p1_in]); addBellLog("🔔 Sh 1-kir: 1-V ➔ Sh 7-V"); });
-  document.getElementById("manualSat1Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p1_out]); addBellLog("🔔 Sh 1-chiq: 1-V ➔ Sh 8-V"); });
-  document.getElementById("manualSat2In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p2_in]); addBellLog("🔔 Sh 2-kir: 1-V ➔ Sh 9-V"); });
-  document.getElementById("manualSat2Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p2_out]); addBellLog("🔔 Sh 2-chiq: 1-V ➔ Sh 10-V"); });
-  document.getElementById("manualSat3In")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p3_in]); addBellLog("🔔 Sh 3-kir: 1-V ➔ Sh 11-V"); });
-  document.getElementById("manualSat3Out")?.addEventListener("click", () => { playAudioSequence([AUDIO_PATHS.voice1, AUDIO_PATHS.sat_p3_out]); addBellLog("🔔 Sh 3-chiq: 1-V ➔ Sh 12-V"); });
+  document.getElementById("manualSat1In")?.addEventListener("click", () => { playManualInBell("Sh 1-kir: 1-V ➔ Sh 7-V", AUDIO_PATHS.sat_p1_in); });
+  document.getElementById("manualSat1Out")?.addEventListener("click", () => { playManualOutBell(6, 1, "Sh 1-chiq: 1-V ➔ Sh 8-V", AUDIO_PATHS.sat_p1_out); });
+  document.getElementById("manualSat2In")?.addEventListener("click", () => { playManualInBell("Sh 2-kir: 1-V ➔ Sh 9-V", AUDIO_PATHS.sat_p2_in); });
+  document.getElementById("manualSat2Out")?.addEventListener("click", () => { playManualOutBell(6, 2, "Sh 2-chiq: 1-V ➔ Sh 10-V", AUDIO_PATHS.sat_p2_out); });
+  document.getElementById("manualSat3In")?.addEventListener("click", () => { playManualInBell("Sh 3-kir: 1-V ➔ Sh 11-V", AUDIO_PATHS.sat_p3_in); });
+  document.getElementById("manualSat3Out")?.addEventListener("click", () => { playManualOutBell(6, 3, "Sh 3-chiq: 1-V ➔ Sh 12-V", AUDIO_PATHS.sat_p3_out); });
 
   document.getElementById("manualAnthemBtn")?.addEventListener("click", () => {
     playAudioSequence([AUDIO_PATHS.anthem], 120000);
