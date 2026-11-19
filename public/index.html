@@ -815,9 +815,17 @@ body.tv-mode .tv-marquee {
   </header>
 
   <!-- Audio unlock banner -->
-  <div class="audio-warn" id="audioWarnBanner">
-    <span>🔇 <b>Muhim eslatma:</b> Brauzer 1-voice (freesound chime) va dars ovozlarini to'sqinliksiz ijro etishi uchun sahifada ovozni yoqing.</span>
-    <button class="btn success sm" onclick="unlockAudioEngine()">🔊 Ovozni faollashtirish</button>
+  <div class="audio-warn" id="audioWarnBanner" onclick="unlockAudioEngine()" style="cursor: pointer;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 24px; animation: pulse 1.5s infinite;">🔔</span>
+      <div>
+        <b style="font-size: 14px;">Avtomatik real vaqtda qo'ng'iroqlar ishlashi uchun sahifaning istalgan joyiga bosing!</b>
+        <div style="font-size: 12px; color: var(--ink-secondary); margin-top: 2px;">
+          Har qanday kompyuterda: real vaqt va hafta kuni avtomatik aniqlanadi. 1-va 2-smena ovozlari o'z vaqtida yangraydi.
+        </div>
+      </div>
+    </div>
+    <button class="btn success sm" id="audioWarnActionBtn" onclick="unlockAudioEngine(event)" style="white-space: nowrap;">🔊 Ovozni faollashtirish</button>
   </div>
 
   <!-- Main Grid: Live Status & Paralar Jadvali on Left, Settings on Right -->
@@ -1716,13 +1724,49 @@ function getMasterPlayer() {
   return document.getElementById("masterAudioPlayer");
 }
 
-function unlockAudioEngine() {
+let isAudioEngineUnlocked = false;
+
+function preloadTodayAudio() {
+  try {
+    const { dayOfWeek } = getCurrentDayTime();
+    const events = compileDailyEvents(dayOfWeek);
+    events.forEach(evt => {
+      if (evt.sequence && Array.isArray(evt.sequence)) {
+        evt.sequence.forEach(url => {
+          if (url && typeof Audio !== "undefined") {
+            const a = new Audio();
+            a.preload = "auto";
+            a.src = url;
+          }
+        });
+      }
+    });
+  } catch (e) {}
+}
+
+function testCurrentTimeVoice() {
+  const { dayOfWeek } = getCurrentDayTime();
+  const day = getActiveVoiceDay(dayOfWeek);
+  const sampleMap = {
+    1: AUDIO_PATHS.mon_p1_in,
+    2: AUDIO_PATHS.tue_p1_in,
+    3: AUDIO_PATHS.wed_p1_in,
+    4: AUDIO_PATHS.thu_p1_in,
+    5: AUDIO_PATHS.fri_p1_in,
+    6: AUDIO_PATHS.sat_p1_in
+  };
+  const targetVoice = sampleMap[day] || AUDIO_PATHS.mon_p1_in;
+  playAudioSequence([AUDIO_PATHS.voice1, targetVoice]);
+  showToast("🔔 1-Voice va bugungi kun ovozi yangramoqda...", "info");
+}
+
+function unlockAudioEngine(silent = false) {
   try {
     if (!audioCtx) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       audioCtx = new AudioContextClass();
     }
-    if (audioCtx.state === "suspended") {
+    if (audioCtx && audioCtx.state === "suspended") {
       audioCtx.resume();
     }
     const player = getMasterPlayer();
@@ -1730,9 +1774,43 @@ function unlockAudioEngine() {
       player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
       player.play().catch(() => {});
     }
+
+    isAudioEngineUnlocked = true;
+
+    // Update Banner to Active State
     const warn = document.getElementById("audioWarnBanner");
-    if (warn) warn.style.display = "none";
-    showToast("🔊 Ovoz tizimi muvaffaqiyatli faollashtirildi!", "success");
+    if (warn) {
+      warn.style.background = "linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(14, 165, 233, 0.22))";
+      warn.style.borderColor = "rgba(16, 185, 129, 0.5)";
+      warn.style.cursor = "default";
+      warn.onclick = null;
+      warn.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#10b981; box-shadow:0 0 10px #10b981;"></span>
+          <div>
+            <b style="color: #10b981;">✅ Real vaqt tizimi to'liq faol!</b>
+            <span style="color: var(--ink-secondary); font-size: 12px; margin-left: 6px;">
+              Kompyuter soati va haftaning kuni aniqlandi. 1-va 2-smena qo'ng'iroqlari avtomatik yangraydi.
+            </span>
+          </div>
+        </div>
+        <button class="btn ghost sm" onclick="testCurrentTimeVoice()" style="border-color:#10b981; color:#10b981; white-space:nowrap;">▶ Sinov ovozi</button>
+      `;
+    }
+
+    const unlockBtn = document.getElementById("audioUnlockBtn");
+    if (unlockBtn) {
+      unlockBtn.textContent = "✅ Ovoz faol";
+      unlockBtn.className = "btn ghost";
+      unlockBtn.style.color = "var(--ok)";
+      unlockBtn.style.borderColor = "var(--ok)";
+    }
+
+    if (silent !== true && typeof silent !== "object") {
+      showToast("🔊 Ovoz tizimi real vaqt rejimida muvaffaqiyatli faollashtirildi!", "success");
+    }
+
+    preloadTodayAudio();
   } catch (e) {
     console.warn("Audio unlock xatosi:", e);
   }
@@ -2055,9 +2133,39 @@ function compileDailyEvents(targetDayOfWeek = null) {
   return events.sort((a, b) => a.timeSec - b.timeSec);
 }
 
+let lastCalendarDate = "";
+
+function checkCalendarDayChange(now) {
+  const todayStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  if (lastCalendarDate !== todayStr) {
+    lastCalendarDate = todayStr;
+    triggeredEventsToday.clear();
+
+    const currentSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds() + now.getMilliseconds() / 1000;
+    const events = compileDailyEvents(now.getDay());
+
+    // Mark past events of today as already triggered so they don't fire retroactively
+    events.forEach(evt => {
+      if (evt.timeSec < currentSec - 3) {
+        triggeredEventsToday.add(evt.id);
+      }
+    });
+
+    // Auto-select today's tab on the right
+    const dayMap = { 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat', 0: 'mon' };
+    const todayTab = dayMap[now.getDay()] || 'mon';
+    switchVoiceTab(todayTab);
+    renderTodayBellList();
+  }
+}
+
 /* Real-Time Tick (Har 250ms) */
 function mainTick() {
   const { dayOfWeek, currentSec, dateString } = getCurrentDayTime();
+
+  if (!isSimulation) {
+    checkCalendarDayChange(new Date());
+  }
 
   const clockEl = document.getElementById("clockDisplay");
   const dateEl = document.getElementById("dateDisplay");
@@ -2070,7 +2178,8 @@ function mainTick() {
   if (isWorkingDay && !AppConfig.muted) {
     events.forEach(evt => {
       const diff = currentSec - evt.timeSec;
-      if (diff >= 0 && diff < 1.8 && !triggeredEventsToday.has(evt.id)) {
+      // Trigger if within 0 to 12 seconds after scheduled bell and not yet triggered today
+      if (diff >= 0 && diff < 12 && !triggeredEventsToday.has(evt.id)) {
         triggeredEventsToday.add(evt.id);
 
         let seq = [...evt.sequence];
@@ -2826,18 +2935,31 @@ function saveScheduleFromModal() {
 
 function saveState() {
   try {
-    localStorage.setItem("med_bell_config_v4", JSON.stringify(AppConfig));
-    localStorage.setItem("med_bell_schedule_v4", JSON.stringify(schedule));
+    localStorage.setItem("med_bell_config_v5", JSON.stringify(AppConfig));
+    localStorage.setItem("med_bell_schedule_v5", JSON.stringify(schedule));
   } catch (e) {}
 }
 
 function loadState() {
   try {
-    const savedConfig = localStorage.getItem("med_bell_config_v4");
+    const savedConfig = localStorage.getItem("med_bell_config_v5");
     if (savedConfig) AppConfig = { ...AppConfig, ...JSON.parse(savedConfig) };
-    const savedSchedule = localStorage.getItem("med_bell_schedule_v4");
-    if (savedSchedule) schedule = JSON.parse(savedSchedule);
-  } catch (e) {}
+
+    const savedSchedule = localStorage.getItem("med_bell_schedule_v5");
+    if (savedSchedule) {
+      const parsed = JSON.parse(savedSchedule);
+      // Ensure all 6 slots for I and II Smena are present
+      if (Array.isArray(parsed) && parsed.length >= 6) {
+        schedule = parsed;
+      } else {
+        schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+      }
+    } else {
+      schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+    }
+  } catch (e) {
+    schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+  }
   applyConfigToUI();
 }
 
@@ -3049,20 +3171,69 @@ async function loadDynamicVoices() {
   }
 }
 
+async function checkServerTimeSync() {
+  try {
+    const start = Date.now();
+    const apiEndpoint = (window.location.protocol === 'file:') ? 'http://localhost:3000/api/voices' : '/api/voices';
+    const res = await fetch(apiEndpoint, { method: 'GET', cache: 'no-store' });
+    const serverDateHeader = res.headers.get('date');
+    if (serverDateHeader) {
+      const serverTime = new Date(serverDateHeader).getTime() + (Date.now() - start) / 2;
+      const diffSec = Math.round((Date.now() - serverTime) / 1000);
+      if (Math.abs(diffSec) > 45) {
+        showToast(`⚠️ Eslatma: Kompyuter soati rasmiy vaqtdan ${Math.abs(diffSec)} soniya ${diffSec > 0 ? 'oldinda' : 'orqada'}. Qo'ng'iroqlar aniq chalishi uchun kompyuter soatini to'g'rilang.`, "warning", 9000);
+      }
+    }
+  } catch (e) {}
+}
+
 function initApp() {
   loadState();
   bindFormControls();
   renderWeekDays();
   renderScheduleTable();
-  renderVoiceCards();
+
+  // Boshqa kompyuterda ochilganda ham amaldagi haftaning kunini avtomatik aniqlab tanlash
+  const dayMap = { 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat', 0: 'mon' };
+  const todayTab = dayMap[new Date().getDay()] || 'mon';
+  switchVoiceTab(todayTab);
+
   renderTodayBellList();
 
+  // Dastlabki tick va tekshiruv
   mainTick();
+
+  // Brauzer orqa fonda (background tab) turganda ham muzlab qolmasligi uchun Web Worker taymeri
+  try {
+    const workerBlob = new Blob([
+      "setInterval(function() { postMessage('tick'); }, 250);"
+    ], { type: 'application/javascript' });
+    const worker = new Worker(URL.createObjectURL(workerBlob));
+    worker.onmessage = function() {
+      mainTick();
+    };
+  } catch (e) {
+    console.warn("Web worker qo'llab-quvvatlanmadi, oddiy interval ishlatiladi:", e);
+  }
+
+  // Zaxira interval
   setInterval(mainTick, 250);
 
   setInterval(() => {
     renderTodayBellList();
   }, 10000);
+
+  // Server vaqti bilan tekshirish
+  setTimeout(checkServerTimeSync, 1500);
+
+  // Boshqa kompyuterda istalgan joyga bosilganda avtomatik ovozni faollashtirish
+  ['click', 'touchstart', 'keydown'].forEach(evtType => {
+    window.addEventListener(evtType, () => {
+      if (!isAudioEngineUnlocked) {
+        unlockAudioEngine(true);
+      }
+    }, { passive: true });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
