@@ -1074,9 +1074,15 @@ body.tv-mode .tv-marquee {
         </div>
 
         <!-- Break Assignment Status on Card -->
-        <div id="breakMusicAssignmentBanner" style="margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); display: flex; align-items: center; justify-content: space-between;">
-          <span>📍 Holat: <b id="breakMusicAssignmentText" style="color: var(--ok);">Barcha tanaffuslarga joylangan</b></span>
-          <span class="pill ok" id="breakMusicActiveBadge" style="margin:0; font-size:10px;">Faol</span>
+        <div id="breakMusicAssignmentBanner" style="margin-top: 10px; padding: 10px 12px; border-radius: 10px; font-size: 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>📍 Tanaffuslar: <b id="breakMusicAssignmentText" style="color: var(--ok);">Barcha 5 ta tanaffusga joylangan</b></span>
+            <span class="pill ok" id="breakMusicActiveBadge" style="margin:0; font-size:10px;">Faol</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px dashed rgba(16, 185, 129, 0.25); padding-top: 5px;">
+            <span style="color: var(--ink-secondary);">📅 Hafta kunlari:</span>
+            <b id="breakMusicDaysText" style="color: var(--ac);">Barcha kunlar (Du-Sha)</b>
+          </div>
         </div>
 
         <!-- Direct Action Buttons -->
@@ -1086,7 +1092,7 @@ body.tv-mode .tv-marquee {
           </button>
           <div style="display: flex; gap: 8px;">
             <button class="btn ghost sm" id="simulateBreakNowBtn" style="flex: 1; font-weight: 600; white-space: nowrap;" title="Tanaffus va musiqani hoziroq real vaqtda eshitib ko'rish">⚡ 1 daqiqa tanaffusni sinash</button>
-            <button class="btn ghost sm" id="openBreakMusicModalBtn" style="flex: 1; font-weight: 600; white-space: nowrap;">⚙️ Tanaffuslarni tanlash</button>
+            <button class="btn ghost sm" id="openBreakMusicModalBtn" style="flex: 1; font-weight: 600; white-space: nowrap;">⚙️ Kunlar & Tanaffuslarni tanlash</button>
           </div>
         </div>
       </div>
@@ -1542,6 +1548,43 @@ body.tv-mode .tv-marquee {
       </div>
     </div>
 
+    <!-- Weekday assignment selector -->
+    <div style="background: var(--chip-bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <label class="field-label" style="margin-bottom:0; font-weight: 700; font-size: 13px;">📅 Musiqa qaysi hafta kunlarida yangrasin:</label>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" class="btn ghost sm" id="selectBreakDaysAllBtn" style="font-size: 11px; padding: 2px 8px;">Barcha kunlar</button>
+          <button type="button" class="btn ghost sm" id="selectBreakDaysNoneBtn" style="font-size: 11px; padding: 2px 8px;">Tozalash</button>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 13px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_1" class="break-day-checkbox" value="1" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Dushanba</b></span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_2" class="break-day-checkbox" value="2" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Seshanba</b></span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_3" class="break-day-checkbox" value="3" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Chorshanba</b></span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_4" class="break-day-checkbox" value="4" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Payshanba</b></span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_5" class="break-day-checkbox" value="5" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Juma</b></span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--line);">
+          <input type="checkbox" id="breakDayCheck_6" class="break-day-checkbox" value="6" checked style="accent-color: var(--ok); width: 16px; height: 16px;">
+          <span><b>Shanba</b></span>
+        </label>
+      </div>
+    </div>
+
     <!-- Action Buttons -->
     <div style="display: flex; flex-direction: column; gap: 8px;">
       <button class="btn success" id="applyModalMusicToBreaksBtn" style="width: 100%; font-weight: 800; font-size: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 12px; border: none; border-radius: 10px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); cursor: pointer;">
@@ -1975,7 +2018,8 @@ let AppConfig = {
     fileName: "",
     fileSize: 0,
     hasCustomTrack: false,
-    assignedSlots: [1, 2, 3, 4, 5]
+    assignedSlots: [1, 2, 3, 4, 5],
+    assignedDays: [1, 2, 3, 4, 5, 6] // 1=Du, 2=Se, 3=Chor, 4=Pay, 5=Ju, 6=Sha
   }
 };
 
@@ -1992,6 +2036,7 @@ let activeVoiceTab = "mon";
 // Tanaffus musiqasi va Direktor holatlari
 let isVoiceSequencePlaying = false;
 let isBreakMusicPlaying = false;
+let isBreakMusicStarting = false;
 let isBreakMusicPreviewing = false;
 let currentBreakMusicBlobUrl = null;
 let breakMusicFadeInterval = null;
@@ -2131,6 +2176,9 @@ async function loadAndInitBreakMusic() {
       AppConfig.breakMusic.fileSize = record.size;
       if (!AppConfig.breakMusic.assignedSlots || !Array.isArray(AppConfig.breakMusic.assignedSlots) || AppConfig.breakMusic.assignedSlots.length === 0) {
         AppConfig.breakMusic.assignedSlots = [1, 2, 3, 4, 5];
+      }
+      if (!AppConfig.breakMusic.assignedDays || !Array.isArray(AppConfig.breakMusic.assignedDays) || AppConfig.breakMusic.assignedDays.length === 0) {
+        AppConfig.breakMusic.assignedDays = [1, 2, 3, 4, 5, 6];
       }
     } else {
       AppConfig.breakMusic = AppConfig.breakMusic || {};
@@ -2278,10 +2326,11 @@ function fadeAudio(audioEl, targetVol, durationMs = 2000, onComplete) {
 }
 
 function startBreakMusic() {
-  if (isVoiceSequencePlaying || AppConfig.muted || isBreakMusicPreviewing) return;
+  if (isVoiceSequencePlaying || AppConfig.muted || isBreakMusicPreviewing || isBreakMusicPlaying || isBreakMusicStarting) return;
   const player = getBreakMusicPlayer();
   if (!player || !player.src) return;
 
+  isBreakMusicStarting = true;
   const targetVol = Math.max(0.05, Math.min(1, (AppConfig.breakMusic?.volume || 30) / 100));
   player.volume = 0.05;
   player.loop = true;
@@ -2289,16 +2338,25 @@ function startBreakMusic() {
   const playPromise = player.play();
   if (playPromise !== undefined) {
     playPromise.then(() => {
+      isBreakMusicStarting = false;
       isBreakMusicPlaying = true;
       fadeAudio(player, targetVol, 1500);
       updateBreakMusicStatusUI();
     }).catch(err => {
+      isBreakMusicStarting = false;
+      isBreakMusicPlaying = false;
       console.warn("Break music play blocked:", err);
     });
+  } else {
+    isBreakMusicStarting = false;
+    isBreakMusicPlaying = true;
+    fadeAudio(player, targetVol, 1500);
+    updateBreakMusicStatusUI();
   }
 }
 
 function stopBreakMusic(smooth = true) {
+  isBreakMusicStarting = false;
   if (isBreakMusicPreviewing) return;
   const player = getBreakMusicPlayer();
   if (!player) return;
@@ -2321,15 +2379,25 @@ function stopBreakMusic(smooth = true) {
   }
 }
 
-function isBreakMusicAssigned(slotId) {
+function isBreakMusicAssigned(slotId, targetDay = null) {
   if (!AppConfig.breakMusic || !AppConfig.breakMusic.enabled || !AppConfig.breakMusic.hasCustomTrack) return false;
   if (AppConfig.breakMusic.mode === "off") return false;
+
+  // Day of week check (1=Du, 2=Se, 3=Chor, 4=Pay, 5=Ju, 6=Sha)
+  const { dayOfWeek } = getCurrentDayTime();
+  const day = targetDay !== null ? Number(targetDay) : Number(dayOfWeek);
+  const assignedDays = (AppConfig.breakMusic.assignedDays || [1, 2, 3, 4, 5, 6]).map(Number);
+  if (!assignedDays.includes(day)) return false;
+
+  // Break slot check
   if (AppConfig.breakMusic.mode === "big") return Number(slotId) === 2;
-  const assigned = AppConfig.breakMusic.assignedSlots || [1, 2, 3, 4, 5];
-  return assigned.includes(Number(slotId));
+  const assignedSlots = (AppConfig.breakMusic.assignedSlots || [1, 2, 3, 4, 5]).map(Number);
+  return assignedSlots.includes(Number(slotId));
 }
 
-function applyMusicToBreaks(slots = null) {
+function applyMusicToBreaks(slots = null, days = null) {
+  unlockAudioEngine(true);
+
   if (!AppConfig.breakMusic || !AppConfig.breakMusic.hasCustomTrack) {
     requireDirectorAuth(() => {
       openBreakMusicModal();
@@ -2338,19 +2406,44 @@ function applyMusicToBreaks(slots = null) {
     return;
   }
 
-  let selectedSlots = slots;
-  if (!selectedSlots) {
-    const checked = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
-    selectedSlots = checked.length > 0 ? checked : [1, 2, 3, 4, 5];
+  // To'g'ridan-to'g'ri foydalanuvchi tugma bosishidan foydalanib breakPlayer'ni avtomatik ijroga tayyorlash
+  const bPlayer = getBreakMusicPlayer();
+  if (bPlayer && bPlayer.src) {
+    const origVol = bPlayer.volume;
+    const origMuted = bPlayer.muted;
+    bPlayer.muted = true;
+    bPlayer.play().then(() => {
+      if (!isBreakMusicPlaying && !isBreakMusicPreviewing) {
+        bPlayer.pause();
+      }
+      bPlayer.muted = origMuted;
+      bPlayer.volume = origVol;
+    }).catch(e => {
+      bPlayer.muted = origMuted;
+      bPlayer.volume = origVol;
+    });
   }
 
-  AppConfig.breakMusic.enabled = (selectedSlots.length > 0);
+  let selectedSlots = slots;
+  if (!selectedSlots) {
+    const checkedSlots = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
+    selectedSlots = checkedSlots.length > 0 ? checkedSlots : (AppConfig.breakMusic?.assignedSlots && AppConfig.breakMusic.assignedSlots.length > 0 ? AppConfig.breakMusic.assignedSlots : [1, 2, 3, 4, 5]);
+  }
+
+  let selectedDays = days;
+  if (!selectedDays) {
+    const checkedDays = Array.from(document.querySelectorAll(".break-day-checkbox:checked")).map(cb => Number(cb.value));
+    selectedDays = checkedDays.length > 0 ? checkedDays : (AppConfig.breakMusic?.assignedDays && AppConfig.breakMusic.assignedDays.length > 0 ? AppConfig.breakMusic.assignedDays : [1, 2, 3, 4, 5, 6]);
+  }
+
+  AppConfig.breakMusic.enabled = (selectedSlots.length > 0 && selectedDays.length > 0);
   AppConfig.breakMusic.assignedSlots = selectedSlots;
+  AppConfig.breakMusic.assignedDays = selectedDays;
   if (selectedSlots.length === 5) {
     AppConfig.breakMusic.mode = "all";
   } else if (selectedSlots.length === 1 && selectedSlots.includes(2)) {
     AppConfig.breakMusic.mode = "big";
-  } else if (selectedSlots.length === 0) {
+  } else if (selectedSlots.length === 0 || selectedDays.length === 0) {
     AppConfig.breakMusic.mode = "off";
     AppConfig.breakMusic.enabled = false;
   } else {
@@ -2363,8 +2456,10 @@ function applyMusicToBreaks(slots = null) {
   renderTodayBellList();
 
   const trackName = AppConfig.breakMusic.fileName || "Musiqa";
-  if (selectedSlots.length > 0) {
-    showToast(`✅ "${trackName}" ${selectedSlots.length} ta tanaffusga muvaffaqiyatli joylandi va joriy qilindi!`, "success");
+  if (AppConfig.breakMusic.enabled) {
+    const dayLabels = { 1: "Du", 2: "Se", 3: "Chor", 4: "Pay", 5: "Ju", 6: "Sha" };
+    const dayStr = selectedDays.length === 6 ? "Barcha kunlar (Du-Sha)" : selectedDays.map(d => dayLabels[d]).join(", ");
+    showToast(`✅ "${trackName}" ${dayStr} bo'yicha ${selectedSlots.length} ta tanaffusga joriy qilindi!`, "success");
     checkAndResumeBreakMusic();
   } else {
     showToast("ℹ️ Tanaffus musiqasi o'chirildi.", "info");
@@ -2390,7 +2485,7 @@ function testSimulateBreakNow() {
     return;
   }
 
-  unlockAudioEngine();
+  unlockAudioEngine(true);
   isBreakSimulationRunning = true;
   const simBtn = document.getElementById("simulateBreakNowBtn");
   if (simBtn) {
@@ -2471,12 +2566,8 @@ function handleBreakMusicTick(inBreak, isBig, bRemain, slotId) {
     return;
   }
 
-  const mode = AppConfig.breakMusic.mode || "all";
-  if (mode === "off") {
-    if (isBreakMusicPlaying) stopBreakMusic(false);
-    return;
-  }
-  if (mode === "big" && !isBig) {
+  const { dayOfWeek } = getCurrentDayTime();
+  if (!AppConfig.workingDays.includes(dayOfWeek)) {
     if (isBreakMusicPlaying) stopBreakMusic(false);
     return;
   }
@@ -2485,9 +2576,9 @@ function handleBreakMusicTick(inBreak, isBig, bRemain, slotId) {
     return;
   }
 
-  // Check if music is assigned for this slot/break
+  // Check if music is assigned for this slot and day of week
   if (slotId !== undefined && slotId !== null) {
-    if (!isBreakMusicAssigned(slotId)) {
+    if (!isBreakMusicAssigned(slotId, dayOfWeek)) {
       if (isBreakMusicPlaying) stopBreakMusic(false);
       return;
     }
@@ -2502,7 +2593,7 @@ function handleBreakMusicTick(inBreak, isBig, bRemain, slotId) {
   }
 
   // Tanaffus davom etmoqda va darsga 6 soniyadan ko'proq vaqt bor
-  if (!isBreakMusicPlaying) {
+  if (!isBreakMusicPlaying && !isBreakMusicStarting) {
     startBreakMusic();
   }
 }
@@ -2523,10 +2614,8 @@ function checkAndResumeBreakMusic() {
     const nextStart = timeToSec(nextSlot.start);
 
     if (currentSec >= sEnd && currentSec < nextStart) {
-      const bDuration = nextStart - sEnd;
       const bRemain = nextStart - currentSec;
-
-      if (isBreakMusicAssigned(slot.id) && bRemain > 6) {
+      if (isBreakMusicAssigned(slot.id, dayOfWeek) && bRemain > 6) {
         startBreakMusic();
       }
       return;
@@ -2544,6 +2633,7 @@ function updateBreakMusicUI() {
   const volBadge = document.getElementById("breakMusicVolumeBadge");
   const statusPill = document.getElementById("breakMusicStatusPill");
   const assignText = document.getElementById("breakMusicAssignmentText");
+  const daysText = document.getElementById("breakMusicDaysText");
   const activeBadge = document.getElementById("breakMusicActiveBadge");
   const applyBtn = document.getElementById("applyMusicToBreaksBtn");
 
@@ -2554,24 +2644,37 @@ function updateBreakMusicUI() {
   const volRange = document.getElementById("breakMusicVolRange");
   const volLabel = document.getElementById("modalBreakVolLabel");
 
-  const assigned = cfg.assignedSlots || [1, 2, 3, 4, 5];
+  const assigned = (cfg.assignedSlots || [1, 2, 3, 4, 5]).map(Number);
+  const assignedDays = (cfg.assignedDays || [1, 2, 3, 4, 5, 6]).map(Number);
   const isAssignedToAll = assigned.length === 5;
   const isAssignedToBig = assigned.length === 1 && assigned.includes(2);
 
+  const dayNamesShort = { 1: "Du", 2: "Se", 3: "Chor", 4: "Pay", 5: "Ju", 6: "Sha" };
+  let daySummary = "Hech qaysi kunda";
+  if (assignedDays.length === 6) {
+    daySummary = "Barcha kunlar (Du-Sha)";
+  } else if (assignedDays.length === 5 && !assignedDays.includes(6)) {
+    daySummary = "Dushanba — Juma (Du-Ju)";
+  } else if (assignedDays.length > 0) {
+    daySummary = assignedDays.map(d => dayNamesShort[d]).join(", ");
+  }
+
   let assignDesc = "Hech qaysi tanaffusga joylanmagan";
-  if (cfg.hasCustomTrack && cfg.enabled && cfg.mode !== "off") {
+  if (cfg.hasCustomTrack && cfg.enabled && cfg.mode !== "off" && assignedDays.length > 0) {
     if (isAssignedToAll) {
-      assignDesc = "Barcha 5 ta tanaffusga joylangan (Faol)";
+      assignDesc = "Barcha 5 ta tanaffusga joylangan";
     } else if (isAssignedToBig) {
-      assignDesc = "Faqat Katta tanaffusga joylangan (10:55)";
+      assignDesc = "Faqat Katta tanaffusga (10:55)";
     } else if (assigned.length > 0) {
       assignDesc = `${assigned.length} ta tanaffusga joylangan`;
     }
   }
 
   if (assignText) assignText.textContent = assignDesc;
+  if (daysText) daysText.textContent = daySummary;
+
   if (activeBadge) {
-    const isWorking = cfg.hasCustomTrack && cfg.enabled && cfg.mode !== "off" && assigned.length > 0;
+    const isWorking = cfg.hasCustomTrack && cfg.enabled && cfg.mode !== "off" && assigned.length > 0 && assignedDays.length > 0;
     activeBadge.className = isWorking ? "pill ok" : "pill off";
     activeBadge.textContent = isWorking ? "Faol" : "Nofaol";
   }
@@ -2599,6 +2702,14 @@ function updateBreakMusicUI() {
     }
   }
 
+  // Update modal break-day checkboxes
+  for (let d = 1; d <= 6; d++) {
+    const cb = document.getElementById(`breakDayCheck_${d}`);
+    if (cb) {
+      cb.checked = assignedDays.includes(d) && cfg.mode !== "off";
+    }
+  }
+
   if (cfg.hasCustomTrack && cfg.fileName) {
     const sizeMb = cfg.fileSize ? (cfg.fileSize / (1024 * 1024)).toFixed(1) + " MB" : "";
     if (titleEl) titleEl.textContent = cfg.fileName;
@@ -2606,7 +2717,7 @@ function updateBreakMusicUI() {
     if (trackNameModal) trackNameModal.textContent = cfg.fileName;
     if (trackMetaModal) trackMetaModal.textContent = `Doimiy saqlangan audio (${sizeMb})`;
     if (statusPill) {
-      const isWorking = cfg.enabled && cfg.mode !== "off" && assigned.length > 0;
+      const isWorking = cfg.enabled && cfg.mode !== "off" && assigned.length > 0 && assignedDays.length > 0;
       statusPill.className = isWorking ? "pill lesson" : "pill off";
       statusPill.textContent = isWorking ? "🟢 Tanaffuslarda yangraydi" : "Nofaol";
     }
@@ -2804,15 +2915,29 @@ function unlockAudioEngine(silent = false) {
       audioCtx.resume();
     }
     const player = getMasterPlayer();
-    if (player && (!player.src || player.src.startsWith("data:"))) {
-      player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
-      player.play().catch(() => {});
+    if (player) {
+      if (!player.src) {
+        player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+      }
+      const prevMuted = player.muted;
+      player.muted = true;
+      player.play().then(() => {
+        if (!isVoiceSequencePlaying) player.pause();
+        player.muted = prevMuted;
+      }).catch(() => { player.muted = prevMuted; });
     }
 
     const breakPlayer = getBreakMusicPlayer();
-    if (breakPlayer && (!breakPlayer.src || breakPlayer.src.startsWith("data:"))) {
-      breakPlayer.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
-      breakPlayer.play().then(() => { breakPlayer.pause(); }).catch(() => {});
+    if (breakPlayer) {
+      if (!breakPlayer.src) {
+        breakPlayer.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+      }
+      const prevMuted = breakPlayer.muted;
+      breakPlayer.muted = true;
+      breakPlayer.play().then(() => {
+        if (!isBreakMusicPlaying && !isBreakMusicPreviewing) breakPlayer.pause();
+        breakPlayer.muted = prevMuted;
+      }).catch(() => { breakPlayer.muted = prevMuted; });
     }
 
     isAudioEngineUnlocked = true;
@@ -3004,7 +3129,9 @@ function getCurrentDayTime() {
     const now = performance.now();
     const delta = (now - lastSimRealTs) / 1000;
     lastSimRealTs = now;
-    simFakeSeconds += delta * simSpeed;
+    // Ovoz ijro etilayotganda simulyatsiya vaqtini sekinlashtirish (tanaffus musiqasi va ovoz to'liq eshitilishi uchun)
+    const effSpeed = (isVoiceSequencePlaying || isBreakMusicPlaying) ? Math.min(simSpeed, 2) : simSpeed;
+    simFakeSeconds += delta * effSpeed;
     if (simFakeSeconds >= 86400) simFakeSeconds %= 86400;
     const dayNames = { 1: "Dushanba", 2: "Seshanba", 3: "Chorshanba", 4: "Payshanba", 5: "Juma", 6: "Shanba" };
     return {
@@ -3387,9 +3514,11 @@ function renderScheduleTable() {
   const tbody = document.getElementById("scheduleTableBody");
   if (!tbody) return;
 
+  const { dayOfWeek } = getCurrentDayTime();
+
   tbody.innerHTML = schedule.map((slot, idx) => {
     const durationMin = Math.round((timeToSec(slot.end) - timeToSec(slot.start)) / 60);
-    const hasMusic = isBreakMusicAssigned(slot.id);
+    const hasMusic = isBreakMusicAssigned(slot.id, dayOfWeek);
     const musicBadge = hasMusic 
       ? `<div style="margin-top:4px;"><span class="pill ok" style="font-size:10px; margin:0; padding:2px 8px; background:rgba(16,185,129,0.18); color:#10b981; border:1px solid rgba(16,185,129,0.35); font-weight:700;">🎵 Musiqa joylangan</span></div>`
       : (slot.breakMin ? `<div style="margin-top:4px;"><span class="pill off" style="font-size:10px; margin:0; padding:2px 6px; opacity:0.6;">Musiqasiz</span></div>` : '');
@@ -3527,15 +3656,15 @@ function renderTodayBellList() {
   const list = document.getElementById("todayBellList");
   if (!list) return;
 
-  const events = compileDailyEvents();
-  const { currentSec } = getCurrentDayTime();
+  const { dayOfWeek, currentSec } = getCurrentDayTime();
+  const events = compileDailyEvents(dayOfWeek);
 
   list.innerHTML = events.map(evt => {
     const isPassed = currentSec > (evt.timeSec + 10);
     const isNow = Math.abs(currentSec - evt.timeSec) < 15;
     let statusClass = isPassed ? "passed" : (isNow ? "current" : "");
 
-    const isBreakBell = (evt.type === "break_start" || evt.type === "lunch_start") && evt.slotId && isBreakMusicAssigned(evt.slotId);
+    const isBreakBell = (evt.type === "break_start" || evt.type === "lunch_start") && evt.slotId && isBreakMusicAssigned(evt.slotId, dayOfWeek);
     const musicBadge = isBreakBell ? `
       <div style="font-size:11px; color:#10b981; font-weight:600; margin-top:3px; display:flex; align-items:center; gap:4px;">
         <span>🎵</span> <span>Tanaffusda fon musiqasi yangraydi</span>
@@ -4043,14 +4172,27 @@ function bindFormControls() {
 
   // Modal: Musiqani tanlangan tanaffuslarga joylash (Joriy qilish) tugmasi
   document.getElementById("applyModalMusicToBreaksBtn")?.addEventListener("click", () => {
-    const checked = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
-    if (checked.length === 0) {
+    const checkedSlots = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
+    const checkedDays = Array.from(document.querySelectorAll(".break-day-checkbox:checked")).map(cb => Number(cb.value));
+    if (checkedSlots.length === 0) {
       if (!confirm("Hech qaysi tanaffus tanlanmadi. Musiqani tanaffuslardan o'chirishni xohlaysizmi?")) {
         return;
       }
     }
-    applyMusicToBreaks(checked);
+    if (checkedDays.length === 0) {
+      alert("Iltimos, musiqani ijro etish uchun kamida 1 ta hafta kunini tanlang!");
+      return;
+    }
+    applyMusicToBreaks(checkedSlots, checkedDays);
     closeBreakMusicModal();
+  });
+
+  // Modal: Hafta kunlarini tanlash tugmalari (Barchasi / Tozalash)
+  document.getElementById("selectBreakDaysAllBtn")?.addEventListener("click", () => {
+    document.querySelectorAll(".break-day-checkbox").forEach(cb => cb.checked = true);
+  });
+  document.getElementById("selectBreakDaysNoneBtn")?.addEventListener("click", () => {
+    document.querySelectorAll(".break-day-checkbox").forEach(cb => cb.checked = false);
   });
 
   // Modal: Tanlash tugmalari (Barchasi / Faqat Katta / Tozalash)
@@ -4073,9 +4215,11 @@ function bindFormControls() {
     const volRng = document.getElementById("breakMusicVolRange");
     if (volRng) AppConfig.breakMusic.volume = Number(volRng.value);
     
-    const checked = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
-    AppConfig.breakMusic.assignedSlots = checked;
-    AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off" && checked.length > 0);
+    const checkedSlots = Array.from(document.querySelectorAll(".break-slot-checkbox:checked")).map(cb => Number(cb.value));
+    const checkedDays = Array.from(document.querySelectorAll(".break-day-checkbox:checked")).map(cb => Number(cb.value));
+    AppConfig.breakMusic.assignedSlots = checkedSlots;
+    AppConfig.breakMusic.assignedDays = checkedDays.length > 0 ? checkedDays : [1, 2, 3, 4, 5, 6];
+    AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off" && checkedSlots.length > 0 && checkedDays.length > 0);
 
     saveState();
     closeBreakMusicModal();
@@ -4260,7 +4404,8 @@ function loadState() {
         fileName: "",
         fileSize: 0,
         hasCustomTrack: false,
-        assignedSlots: [1, 2, 3, 4, 5]
+        assignedSlots: [1, 2, 3, 4, 5],
+        assignedDays: [1, 2, 3, 4, 5, 6]
       };
     } else {
       if (AppConfig.breakMusic.enabled === undefined) AppConfig.breakMusic.enabled = (AppConfig.breakMusic.mode !== "off");
@@ -4274,6 +4419,9 @@ function loadState() {
         } else {
           AppConfig.breakMusic.assignedSlots = [1, 2, 3, 4, 5];
         }
+      }
+      if (!AppConfig.breakMusic.assignedDays || !Array.isArray(AppConfig.breakMusic.assignedDays) || AppConfig.breakMusic.assignedDays.length === 0) {
+        AppConfig.breakMusic.assignedDays = [1, 2, 3, 4, 5, 6];
       }
     }
 
@@ -4565,9 +4713,7 @@ function initApp() {
   // Boshqa kompyuterda istalgan joyga bosilganda avtomatik ovozni faollashtirish
   ['click', 'touchstart', 'keydown'].forEach(evtType => {
     window.addEventListener(evtType, () => {
-      if (!isAudioEngineUnlocked) {
-        unlockAudioEngine(true);
-      }
+      unlockAudioEngine(true);
     }, { passive: true });
   });
 }
